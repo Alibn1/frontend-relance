@@ -1,0 +1,49 @@
+.register-container {
+  max-width: 450px;
+  margin: 80px auto;
+  padding: 30px;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 30px;
+}
+
+.form-field {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.full-width-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: #f44336;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.login-link button {
+  font-weight: 600;
+}
+
+/* Masquer les yeux natifs */
+input::-ms-reveal,
+input::-ms-clear,
+input::-webkit-clear-button {
+  display: none !important;
+}

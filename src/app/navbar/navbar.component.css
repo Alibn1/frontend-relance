@@ -1,0 +1,44 @@
+/* Change the color of the navbar */
+.navbar {
+  background-color: #6200ea; /* You can customize the exact shade of violet */
+  color: white; /* Make text white for contrast */
+}
+
+/* Align the user name and profile icon to the right */
+.spacer {
+  flex: 1;
+}
+
+/* Optionally style the user name */
+.user-name {
+  margin-right: 10px; /* Space between the user name and the profile icon */
+}
+
+/* Ensure the profile icon has some margin */
+mat-icon-button {
+  margin-left: 10px;
+}
+
+/* Optionally style the sidenav container */
+.sidenav-container {
+  height: 100%;
+  display: flex;
+}
+
+mat-toolbar mat-icon {
+  color: white;
+}
+
+.date-time {
+  margin-right: 20px;
+  color: white;
+  font-size: 14px;
+  font-family: monospace;
+}
+
+.app-title {
+  font-weight: bold;
+  font-size: 18px;
+  color: white;
+  margin-left: 10px;
+}

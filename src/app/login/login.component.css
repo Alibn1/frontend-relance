@@ -1,0 +1,65 @@
+/* Style de la carte de login */
+.login-container {
+  max-width: 450px;
+  margin: 80px auto; /* Centré et espacé du haut */
+  padding: 30px;
+  background-color: #fff; /* Fond blanc pour la carte de login */
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Ombre légère */
+}
+
+/* Titre centré */
+h2 {
+  text-align: center;
+  font-size: 26px;
+  margin-bottom: 30px;
+}
+
+/* Style des champs du formulaire */
+.form-field {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+/* Bouton plein largeur */
+.full-width-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+/* Message d'erreur */
+.error-message {
+  color: #f44336;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 15px;
+}
+
+/* Lien vers inscription */
+.register-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.register-link button {
+  font-weight: 600;
+}
+
+/* Supprimer l'icône native du champ password */
+input::-ms-reveal,
+input::-ms-clear,
+input::-webkit-clear-button {
+  display: none !important;
+}
+
+mat-form-field .mat-icon-button {
+  padding: 0;
+  margin-right: -4px; /* ajustement fin si l'icône dépasse un peu */
+}
+
+.full-width-button {
+  background-color: #4CAF50 !important; /* vert Material */
+  color: white !important;
+}

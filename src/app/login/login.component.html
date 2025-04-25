@@ -1,0 +1,67 @@
+<div class="login-container">
+  <h2>Connexion</h2>
+
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Email</mat-label>
+      <input
+        matInput
+        type="email"
+        formControlName="email"
+        required
+      />
+      <mat-icon matSuffix>email</mat-icon>
+    </mat-form-field>
+
+    <!-- Mot de passe -->
+    <mat-form-field appearance="outline" class="form-field">
+      <mat-label>Mot de passe</mat-label>
+      <input
+        matInput
+        [type]="hidePassword ? 'password' : 'text'"
+        formControlName="password"
+        required
+        autocomplete="off"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        type="button"
+        (click)="hidePassword = !hidePassword"
+        aria-label="Toggle password visibility"
+      >
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <!-- Spinner + bouton -->
+    <div class="form-actions">
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        class="full-width-button"
+        [disabled]="isLoading || loginForm.invalid"
+      >
+        <mat-spinner *ngIf="isLoading" diameter="25"></mat-spinner>
+        <span *ngIf="!isLoading">Se connecter</span>
+      </button>
+    </div>
+
+    <!-- Message d'erreur -->
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <!-- Lien vers inscription -->
+    <div class="register-link">
+      <p>Pas encore inscrit ?
+        <button mat-button color="accent" type="button" (click)="goToRegister()">
+          S'inscrire
+        </button>
+      </p>
+    </div>
+  </form>
+</div>
