@@ -5,10 +5,14 @@ import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import {provideHttpClient, withFetch, withInterceptors} from '@angular/common/http';
 import {jwtInterceptor} from './interceptors/jwt.interceptor';
+import {provideAnimations} from '@angular/platform-browser/animations';
+import {MATERIAL_PROVIDERS} from './material';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideHttpClient(
     withInterceptors([jwtInterceptor]), // Intercepteur JWT
     withFetch()),
-    provideClientHydration()]
+    provideClientHydration(),provideAnimations(),
+    ...MATERIAL_PROVIDERS
+  ]
 };
