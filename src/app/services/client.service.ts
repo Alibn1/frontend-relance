@@ -25,7 +25,7 @@ export class ClientService {
 
   getClients(params?: any): Observable<any> {
     const httpParams = params ? new HttpParams({fromObject: params}) : undefined;
-    return this.http.get<any>(`${this.apiUrl}/clients/with-details`, {...this.getAuthHeaders(), params: httpParams});
+    return this.http.get<any>(`${this.apiUrl}/clients`, {...this.getAuthHeaders(), params: httpParams});
   }
 
   getClientById(clientId: number | string): Observable<any> {

@@ -27,7 +27,6 @@ export class ClientListComponent implements OnInit, AfterViewInit {
   loading = true;
   error = '';
   noDataFound = false;
-
   pageSize = 10;
   pageSizeOptions = [5, 10, 25, 100];
   pageIndex = 0;

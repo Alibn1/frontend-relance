@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';  // Correct import for MatSidenavModule
-import { MatListModule } from '@angular/material/list'; // Correct import for MatNavList and MatListItem
-import { MatIconButton } from '@angular/material/button';  // Correct import for MatIconButton
+import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button'; // Correction ici : utiliser MatButtonModule
 
 @Component({
   selector: 'app-navbar',
@@ -15,18 +15,20 @@ import { MatIconButton } from '@angular/material/button';  // Correct import for
     MatIconModule,
     MatMenuModule,
     MatToolbarModule,
-    MatSidenavModule, // Import the correct module
-    MatListModule,  // Import the correct module for MatNavList and MatListItem
-    RouterOutlet,
-    MatIconButton,  // Import the correct module for MatIconButton
-    RouterLink
+    MatSidenavModule,
+    MatListModule,
+    MatButtonModule,  // Correct pour mat-icon-button
+    RouterLink,
+    RouterOutlet
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent implements OnInit {
+  @ViewChild('sidenav') sidenav!: MatSidenav;
+
   isAuthenticated: boolean = false;
-  isMenuOpen: boolean = false; // Initialize as false to keep the menu closed initially
+  isMenuOpen: boolean = false; // true par défaut pour affichage desktop
   currentDateTime: string = '';
 
   constructor(protected authService: AuthService, private router: Router) {}
@@ -37,12 +39,12 @@ export class NavbarComponent implements OnInit {
     });
 
     this.updateDateTime();
-    setInterval(() => this.updateDateTime(), 1000); // met à jour chaque seconde
+    setInterval(() => this.updateDateTime(), 1000); // Mise à jour de la date et heure
   }
 
   updateDateTime(): void {
     const now = new Date();
-    this.currentDateTime = now.toLocaleString(); // ou utilise toLocaleTimeString() pour seulement l'heure
+    this.currentDateTime = now.toLocaleString();
   }
 
   logout() {
@@ -50,6 +52,8 @@ export class NavbarComponent implements OnInit {
   }
 
   toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;  // Toggle the sidenav visibility
+    if (this.sidenav) {
+      this.sidenav.toggle();
+    }
   }
 }

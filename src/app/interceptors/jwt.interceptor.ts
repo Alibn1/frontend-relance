@@ -4,42 +4,46 @@ import { AuthService } from '../services/auth.service';
 import { catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { HttpContextToken } from '@angular/common/http';
+import { isPlatformBrowser } from '@angular/common';
+import { PLATFORM_ID } from '@angular/core';
 
-// ⚙️ Définition d'un token de contexte personnalisé pour ignorer certaines requêtes
 export const SKIP_AUTH = new HttpContextToken(() => false);
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);  // Injection du service d'authentification
-  const router = inject(Router);            // Injection du routeur
+  const authService = inject(AuthService);
+  const router = inject(Router);
+  const platformId = inject(PLATFORM_ID);
 
-  // 🎯 Ignorer les requêtes où le contexte `SKIP_AUTH` est activé (ex: requêtes publiques ou non-authentifiées)
+  // 🎯 Ignore les requêtes publiques
   if (req.context.get(SKIP_AUTH) || req.url.includes('/login') || req.url.includes('/register')) {
-    return next(req);  // Passe la requête sans modification
+    return next(req);
   }
 
-  const token = authService.getToken();  // Récupère le token stocké dans localStorage (ou ailleurs)
+  // ⚙️ Sécuriser l'accès au localStorage uniquement si on est dans le navigateur
+  let token: string | null = null;
+  if (isPlatformBrowser(platformId)) {
+    token = authService.getToken();
+  }
 
   if (token) {
-    // 👌 Si un token est présent, ajoute-le à l'en-tête de la requête
     const cloned = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`  // Injection du token dans l'en-tête Authorization
+        Authorization: `Bearer ${token}`
       }
     });
+
     return next(cloned).pipe(
       catchError(err => {
-        // 🔴 Si le serveur renvoie une erreur 401 (non autorisé), se déconnecte et redirige
         if (err.status === 401) {
-          authService.logout();   // Déconnexion de l'utilisateur
-          router.navigate(['/login']);  // Redirection vers la page de login
+          authService.logout();
+          router.navigate(['/login']);
         }
-        return throwError(() => err);  // Relance l'erreur après traitement
+        return throwError(() => err);
       })
     );
   } else {
-    // Si aucun token n'est présent, déconnecte l'utilisateur et redirige
-    authService.logout();
-    router.navigate(['/login']);
-    return throwError(() => new Error('No authentication token available'));
+    // ❗ Si pas de token, NE PAS faire de logout forcé ni d'erreur levée
+    // Juste envoyer la requête telle quelle (par exemple pour pages publiques)
+    return next(req);
   }
 };

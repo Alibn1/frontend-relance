@@ -1,28 +1,37 @@
-/* Change the color of the navbar */
 .navbar {
-  background-color: #6200ea; /* You can customize the exact shade of violet */
-  color: white; /* Make text white for contrast */
+  background-color: #6200ea;
+  color: white;
 }
 
-/* Align the user name and profile icon to the right */
 .spacer {
   flex: 1;
 }
 
-/* Optionally style the user name */
 .user-name {
-  margin-right: 10px; /* Space between the user name and the profile icon */
+  margin-right: 10px;
 }
 
-/* Ensure the profile icon has some margin */
 mat-icon-button {
   margin-left: 10px;
 }
 
-/* Optionally style the sidenav container */
 .sidenav-container {
-  height: 100%;
+  height: 100vh;
+}
+
+mat-sidenav {
+  width: 220px;
+  background-color: #f0f0f0; /* ✅ Gris clair pour se différencier du fond */
+  border-right: 1px solid #ddd; /* ✅ Fine bordure droite pour plus de visibilité */
+  padding-top: 10px;
+}
+
+.main-content {
+  flex: 1;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
 }
 
 mat-toolbar mat-icon {
