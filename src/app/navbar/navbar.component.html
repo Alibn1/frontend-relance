@@ -17,15 +17,19 @@
   </mat-menu>
 </mat-toolbar>
 
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #sidenav mode="side" [(opened)]="isMenuOpen" class="sidenav">
-    <mat-nav-list>
-      <a mat-list-item routerLink="/clients">Clients</a>
-      <a mat-list-item routerLink="/settings">Relances</a>
-    </mat-nav-list>
-  </mat-sidenav>
+<div class="layout-container">
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #sidenav mode="side" [(opened)]="isMenuOpen" class="sidenav">
+      <mat-nav-list>
+        <a mat-list-item routerLink="/clients">Clients</a>
+        <a mat-list-item routerLink="/relances/historique">Relances</a>
+      </mat-nav-list>
+    </mat-sidenav>
 
-  <mat-sidenav-content class="main-content">
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+    <mat-sidenav-content class="main-content">
+      <div class="inner-content">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

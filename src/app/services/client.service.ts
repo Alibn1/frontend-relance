@@ -28,6 +28,11 @@ export class ClientService {
     return this.http.get<any>(`${this.apiUrl}/clients`, {...this.getAuthHeaders(), params: httpParams});
   }
 
+
+  getClientDetails(code: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/clients/${code}`);
+  }
+
   getClientById(clientId: number | string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/clients/${clientId}`, this.getAuthHeaders());
   }

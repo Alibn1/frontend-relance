@@ -2,10 +2,13 @@ import { Routes } from '@angular/router';
 import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
 import {ClientListComponent} from './client-list/client-list.component';
+import { RelanceHistoriqueComponent } from './relance-historique/relance-historique.component';
 import {AuthenticatedLayoutComponent} from './layouts/authenticated-layout.component';
 import {PublicLayoutComponent} from './layouts/public-layout.component';
 import {AuthGuard} from './guards/auth.guard';
 import {AuthResolver} from './resolver/auth.resolver';
+
+
 
 export const routes: Routes = [
   {
@@ -30,6 +33,12 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         resolve: { user: AuthResolver }
       },
+      {
+        path: 'relances/historique',
+        component: RelanceHistoriqueComponent,
+        canActivate: [AuthGuard],
+        resolve: { user: AuthResolver }
+      }
 
     ]
   },

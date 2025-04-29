@@ -44,12 +44,12 @@
 
         <ng-container matColumnDef="date_relevee">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Relevée</th>
-          <td mat-cell *matCellDef="let client">{{ client.date_relevee | date }}</td>
+          <td mat-cell *matCellDef="let client">{{ client.date_relevee | date: 'yyyy-MM-dd' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="derniere_relance">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Dernière Relance</th>
-          <td mat-cell *matCellDef="let client">{{ client.derniere_relance | date }}</td>
+          <td mat-cell *matCellDef="let client">{{ client.derniere_relance | date: 'yyyy-MM-dd' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="details">
