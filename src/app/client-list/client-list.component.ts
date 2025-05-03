@@ -118,6 +118,16 @@ export class ClientListComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/clients', clientCode]);
   }
 
+  getDaysElapsed(dateString: string | Date): number {
+    if (!dateString) {
+      return -1;
+    }
+    const today = new Date();
+    const dateValue = new Date(dateString);
+    const diffTime = Math.abs(today.getTime() - dateValue.getTime());
+    return Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  }
+
   handlePageEvent(event: any): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;

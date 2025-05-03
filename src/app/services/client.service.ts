@@ -45,8 +45,8 @@ export class ClientService {
     });
   }
 
-  getClientReleves(clientId: string, params?: any): Observable<any> {
-    const httpParams = params ? new HttpParams({fromObject: params}) : undefined;
+  getClientReleves(clientId: string, params: any = {}): Observable<any> {
+    const httpParams = new HttpParams({ fromObject: params });
     return this.http.get<any>(`${this.apiUrl}/clients/${clientId}/releves`, {
       ...this.getAuthHeaders(),
       params: httpParams
