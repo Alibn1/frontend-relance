@@ -47,8 +47,9 @@
 
 .badge.BROUILLON { background-color: #9e9e9e; }
 .badge.ENVOYE, .badge.ENVOYÉ { background-color: #1e88e5; }
-.badge.OUVERTE { background-color: #43a047; }
+.badge.OUVERT { background-color: #43a047; }
 .badge.VALIDE { background-color: #4caf50; }
+.badge.CLOTURE { background-color: #e53935; }
 .badge.REFUSE, .badge.REFUSÉ { background-color: #e53935; }
 .badge.ENCOURS { background-color: #757575; }
 .badge.DEFAULT { background-color: #bdbdbd; }

@@ -50,7 +50,9 @@ export class RelanceHistoriqueComponent implements OnInit {
           numero_relance_dossier: item.numero_relance_dossier,
           date_relance_dossier: this.formatDate(item.date_relance_dossier),
           client: `${item.client?.code_client ?? ''} ${item.client?.raison_sociale ?? ''}`,
-          statut: item.statut?.libelle ?? item.statut,
+          //statut: item.statut?.libelle ?? item.statut,
+          statut: item.statut?.libelle ?? '—',  // Pour l'affichage (exemple: "Ouvert")
+          statut_code: item.statut?.code ?? 'BROUILLON',  // Pour la classe CSS (exemple: "OUVERT")
           numero_relance: etape?.numero_relance ?? '—',
           date_rappel: this.formatDate(etape?.date_rappel),
           statut_detail: etape?.statut_detail ?? 'BROUILLON',
@@ -81,7 +83,8 @@ export class RelanceHistoriqueComponent implements OnInit {
       case 'BROUILLON': return 'badge BROUILLON';
       case 'ENVOYE':
       case 'ENVOYÉ': return 'badge ENVOYE';
-      case 'OUVERTE': return 'badge OUVERTE';
+      case 'OUVERT': return 'badge OUVERT';
+      case 'CLOTURE': return 'badge CLOTURE';
       case 'VALIDE': return 'badge VALIDE';
       case 'REFUSE':
       case 'REFUSÉ': return 'badge REFUSE';
