@@ -76,8 +76,8 @@ export class ClientDetailsComponent implements OnInit {
     this.router.navigate(['/clients']);
   }
 
-  ajouterRelance(): void {
-    console.log('Ajouter une relance !');
+  navigateToNewRelance(): void {
+    this.router.navigate(['relances', 'create'], { relativeTo: this.route });
   }
 
 

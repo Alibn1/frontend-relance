@@ -22,6 +22,10 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatCardModule} from '@angular/material/card';
 import {MatToolbar} from '@angular/material/toolbar';
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
+import { MatSelect } from '@angular/material/select';
+import { MatOption } from '@angular/material/core';
+
 
 export const MATERIAL_PROVIDERS = [
   // provideAnimations(),
@@ -61,6 +65,11 @@ export const MATERIAL_PROVIDERS = [
     MatMenuModule,
     MatProgressSpinnerModule,
     NgIf,
-    NgStyle
+    NgStyle,
+    MatDatepickerToggle,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatSelect,
+    MatOption
   // ),
 ];
