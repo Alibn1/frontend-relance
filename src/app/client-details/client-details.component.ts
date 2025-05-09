@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import { ClientService } from '../services/client.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {MATERIAL_PROVIDERS} from '../material';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-client-details',
@@ -19,6 +20,12 @@ export class ClientDetailsComponent implements OnInit {
   relances = new MatTableDataSource<any>();
   releves = new MatTableDataSource<any>();
   impayes = new MatTableDataSource<any>();  // données fictives pour l'instant
+
+  @ViewChild('sortRelances') sortRelances!: MatSort;
+  @ViewChild('sortReleves') sortReleves!: MatSort;
+  @ViewChild('sortImpayes') sortImpayes!: MatSort;
+
+
 
   constructor(
     private route: ActivatedRoute,
@@ -40,9 +47,18 @@ export class ClientDetailsComponent implements OnInit {
       });
 
       // Charger les relances
-      this.clientService.getClientRelances(this.clientCode).subscribe({
+      //this.clientService.getClientRelances(this.clientCode).subscribe({
+      this.clientService.getClientEtapeRelances(this.clientCode).subscribe({
         next: (relancesData) => {
-          this.relances.data = relancesData;
+          const trie = relancesData.sort((a: any, b: any) => {
+            const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+            const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+            return dateB - dateA;
+          });
+
+           this.relances.data = trie;
+          this.relances.sort = this.sortRelances;
+
         },
         error: (err) => console.error('Erreur lors du chargement des relances:', err)
       });
@@ -51,26 +67,33 @@ export class ClientDetailsComponent implements OnInit {
       this.clientService.getClientReleves(this.clientCode).subscribe({
         next: (relevesData) => {
           this.releves.data = relevesData;
+          this.releves.sort = this.sortReleves;
         },
         error: (err) => console.error('Erreur lors du chargement des relevés:', err)
       });
 
       // Charger des données fictives pour les impayés
       this.loadFakeImpayes();
+      this.impayes.sort = this.sortImpayes;
     }
   }
 
   getTotalSoldeInitiale(): number {
-    return this.releves.data.reduce((acc: number, r: any) => acc + (r.solde_initiale || 0), 0);
+    return this.releves.data.reduce((acc: number, r: any) => acc + (parseFloat(r.solde_initiale) || 0), 0);
   }
 
   getTotalSoldeFinale(): number {
-    return this.releves.data.reduce((acc: number, r: any) => acc + (r.solde_finale || 0), 0);
+    return this.releves.data.reduce((acc: number, r: any) => acc + (parseFloat(r.solde_finale) || 0), 0);
   }
 
   getTotalReste(): number {
-    return this.releves.data.reduce((acc: number, r: any) => acc + ((r.solde_initiale || 0) - (r.solde_finale || 0)), 0);
+    return this.releves.data.reduce((acc: number, r: any) => {
+      const initial = parseFloat(r.solde_initiale) || 0;
+      const finale = parseFloat(r.solde_finale) || 0;
+      return acc + (initial - finale);
+    }, 0);
   }
+
 
   goBack(): void {
     this.router.navigate(['/clients']);

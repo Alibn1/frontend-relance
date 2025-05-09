@@ -45,6 +45,13 @@ export class ClientService {
     });
   }
 
+  getClientEtapeRelances(clientId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/clients/${clientId}/etape-relances`, {
+      ...this.getAuthHeaders()
+    });
+  }
+
+
   getClientReleves(clientId: string, params: any = {}): Observable<any> {
     const httpParams = new HttpParams({ fromObject: params });
     return this.http.get<any>(`${this.apiUrl}/clients/${clientId}/releves`, {

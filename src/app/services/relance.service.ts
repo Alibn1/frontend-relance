@@ -46,9 +46,10 @@ export class RelanceService {
   // ✅ Ajouter une étape à un dossier de relance
   addRelanceStep(ndr: string, etapeData: any): Observable<any> {
     const formattedData = {
+      code_sous_modele: etapeData.code_sous_modele,
       titre_sous_modele: etapeData.titre_sous_modele,
       ordre: etapeData.ordre,
-      statut_relance_dt: etapeData.statut_relance_dt || 'SDR003',
+      statut_detail: etapeData.statut_detail|| 'BROUILLON',
       date_rappel: etapeData.date_rappel,
       nb_jours_rappel: etapeData.nb_jours_rappel,
       methode_envoi: etapeData.methode_envoi,

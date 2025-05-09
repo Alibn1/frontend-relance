@@ -11,12 +11,12 @@
     <div class="card-header">
       <mat-card-title>Historique des relances</mat-card-title>
       <button mat-button color="primary" class="relance-btn" (click)="navigateToNewRelance()">
-        <span class="no-space">
-      <mat-icon inline>add</mat-icon>Relance
-        </span>
+      <span class="no-space">
+        <mat-icon inline>add</mat-icon>Relance
+      </span>
       </button>
     </div>
-    <table mat-table [dataSource]="relances" class="mat-elevation-z2" matSort>
+    <table mat-table [dataSource]="relances" class="mat-elevation-z2" matSort #sortRelances="matSort">
       <ng-container matColumnDef="numero_relance">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Relance</th>
         <td mat-cell *matCellDef="let r">{{ r.numero_relance }}</td>
@@ -35,7 +35,7 @@
       </ng-container>
 
       <ng-container matColumnDef="utilisateur">
-        <th mat-header-cell *matHeaderCellDef>Utilisateur</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Utilisateur</th>
         <td mat-cell *matCellDef="let r">{{ r.executant_envoi }}</td>
       </ng-container>
 
@@ -44,12 +44,13 @@
     </table>
   </mat-card>
 
-  <!-- Partie Droite : Relevés et Impayés -->
+  <!-- Partie Droite -->
   <div class="droite">
-    <!-- Relevés -->
+
+    <!-- ✅ Relevés -->
     <mat-card class="releves-card">
       <mat-card-title>Relevés</mat-card-title>
-      <table mat-table [dataSource]="releves" class="mat-elevation-z2" matSort>
+      <table mat-table [dataSource]="releves" class="mat-elevation-z2" matSort #sortReleves="matSort">
         <ng-container matColumnDef="date_releve">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
           <td mat-cell *matCellDef="let r">{{ r.date_releve | date: 'yyyy-MM' }}</td>
@@ -57,7 +58,7 @@
         </ng-container>
 
         <ng-container matColumnDef="solde_initiale">
-          <th mat-header-cell *matHeaderCellDef>Valeur Initiale</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Valeur Initiale</th>
           <td mat-cell *matCellDef="let r">{{ r.solde_initiale | number: '1.0-0' }}</td>
           <td mat-footer-cell *matFooterCellDef class="total-footer">
             {{ getTotalSoldeInitiale() | number: '1.0-0' }}
@@ -65,7 +66,7 @@
         </ng-container>
 
         <ng-container matColumnDef="solde_finale">
-          <th mat-header-cell *matHeaderCellDef>Valeur Réglée</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Valeur Réglée</th>
           <td mat-cell *matCellDef="let r">{{ r.solde_finale | number: '1.0-0' }}</td>
           <td mat-footer-cell *matFooterCellDef class="total-footer">
             {{ getTotalSoldeFinale() | number: '1.0-0' }}
@@ -73,7 +74,7 @@
         </ng-container>
 
         <ng-container matColumnDef="reste">
-          <th mat-header-cell *matHeaderCellDef>Reste à Régler</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Reste à Régler</th>
           <td mat-cell *matCellDef="let r">
             {{ (r.solde_initiale - r.solde_finale) | number: '1.0-0' }}
           </td>
@@ -88,42 +89,42 @@
       </table>
     </mat-card>
 
-    <!-- Impayés -->
+    <!-- ✅ Impayés -->
     <mat-card class="impayes-card">
       <mat-card-title>Impayés</mat-card-title>
-      <table mat-table [dataSource]="impayes" class="mat-elevation-z2" matSort>
+      <table mat-table [dataSource]="impayes" class="mat-elevation-z2" matSort #sortImpayes="matSort">
         <ng-container matColumnDef="recouvrement">
-          <th mat-header-cell *matHeaderCellDef>Recouvrement</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Recouvrement</th>
           <td mat-cell *matCellDef="let i">{{ i.recouvrement }}</td>
         </ng-container>
 
         <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
           <td mat-cell *matCellDef="let i">{{ i.date | date: 'yyyy-MM-dd' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="type">
-          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
           <td mat-cell *matCellDef="let i">{{ i.type }}</td>
         </ng-container>
 
         <ng-container matColumnDef="echeance">
-          <th mat-header-cell *matHeaderCellDef>Echéance</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Échéance</th>
           <td mat-cell *matCellDef="let i">{{ i.echeance }}</td>
         </ng-container>
 
         <ng-container matColumnDef="valeur_initiale">
-          <th mat-header-cell *matHeaderCellDef>Valeur Initiale</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Valeur Initiale</th>
           <td mat-cell *matCellDef="let i">{{ i.valeur_initiale | number: '1.0-0' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="valeur_reglee">
-          <th mat-header-cell *matHeaderCellDef>Valeur Réglée</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Valeur Réglée</th>
           <td mat-cell *matCellDef="let i">{{ i.valeur_reglee | number: '1.0-0' }}</td>
         </ng-container>
 
         <ng-container matColumnDef="reste">
-          <th mat-header-cell *matHeaderCellDef>Reste à Régler</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Reste à Régler</th>
           <td mat-cell *matCellDef="let i">{{ i.reste | number: '1.0-0' }}</td>
         </ng-container>
 

@@ -73,19 +73,22 @@ export class ClientListComponent implements OnInit, AfterViewInit {
 
   enrichirClients(clients: any[]): any[] {
     return clients.map(client => {
-      const releve = client.releves?.[0];
-      const solde_final = releve?.solde_final ?? 0;
-      const solde_initial = releve?.solde_initial ?? 0;
+      const releves = client.releves ?? [];
+
+      const totalSoldeFinale = releves.reduce((acc: number, r: any) => acc + (r.solde_finale || 0), 0);
+      const totalSoldeInitiale = releves.reduce((acc: number, r: any) => acc + (r.solde_initiale || 0), 0);
+      const totalImpayes = releves.reduce((acc: number, r: any) => acc + ((r.solde_initiale || 0) - (r.solde_finale || 0)), 0);
 
       return {
         ...client,
         raison_sociale: client.R_sociale ?? client.raison_sociale,
-        solde_releve: solde_final,
-        total_impaye: solde_final - solde_initial,
-        statut: releve?.statut ?? 'AUCUN',
-        date_relevee: releve?.date_releve ?? null,
+        solde_releve: totalSoldeFinale,
+        total_impaye: totalImpayes,
+        statut: releves?.[0]?.statut ?? 'AUCUN',
+        date_relevee: releves?.[0]?.date_releve ?? null,
         derniere_relance: this.getDerniereRelanceFromList(client.relances)
       };
+
     });
   }
 

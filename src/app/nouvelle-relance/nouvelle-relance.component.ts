@@ -7,18 +7,9 @@ import { AuthService } from '../services/auth.service';
 import { catchError, switchMap, take, finalize, map } from 'rxjs/operators';
 import { of, throwError } from 'rxjs';
 
-import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatIconModule } from '@angular/material/icon';
 import {ClientService} from "../services/client.service";
 import { Location } from '@angular/common';
+import {MATERIAL_PROVIDERS} from '../material';
 
 
 @Component({
@@ -27,17 +18,18 @@ import { Location } from '@angular/common';
   styleUrls: ['./nouvelle-relance.component.css'],
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    MatIconModule,
+    MATERIAL_PROVIDERS
+    // CommonModule,
+    // ReactiveFormsModule,
+    // MatCardModule,
+    // MatFormFieldModule,
+    // MatInputModule,
+    // MatSelectModule,
+    // MatDatepickerModule,
+    // MatNativeDateModule,
+    // MatButtonModule,
+    // MatProgressSpinnerModule,
+    // MatIconModule,
   ]
 })
 export class NouvelleRelanceComponent implements OnInit {
@@ -93,7 +85,7 @@ export class NouvelleRelanceComponent implements OnInit {
       methode_envoi: ['Email', Validators.required],
       objet_relance1: [''],
       objet_relance2: [''],
-      modele_relance: [null, Validators.required]
+      code_sous_modele: [null, Validators.required]
     });
   }
 
@@ -162,7 +154,7 @@ export class NouvelleRelanceComponent implements OnInit {
 
   private createNewRelance() {
     return this.relanceService.createRelance(this.clientCode).pipe(
-      map((response: any) => response?.data?.NDR || response?.NDR || response)
+      map((response: any) => response?.data?.numero_relance_dossier || response?.numero_relance_dossier || response)
     );
   }
 
@@ -179,15 +171,16 @@ export class NouvelleRelanceComponent implements OnInit {
   private addRelanceStep(ndr: string) {
     const formValues = this.relanceForm.getRawValue();
     const etapeData = {
+      code_sous_modele: formValues.code_sous_modele,
       titre_sous_modele: formValues.titre,
       ordre: +formValues.ordre,
-      statut_relance_dt: 'SDR003',
+      statut_detail: 'BROUILLON',
       date_rappel: this.formatDate(formValues.date_rappel),        // ✅ ici
       nb_jours_rappel: +formValues.nb_jours_rappel,                // ✅ ici
       methode_envoi: formValues.methode_envoi,                     // ✅ ici
       objet_relance_1: formValues.objet_relance1,                  // ✅ ici
       objet_relance_2: formValues.objet_relance2,                  // ✅ ici
-      utilisateur_creation: 'System'
+      //utilisateur_creation: 'System'
     };
 
 
@@ -210,7 +203,7 @@ export class NouvelleRelanceComponent implements OnInit {
       ? 'Nouvelle étape ajoutée avec succès'
       : 'Relance et étape créées avec succès';
     this.showNotification(message);
-    this.navigateToClientRelances();
+    this.goBack();
   }
 
   private handleSubmitError(error: any): void {
