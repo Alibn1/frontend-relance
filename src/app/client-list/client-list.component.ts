@@ -75,36 +75,40 @@ export class ClientListComponent implements OnInit, AfterViewInit {
     return clients.map(client => {
       const releves = client.releves ?? [];
 
-      const totalSoldeFinale = releves.reduce((acc: number, r: any) => acc + (r.solde_finale || 0), 0);
-      const totalSoldeInitiale = releves.reduce((acc: number, r: any) => acc + (r.solde_initiale || 0), 0);
-      const totalImpayes = releves.reduce((acc: number, r: any) => acc + ((r.solde_initiale || 0) - (r.solde_finale || 0)), 0);
+      const totalSoldeFinale = releves.reduce((acc: number, r: any) => acc + (+r.solde_finale || 0), 0);
+      const totalSoldeInitiale = releves.reduce((acc: number, r: any) => acc + (+r.solde_initiale || 0), 0);
+      const totalImpayes = releves.reduce((acc: number, r: any) => acc + ((+r.solde_initiale || 0) - (+r.solde_finale || 0)), 0);
 
       return {
         ...client,
         raison_sociale: client.R_sociale ?? client.raison_sociale,
-        solde_releve: totalSoldeFinale,
+        solde_releve: totalSoldeInitiale,
         total_impaye: totalImpayes,
         statut: releves?.[0]?.statut ?? 'AUCUN',
         date_relevee: releves?.[0]?.date_releve ?? null,
         derniere_relance: this.getDerniereRelanceFromList(client.relances)
       };
-
     });
   }
 
   getDerniereRelanceFromList(relances: any[]): Date | null {
+    console.log('Relances reçues pour client:', relances); // 🔍 ajoute ceci
+
     if (!relances || relances.length === 0) return null;
 
     const validRelances = relances.filter(r =>
-      r.date_rappel && !isNaN(new Date(r.date_rappel).getTime())
+      r.created_at && !isNaN(new Date(r.created_at).getTime())
     );
 
     if (validRelances.length === 0) return null;
 
-    const derniere = validRelances.reduce((latest, r) =>
-      new Date(r.date_rappel) > new Date(latest.date_rappel) ? r : latest, validRelances[0]);
+    const sorted = validRelances.sort((a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
 
-    return new Date(derniere.date_rappel);
+    console.log('Dernière relance trouvée:', sorted[0]); // 🔍 ajoute ceci aussi
+
+    return new Date(sorted[0].created_at);
   }
 
   getStatusClass(status: string): string {

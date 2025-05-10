@@ -7,12 +7,14 @@ import {provideHttpClient, withFetch, withInterceptors} from '@angular/common/ht
 import {jwtInterceptor} from './interceptors/jwt.interceptor';
 import {provideAnimations} from '@angular/platform-browser/animations';
 import {MATERIAL_PROVIDERS} from './material';
+import {provideNativeDateAdapter} from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideHttpClient(
     withInterceptors([jwtInterceptor]), // Intercepteur JWT
     withFetch()),
     provideClientHydration(),provideAnimations(),
+    provideNativeDateAdapter(),
     ...MATERIAL_PROVIDERS
   ]
 };

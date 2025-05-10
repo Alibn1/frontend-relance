@@ -23,13 +23,13 @@
       <!-- Solde Relevé -->
       <ng-container matColumnDef="solde_releve">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Solde Relevé</th>
-        <td mat-cell *matCellDef="let client">{{ client.solde_releve | currency }}</td>
+        <td mat-cell *matCellDef="let client">{{ client.solde_releve | number:'1.0-0' }}</td>
       </ng-container>
 
       <!-- Total Impayé -->
       <ng-container matColumnDef="total_impaye">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Total Impayé</th>
-        <td mat-cell *matCellDef="let client">{{ client.total_impaye | currency }}</td>
+        <td mat-cell *matCellDef="let client">{{ client.total_impaye | number:'1.0-0' }}</td>
       </ng-container>
 
       <!-- Statut -->
