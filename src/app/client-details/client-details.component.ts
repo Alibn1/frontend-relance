@@ -18,6 +18,7 @@ export class ClientDetailsComponent implements OnInit {
   clientDetails: any = {};
 
   relances = new MatTableDataSource<any>();
+  etape_relances = new MatTableDataSource<any>();
   releves = new MatTableDataSource<any>();
   impayes = new MatTableDataSource<any>();  // données fictives pour l'instant
 

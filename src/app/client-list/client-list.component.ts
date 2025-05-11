@@ -86,29 +86,25 @@ export class ClientListComponent implements OnInit, AfterViewInit {
         total_impaye: totalImpayes,
         statut: releves?.[0]?.statut ?? 'AUCUN',
         date_relevee: releves?.[0]?.date_releve ?? null,
-        derniere_relance: this.getDerniereRelanceFromList(client.relances)
+        derniere_relance: this.getDerniereEtapeRelance(client.etape_relances)
       };
     });
   }
 
-  getDerniereRelanceFromList(relances: any[]): Date | null {
-    console.log('Relances reçues pour client:', relances); // 🔍 ajoute ceci
+  getDerniereEtapeRelance(etapes: any[]): Date | null {
+    if (!etapes || etapes.length === 0) return null;
 
-    if (!relances || relances.length === 0) return null;
-
-    const validRelances = relances.filter(r =>
-      r.created_at && !isNaN(new Date(r.created_at).getTime())
+    const validEtapes = etapes.filter(e =>
+      e.date_creation_debut && !isNaN(new Date(e.date_creation_debut).getTime())
     );
 
-    if (validRelances.length === 0) return null;
+    if (validEtapes.length === 0) return null;
 
-    const sorted = validRelances.sort((a, b) =>
-      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    const sorted = validEtapes.sort((a, b) =>
+      new Date(b.date_creation_debut).getTime() - new Date(a.date_creation_debut).getTime()
     );
 
-    console.log('Dernière relance trouvée:', sorted[0]); // 🔍 ajoute ceci aussi
-
-    return new Date(sorted[0].created_at);
+    return new Date(sorted[0].date_creation_debut);
   }
 
   getStatusClass(status: string): string {
