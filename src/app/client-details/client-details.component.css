@@ -50,6 +50,15 @@ table {
   padding: 4px 16px 0; /* rapproché de la navbar */
 }
 
+
+.total-footer {
+  font-weight: bold;
+  background-color: #f3f3f3;
+  padding: 12px;
+  font-size: 14px;
+}
+
+
 /* Titre client : code + raison sociale */
 .client-title {
   font-size: 1rem;
@@ -104,3 +113,6 @@ table {
 .badge.REFUSE, .badge.REFUSÉ { background-color: #e53935; }
 .badge.ENCOURS { background-color: #757575; }
 .badge.DEFAULT { background-color: #bdbdbd; }
+
+
+

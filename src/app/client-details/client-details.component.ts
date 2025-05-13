@@ -95,6 +95,19 @@ export class ClientDetailsComponent implements OnInit {
     }, 0);
   }
 
+  getTotalImpayesInitiale(): number {
+    return this.impayes.data.reduce((acc: number, i: any) => acc + (parseFloat(i.valeur_initiale) || 0), 0);
+  }
+
+  getTotalImpayesReglee(): number {
+    return this.impayes.data.reduce((acc: number, i: any) => acc + (parseFloat(i.valeur_reglee) || 0), 0);
+  }
+
+  getTotalImpayesReste(): number {
+    return this.impayes.data.reduce((acc: number, i: any) => acc + (parseFloat(i.reste) || 0), 0);
+  }
+
+
 
   goBack(): void {
     this.router.navigate(['/clients']);
