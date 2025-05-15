@@ -75,7 +75,7 @@ export class RelanceHistoriqueComponent implements OnInit {
   }
 
   voirDossier(numero: string) {
-    this.router.navigate(['/event-relance', numero]);
+    this.router.navigate(['/relance-dossiers', numero]);
   }
 
   getStatusClass(statut: string): string {

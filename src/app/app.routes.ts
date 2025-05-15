@@ -5,6 +5,7 @@ import {ClientListComponent} from './client-list/client-list.component';
 import {ClientDetailsComponent} from './client-details/client-details.component';
 import {NouvelleRelanceComponent} from './nouvelle-relance/nouvelle-relance.component';
 import { RelanceHistoriqueComponent } from './relance-historique/relance-historique.component';
+import { DetailRelanceComponent } from './relance-details/relance-details.component';
 import {AuthenticatedLayoutComponent} from './layouts/authenticated-layout.component';
 import {PublicLayoutComponent} from './layouts/public-layout.component';
 import {AuthGuard} from './guards/auth.guard';
@@ -55,7 +56,13 @@ export const routes: Routes = [
         component: RelanceHistoriqueComponent,
         canActivate: [AuthGuard],
         resolve: { user: AuthResolver }
-      }
+      },
+      {
+        path: 'relance-dossiers/:id',
+        component: DetailRelanceComponent,
+        canActivate: [AuthGuard],
+        resolve: { user: AuthResolver }
+      },
 
     ]
   },

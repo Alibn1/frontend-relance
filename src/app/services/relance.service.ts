@@ -68,5 +68,12 @@ export class RelanceService {
     );
   }
 
-
+  getRelanceDetails(ndr: string): Observable<any> {
+    return this.apiService.get(`relance-dossiers/${ndr}`).pipe(
+      catchError(error => {
+        console.error('Erreur détaillée:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 }
