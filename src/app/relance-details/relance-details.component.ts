@@ -7,7 +7,6 @@ import { Location } from '@angular/common';
 import { MATERIAL_PROVIDERS } from '../material';
 import { provideNativeDateAdapter } from '@angular/material/core';
 //import { SousModeleService } from '../services/sous-modele.service';
-//import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-detail-relance',
@@ -18,6 +17,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
   providers: [provideNativeDateAdapter()]
 })
 export class DetailRelanceComponent implements OnInit {
+  opened = true;
   relanceId = '';
   relance: any = null;
   isLoading = true;
@@ -33,6 +33,7 @@ export class DetailRelanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.relanceId = this.route.snapshot.paramMap.get('id') || '';
+    console.log('relanceId:', this.relanceId);
     this.loadRelanceDetails();
   }
 
@@ -44,7 +45,7 @@ export class DetailRelanceComponent implements OnInit {
           const data = response.data;
           this.relance = {
             ...data,
-            num_relance_dossier: data.num_relance_dossier,
+            ndr: data.numero_relance_dossier,
             date: data.date_relance,
             statut: data.statut?.code_statut ?? 'INCONNU',
             libelle: data.statut?.libelle_statut ?? 'Inconnu',
@@ -52,7 +53,6 @@ export class DetailRelanceComponent implements OnInit {
             historique: data.historiques ?? [],
             etapes: data.etapes ?? [],
             documents: data.documents ?? [],
-
           };
         } else {
           this.showError(response.message || 'Erreur lors du chargement');
@@ -80,7 +80,7 @@ export class DetailRelanceComponent implements OnInit {
   toggleStatus(): void {
     if (!this.relance?.statut) return;
 
-    const newStatus = this.relance.STA.toUpperCase() === 'OUVERT' ? 'Cloture' : 'Ouvert';
+    const newStatus = this.relance.statut.toUpperCase() === 'OUVERT' ? 'Cloture' : 'Ouvert';
 
     this.apiService.patch(`relance-dossiers/${this.relanceId}/status`, { status: newStatus }).subscribe({
       next: () => {
@@ -99,7 +99,7 @@ export class DetailRelanceComponent implements OnInit {
   }
 
   getStatutIcon(): string {
-    switch (this.relance?.STA?.toUpperCase()) {
+    switch (this.relance?.statut?.toUpperCase()) {
       case 'CLOTURE': return 'lock';
       case 'OUVERT': return 'lock_open';
       default: return 'lock_outline';
@@ -108,8 +108,8 @@ export class DetailRelanceComponent implements OnInit {
 
   navigateToCreateEvent(): void {
     const firstEtape = this.relance?.etapes?.[0];
-    if (this.relance?.NDR && firstEtape?.numero_relance) {
-      this.router.navigate([`/relance-dossiers/${this.relance.NDR}/etapes/${firstEtape.numero_relance}/evenements/creer`])
+    if (this.relance?.ndr && firstEtape?.numero_relance) {
+      this.router.navigate([`/relance-dossiers/${this.relance.ndr}/etapes/${firstEtape.numero_relance}/evenements/creer`])
         .catch(() => this.showError('Erreur lors de la redirection'));
     } else {
       this.showError('Aucune étape disponible pour cette relance.');
@@ -118,8 +118,8 @@ export class DetailRelanceComponent implements OnInit {
 
   navigateToEventHistory(): void {
     const firstEtape = this.relance?.etapes?.[0];
-    if (this.relance?.NDR && firstEtape?.numero_relance) {
-      this.router.navigate([`/relance-dossiers/${this.relance.NDR}/etapes/${firstEtape.numero_relance}/evenements`]);
+    if (this.relance?.ndr && firstEtape?.numero_relance) {
+      this.router.navigate([`/relance-dossiers/${this.relance.ndr}/etapes/${firstEtape.numero_relance}/evenements`]);
     } else {
       this.showError('Aucune étape disponible pour afficher l\'historique');
     }
@@ -128,7 +128,6 @@ export class DetailRelanceComponent implements OnInit {
   goBack(): void {
     window.history.length > 1 ? this.location.back() : this.router.navigate(['/relance-dossiers']);
   }
-
 
   sendEmail(): void {
     console.log('Envoi d\'email pour la relance', this.relanceId);

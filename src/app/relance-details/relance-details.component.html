@@ -1,65 +1,67 @@
-<div class="container">
-  <!-- Header with Actions -->
-  <div class="header mat-elevation-z2">
-    <button mat-icon-button (click)="goBack()" matTooltip="Retour">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <div class="header-title">
-      <mat-icon color="primary">folder_open</mat-icon>
-      <h1>Relance N° {{ relance?.num_relance_dossier }}</h1>
-    </div>
-    <div class="header-actions">
-      <button mat-stroked-button (click)="navigateToEventHistory()">
-        <mat-icon>history</mat-icon> Historique
-      </button>
-      <button mat-stroked-button (click)="navigateToCreateEvent()">
-        <mat-icon>event</mat-icon> Événement
-      </button>
-      <button mat-icon-button [ngStyle]="{ 'color': getStatutColor() }" (click)="toggleStatus()" matTooltip="Changer le statut">
-        <mat-icon>{{ getStatutIcon() }}</mat-icon>
-      </button>
-    </div>
+<!-- Bande violette parfaitement attachée -->
+<div class="relance-header mat-elevation-z4">
+  <button mat-icon-button (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <div class="relance-title">
+    <mat-icon>folder</mat-icon>
+    <h1>{{ relance?.ndr }}</h1>
+    <span class="etape-code">{{ relance?.etapes?.[0]?.numero_relance }}</span>
   </div>
+  <div class="header-actions">
+    <button mat-stroked-button color="primary" (click)="navigateToEventHistory()">
+      <mat-icon>history</mat-icon> Historique
+    </button>
+    <button mat-stroked-button color="primary" (click)="navigateToCreateEvent()">
+      <mat-icon>event</mat-icon> Événement
+    </button>
+    <button mat-icon-button (click)="toggleStatus()" matTooltip="Changer le statut"
+            [ngStyle]="{ 'color': getStatutColor() }">
+      <mat-icon>{{ getStatutIcon() }}</mat-icon>
+    </button>
+  </div>
+</div>
 
-  <!-- Main content -->
-  <div class="main">
-    <mat-card class="relance-details mat-elevation-z1">
-      <div class="details-grid">
-        <!-- Info principale -->
-        <div class="info-block">
-          <h3>Détails</h3>
-          <p><strong>Date:</strong> {{ relance?.date | date: 'dd/MM/yyyy' }}</p>
-          <p><strong>Statut:</strong> {{ relance?.libelle }}</p>
-          <p><strong>Utilisateur:</strong> {{ relance?.user }}</p>
-        </div>
-
-        <!-- Client info -->
-        <div class="info-block">
-          <h3>Client</h3>
-          <p><strong>Raison sociale:</strong> {{ relance?.client?.raison_sociale || 'Non renseigné' }}</p>
-          <p><strong>Email:</strong> {{ relance?.client?.email || 'Non renseigné' }}</p>
-          <p><strong>Téléphone:</strong> {{ relance?.client?.telephone || 'Non renseigné' }}</p>
-        </div>
-
-        <!-- Actions avancées -->
-        <div class="info-block actions">
-          <h3>Actions</h3>
-          <button mat-raised-button color="primary" (click)="navigateToCreateEvent()">
-            <mat-icon>event</mat-icon> Ajouter événement
-          </button>
-          <button mat-raised-button color="accent" (click)="sendEmail()">
-            <mat-icon>mail</mat-icon> Envoyer Email
-          </button>
-          <button mat-raised-button color="warn" (click)="confirmDelete()">
-            <mat-icon>delete</mat-icon> Supprimer
-          </button>
-        </div>
-      </div>
+<!-- Contenu des cartes -->
+<div class="container">
+  <div class="card-grid">
+    <!-- Détails relance -->
+    <mat-card class="detail-card">
+      <mat-card-title>Détails de la relance</mat-card-title>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <p><strong>Date:</strong> {{ relance?.date | date:'dd/MM/yyyy' }}</p>
+        <p><strong>Statut:</strong> {{ relance?.libelle }}</p>
+        <p><strong>Utilisateur:</strong> {{ relance?.user }}</p>
+      </mat-card-content>
     </mat-card>
 
-    <!-- Loading Spinner -->
-    <div *ngIf="isLoading" class="loading">
-      <mat-spinner diameter="60"></mat-spinner>
-    </div>
+    <!-- Client -->
+    <mat-card class="detail-card">
+      <mat-card-title>Informations client</mat-card-title>
+      <mat-divider></mat-divider>
+      <mat-card-content>
+        <p><strong>Raison sociale:</strong> {{ relance?.client?.raison_sociale }}</p>
+        <p><strong>Email:</strong> {{ relance?.client?.email }}</p>
+        <p><strong>Téléphone:</strong> {{ relance?.client?.telephone }}</p>
+      </mat-card-content>
+    </mat-card>
   </div>
+
+  <!-- Actions -->
+  <mat-card class="detail-card full-width">
+    <mat-card-title>Actions</mat-card-title>
+    <mat-divider></mat-divider>
+    <mat-card-content class="action-buttons">
+      <button mat-raised-button color="primary" (click)="navigateToCreateEvent()">
+        <mat-icon>event</mat-icon> Ajouter événement
+      </button>
+      <button mat-raised-button color="accent" (click)="sendEmail()">
+        <mat-icon>mail</mat-icon> Envoyer Email
+      </button>
+      <button mat-raised-button color="warn" (click)="confirmDelete()">
+        <mat-icon>delete</mat-icon> Supprimer
+      </button>
+    </mat-card-content>
+  </mat-card>
 </div>
