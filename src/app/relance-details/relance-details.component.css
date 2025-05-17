@@ -1,42 +1,50 @@
-/* Supprimer tous les marges/paddings du body/html */
+:host {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
 html, body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  overflow-x: hidden;
+  font-family: Roboto, Arial, sans-serif;
+  width: 100%;
 }
 
-/* Bande violette principale */
+/* En-tête violette */
 .relance-header {
-  background-color: #6a1b9a; /* violet foncé */
+  width: 100%;
+  background-color: #6a1b9a;
+  padding: 0.75rem 1.5rem;
   color: white;
-  padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  margin: 0;
-  border-radius: 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  position: relative;
+  box-sizing: border-box;
 }
 
-/* Titre centré avec icône */
-.relance-title {
+/* Zone gauche */
+.relance-left {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 1.5rem;
-  font-weight: bold;
+  gap: 1.5rem;
 }
 
-/* Badge d'étape */
-.etape-code {
-  font-size: 0.75rem;
-  background: white;
-  color: #6a1b9a;
-  padding: 0.25rem 0.6rem;
-  border-radius: 20px;
+/* Infos à gauche */
+.relance-info {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  font-size: 16px;
   font-weight: 500;
+  flex-wrap: wrap;
+}
+
+.relance-info mat-icon {
+  vertical-align: middle;
+  margin-right: 0.4rem;
 }
 
 /* Actions à droite */
@@ -44,47 +52,47 @@ html, body {
   display: flex;
   gap: 0.75rem;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-/* Conteneur principal */
+/* Conteneur global */
 .container {
   padding: 1.5rem;
-  margin: 0;
+  box-sizing: border-box;
+  width: 100%;
 }
 
-/* Cartes côte à côte */
+/* Grille des cartes */
 .card-grid {
   display: flex;
   flex-wrap: wrap;
   gap: 1.5rem;
-  margin-bottom: 2rem;
 }
 
-/* Cartes standards */
+/* Cartes alignées */
 .detail-card {
-  flex: 1 1 calc(50% - 1.5rem);
+  flex: 1 1 calc(50% - 0.75rem);
   background: #fafafa;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 1rem;
+  box-sizing: border-box;
 }
 
-/* Largeur 100% pour la carte actions */
+/* Pleine largeur */
 .full-width {
   width: 100%;
+  background: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1rem;
+  margin-top: 1.5rem;
+  box-sizing: border-box;
 }
 
-/* Boutons alignés */
+/* Boutons */
 .action-buttons {
   display: flex;
-  flex-wrap: wrap;
   gap: 1rem;
-}
-
-/* Chargement */
-.loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2rem;
+  flex-wrap: wrap;
 }

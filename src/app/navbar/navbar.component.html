@@ -27,7 +27,7 @@
     </mat-sidenav>
 
     <mat-sidenav-content class="main-content">
-      <div class="inner-content">
+      <div [ngClass]="{ 'inner-content': true, 'no-padding': isRelanceDetailsRoute() }">
         <router-outlet></router-outlet>
       </div>
     </mat-sidenav-content>

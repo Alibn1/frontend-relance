@@ -1,13 +1,23 @@
-<!-- Bande violette parfaitement attachée -->
 <div class="relance-header mat-elevation-z4">
-  <button mat-icon-button (click)="goBack()">
-    <mat-icon>arrow_back</mat-icon>
-  </button>
-  <div class="relance-title">
-    <mat-icon>folder</mat-icon>
-    <h1>{{ relance?.ndr }}</h1>
-    <span class="etape-code">{{ relance?.etapes?.[0]?.numero_relance }}</span>
+  <!-- Partie gauche : flèche + numéro dossier + client -->
+  <div class="relance-info">
+    <button mat-icon-button (click)="goBack()" matTooltip="Retour">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <div class="info-group">
+      <span class="relance-id">
+        <mat-icon>folder</mat-icon>
+        {{ relance?.ndr }}
+      </span>
+      <span class="client-id">
+        <mat-icon>business</mat-icon>
+        {{ relance?.client?.code_client }} - {{ relance?.client?.raison_sociale }}
+      </span>
+    </div>
   </div>
+
+  <!-- Partie droite : actions -->
   <div class="header-actions">
     <button mat-stroked-button color="primary" (click)="navigateToEventHistory()">
       <mat-icon>history</mat-icon> Historique
@@ -15,17 +25,16 @@
     <button mat-stroked-button color="primary" (click)="navigateToCreateEvent()">
       <mat-icon>event</mat-icon> Événement
     </button>
-    <button mat-icon-button (click)="toggleStatus()" matTooltip="Changer le statut"
-            [ngStyle]="{ 'color': getStatutColor() }">
+    <button mat-icon-button (click)="toggleStatus()" [ngStyle]="{ 'color': getStatutColor() }" matTooltip="Changer le statut">
       <mat-icon>{{ getStatutIcon() }}</mat-icon>
     </button>
   </div>
 </div>
 
-<!-- Contenu des cartes -->
+<!-- Contenu principal avec padding -->
 <div class="container">
   <div class="card-grid">
-    <!-- Détails relance -->
+    <!-- Détails de la relance -->
     <mat-card class="detail-card">
       <mat-card-title>Détails de la relance</mat-card-title>
       <mat-divider></mat-divider>
@@ -36,7 +45,7 @@
       </mat-card-content>
     </mat-card>
 
-    <!-- Client -->
+    <!-- Informations client -->
     <mat-card class="detail-card">
       <mat-card-title>Informations client</mat-card-title>
       <mat-divider></mat-divider>

@@ -6,7 +6,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import { MatButtonModule } from '@angular/material/button'; // Correction ici : utiliser MatButtonModule
+import { MatButtonModule } from '@angular/material/button';
+import {MATERIAL_PROVIDERS} from '../material'; // Correction ici : utiliser MatButtonModule
 
 @Component({
   selector: 'app-navbar',
@@ -19,7 +20,8 @@ import { MatButtonModule } from '@angular/material/button'; // Correction ici : 
     MatListModule,
     MatButtonModule,  // Correct pour mat-icon-button
     RouterLink,
-    RouterOutlet
+    RouterOutlet,
+    MATERIAL_PROVIDERS
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
@@ -55,5 +57,9 @@ export class NavbarComponent implements OnInit {
     if (this.sidenav) {
       this.sidenav.toggle();
     }
+  }
+
+  isRelanceDetailsRoute(): boolean {
+    return this.router.url.startsWith('/relance-dossiers/');
   }
 }
