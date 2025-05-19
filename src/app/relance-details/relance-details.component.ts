@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { MATERIAL_PROVIDERS } from '../material';
 import { provideNativeDateAdapter } from '@angular/material/core';
-//import { SousModeleService } from '../services/sous-modele.service';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-detail-relance',
@@ -22,6 +22,12 @@ export class DetailRelanceComponent implements OnInit {
   relance: any = null;
   isLoading = true;
 
+  creances = [
+    { libelle: 'Relevé', date: '2024-10', debit: 221280, credit: 0, solde: 221280 }
+  ];
+  displayedColumns: string[] = ['libelle', 'date', 'debit', 'credit', 'solde'];
+  dataSource = new MatTableDataSource<any>(this.creances);
+
   constructor(
     private route: ActivatedRoute,
     private apiService: ApiService,
@@ -35,6 +41,7 @@ export class DetailRelanceComponent implements OnInit {
     this.relanceId = this.route.snapshot.paramMap.get('id') || '';
     console.log('relanceId:', this.relanceId);
     this.loadRelanceDetails();
+    this.dataSource.data = this.creances;
   }
 
   loadRelanceDetails(): void {
@@ -123,6 +130,10 @@ export class DetailRelanceComponent implements OnInit {
     } else {
       this.showError('Aucune étape disponible pour afficher l\'historique');
     }
+  }
+
+  get totalSolde() {
+    return this.dataSource.data.reduce((sum, c) => sum + c.solde, 0);
   }
 
   goBack(): void {
