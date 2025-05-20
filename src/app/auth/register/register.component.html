@@ -7,6 +7,9 @@
       <mat-label>Nom</mat-label>
       <input matInput formControlName="name" required />
       <mat-icon matSuffix>person</mat-icon>
+      <mat-error *ngIf="registerForm.get('name')?.touched && registerForm.get('name')?.hasError('required')">
+        Le nom est requis
+      </mat-error>
     </mat-form-field>
 
     <!-- Email -->
@@ -14,6 +17,12 @@
       <mat-label>Email</mat-label>
       <input matInput type="email" formControlName="email" required />
       <mat-icon matSuffix>email</mat-icon>
+      <mat-error *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.hasError('required')">
+        L'email est requis
+      </mat-error>
+      <mat-error *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.hasError('email')">
+        Format d'email invalide
+      </mat-error>
     </mat-form-field>
 
     <!-- Mot de passe -->
@@ -23,6 +32,12 @@
       <button mat-icon-button matSuffix type="button" (click)="hidePassword = !hidePassword">
         <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
+      <mat-error *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.hasError('required')">
+        Le mot de passe est requis
+      </mat-error>
+      <mat-error *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.hasError('minlength')">
+        Le mot de passe doit contenir au moins 6 caractères
+      </mat-error>
     </mat-form-field>
 
     <!-- Confirmer mot de passe -->
@@ -32,22 +47,32 @@
       <button mat-icon-button matSuffix type="button" (click)="hideConfirmPassword = !hideConfirmPassword">
         <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
       </button>
+      <mat-error *ngIf="registerForm.get('password_c')?.touched && registerForm.get('password_c')?.hasError('required')">
+        La confirmation du mot de passe est requise
+      </mat-error>
+      <mat-error *ngIf="registerForm.get('password_c')?.touched && registerForm.get('password_c')?.hasError('mismatch')">
+        Les mots de passe ne correspondent pas
+      </mat-error>
     </mat-form-field>
 
     <!-- Bouton inscription -->
-    <button mat-raised-button color="primary" type="submit" class="full-width-button" [disabled]="isLoading">
+    <button mat-raised-button color="primary" type="submit" class="full-width-button" [disabled]="isLoading || registerForm.invalid">
       <mat-spinner *ngIf="isLoading" diameter="25"></mat-spinner>
       <span *ngIf="!isLoading">S'inscrire</span>
     </button>
 
-    <!-- Erreur -->
+    <!-- Erreur générique -->
     <div *ngIf="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
 
     <!-- Lien vers connexion -->
     <div class="login-link">
-      <p>Déjà inscrit ? <button mat-button color="accent" type="button" (click)="goToLogin()">Se connecter</button></p>
+      <p>Déjà inscrit ?
+        <button mat-button color="accent" type="button" (click)="goToLogin()">
+          Se connecter
+        </button>
+      </p>
     </div>
   </form>
 </div>

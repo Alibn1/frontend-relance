@@ -56,6 +56,7 @@ export class DetailRelanceComponent implements OnInit {
             date: data.date_relance,
             statut: data.statut?.code_statut ?? 'INCONNU',
             libelle: data.statut?.libelle_statut ?? 'Inconnu',
+            couleur_statut: data.statut?.couleur_statut ?? '#9e9e9e',
             user: data.user_creation ?? 'Utilisateur inconnu',
             historique: data.historiques ?? [],
             etapes: data.etapes ?? [],
@@ -102,7 +103,7 @@ export class DetailRelanceComponent implements OnInit {
   }
 
   getStatutColor(): string {
-    return this.relance?.statut?.couleur_statut || '#9e9e9e';
+    return this.relance?.couleur_statut || '#9e9e9e';
   }
 
   getStatutIcon(): string {
@@ -116,7 +117,7 @@ export class DetailRelanceComponent implements OnInit {
   navigateToCreateEvent(): void {
     const firstEtape = this.relance?.etapes?.[0];
     if (this.relance?.ndr && firstEtape?.numero_relance) {
-      this.router.navigate([`/relance-dossiers/${this.relance.ndr}/etapes/${firstEtape.numero_relance}/evenements/creer`])
+      this.router.navigate([`/relance-dossiers/${this.relance.ndr}/etapes/${firstEtape.numero_relance}/evenements/create`])
         .catch(() => this.showError('Erreur lors de la redirection'));
     } else {
       this.showError('Aucune étape disponible pour cette relance.');
@@ -140,11 +141,16 @@ export class DetailRelanceComponent implements OnInit {
     window.history.length > 1 ? this.location.back() : this.router.navigate(['/relance-dossiers']);
   }
 
-  sendEmail(): void {
-    console.log('Envoi d\'email pour la relance', this.relanceId);
-  }
 
   confirmDelete(): void {
     this.snackBar.open('Suppression à implémenter', 'OK', { duration: 2500 });
+  }
+
+  printRelance() {
+    console.log('Impression en cours...');
+  }
+
+  markAsDraft() {
+    console.log('Marquer comme brouillon...');
   }
 }

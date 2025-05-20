@@ -10,13 +10,13 @@ html, body {
   overflow-x: hidden;
   font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
   width: 100%;
-  background-color: #fcfaff;
+  background-color: #fcfaff; /* fond violet très clair */
 }
 
 /* ===== En-tête violet étendu ===== */
 .relance-header {
   width: 100%;
-  background-color: #6a1b9a;
+  background-color: #8f50ec; /* violet doux */
   color: white;
   padding: 1.5rem;
   box-sizing: border-box;
@@ -36,6 +36,16 @@ html, body {
   gap: 1.5rem;
 }
 
+.relance-left button[mat-icon-button] {
+  color: white;
+  transform: translateY(-4px);
+}
+
+.relance-left mat-icon {
+  font-size: 28px;
+  vertical-align: middle;
+}
+
 .relance-info {
   display: flex;
   align-items: center;
@@ -50,14 +60,12 @@ html, body {
   margin-right: 0.4rem;
 }
 
-/* Partie droite de l'en-tête */
 .relance-right {
   display: flex;
   align-items: center;
   gap: 0.75rem;
 }
 
-/* Ligne sous les infos : actions secondaires */
 .relance-subactions {
   display: flex;
   gap: 0.75rem;
@@ -80,7 +88,6 @@ button[mat-stroked-button] {
   line-height: 1.2;
 }
 
-/* Couleurs boutons personnalisées */
 button[mat-flat-button].mat-primary {
   background-color: #3949ab;
   color: #fff;
@@ -96,28 +103,32 @@ button[mat-flat-button].mat-warn {
   color: #fff;
 }
 
-button[mat-flat-button].mat-neutral {
-  background-color: #5e35b1;
-  color: #fff;
-}
-
 button[mat-stroked-button] {
   border: 1px solid rgba(255, 255, 255, 0.6);
   color: white;
 }
 
-/* Badge de statut ouvert / fermé */
-button.opened {
-  background-color: #4caf50 !important;
+button.btn-print {
+  background-color: #003366 !important;
   color: white;
 }
 
-button.closed {
-  background-color: #f44336 !important;
+button.btn-draft {
+  background-color: #708238 !important;
   color: white;
 }
 
-/* Icônes boutons */
+button.btn-light {
+  background-color: #eaeaea !important;
+  color: #333;
+}
+
+/* Bouton de statut dynamique */
+button.statut-button {
+  font-weight: 600;
+}
+
+/* Icônes dans boutons */
 .mat-icon {
   font-size: 16px;
   vertical-align: middle;
@@ -151,14 +162,49 @@ button.closed {
   min-width: 400px;
 }
 
-/* ===== Cartes ===== */
+/* ===== Cartes Générales ===== */
 .detail-card,
 .creance-table-card {
   background: #fafafa;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
+  padding: 1.5rem;
   box-sizing: border-box;
+}
+
+/* ===== Informations client (grille personnalisée) ===== */
+.client-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem 3rem;
+  margin-top: 1.2rem;
+  font-size: 16px;
+}
+
+.client-info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  font-size: 16px;
+}
+
+.client-info-item mat-icon {
+  font-size: 28px;
+  color: #6a1b9a;
+  margin-top: 2px;
+}
+
+.label-title {
+  font-weight: bold;
+  font-size: 15px;
+  color: #444;
+  margin-bottom: 3px;
+}
+
+mat-card-title mat-icon {
+  font-size: 20px;
+  margin-right: 6px;
+  vertical-align: bottom;
 }
 
 /* ===== Tableau Angular Material ===== */

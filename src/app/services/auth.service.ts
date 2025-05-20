@@ -57,12 +57,8 @@ export class AuthService {
   }
 
   login(email: string, password: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
-      tap({
-        next: (response) => this.handleLoginSuccess(response),
-        error: (error) => this.handleAuthError(error)
-      })
-    );
+    return this.http.post(`${this.apiUrl}/login`, { email, password })
+
   }
 
   register(userData: { name: string; email: string; password: string }): Observable<any> {
@@ -98,7 +94,7 @@ export class AuthService {
     return !!token && !this.jwtHelper.isTokenExpired(token);
   }
 
-  private handleLoginSuccess(response: any): void {
+  handleLoginSuccess(response: any): void {
     const userData = { ...response.user, token: response.access_token };
     this.saveSession(response.access_token, userData);
     this.currentUserSubject.next(userData);

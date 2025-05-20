@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import {finalize} from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -51,38 +52,33 @@ export class LoginComponent {
 
   // Méthode pour soumettre le formulaire de connexion
   onSubmit() {
-    if (this.loginForm.invalid) {
-      return;  // Retour si le formulaire est invalide
-    }
+    if (this.loginForm.invalid) return;
 
-    this.isLoading = true;  // Affichage du spinner de chargement
-    const { email, password } = this.loginForm.value;
-
-    // Désactiver les champs du formulaire pendant la requête
+    this.isLoading = true;
     this.loginForm.disable();
 
-    // Appel au service d'authentification
-    this.authService.login(email, password).subscribe({
-      next: (response) => {
-        // Enregistrer le token et l'utilisateur
-        this.authService.saveSession(response.access_token, response.user);
-        // Rediriger vers la page des clients après connexion réussie
-        this.router.navigate(['/clients']);
-      },
-      error: (error) => {
-        // Afficher un message d'erreur dans un snackbar
-        this.snackBar.open(
-          error.error?.message || 'Identifiants incorrects, veuillez réessayer.',
-          'Fermer',
-          { duration: 5000, panelClass: ['error-snackbar'] }
-        );
-      },
-      // Always reset the loading state and re-enable the form in case of completion (success or failure)
-      complete: () => {
-        this.isLoading = false;  // Cacher le spinner
-        this.loginForm.enable();  // Réactiver les champs du formulaire
-      }
-    });
+    const { email, password } = this.loginForm.value;
+
+    this.authService.login(email, password)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+          this.loginForm.enable();
+        })
+      )
+      .subscribe({
+        next: (response) => {
+          this.authService.handleLoginSuccess(response); // ✅ Utiliser la méthode complète
+          this.router.navigate(['/clients']);            // 👈 ça redirigera bien
+        },
+        error: (error) => {
+          this.snackBar.open(
+            error.error?.message || 'Identifiants incorrects, veuillez réessayer.',
+            'Fermer',
+            { duration: 5000, panelClass: ['error-snackbar'] }
+          );
+        }
+      });
   }
 
   // Méthode pour rediriger vers la page d'inscription

@@ -3,20 +3,21 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { finalize } from 'rxjs/operators';
 
-// Import des modules nécessaires d'Angular Material
+import { HttpClientModule } from '@angular/common/http';
+import { NgIf } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {NgIf} from '@angular/common';
-import {HttpClientModule} from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
+  standalone: true,
   imports: [
     HttpClientModule,
     ReactiveFormsModule,
@@ -49,43 +50,59 @@ export class RegisterComponent {
     }, { validators: this.passwordMatchValidator });
   }
 
-  // Validation des mots de passe
   passwordMatchValidator(form: FormGroup) {
-    return form.get('password')?.value === form.get('password_c')?.value
-      ? null
-      : { mismatch: true };
-  }
+    const password = form.get('password');
+    const confirmPassword = form.get('password_c');
 
-  // Soumission du formulaire
-  onSubmit() {
-    if (this.registerForm.invalid) {
-      return; // Si le formulaire est invalide, on ne fait rien
+    if (!password || !confirmPassword) return null;
+
+    if (password.value !== confirmPassword.value) {
+      confirmPassword.setErrors({ ...confirmPassword.errors, mismatch: true });
+    } else {
+      if (confirmPassword.hasError('mismatch')) {
+        const errors = { ...confirmPassword.errors };
+        delete errors['mismatch'];
+        confirmPassword.setErrors(Object.keys(errors).length ? errors : null);
+      }
     }
 
-    this.isLoading = true;
-    const formData = this.registerForm.value;
+    return null;
+  }
 
-    this.authService.register(formData).subscribe({
-      next: () => {
-        this.snackBar.open('Inscription réussie!', 'Fermer', {
-          duration: 5000,
-          panelClass: ['success-snackbar'],
-        });
-        this.router.navigate(['/login']);
-        this.isLoading = false;
-      },
-      error: (error) => {
-        this.snackBar.open(
-          error.error?.message || 'Erreur inscription',
-          'Fermer',
-          { duration: 5000, panelClass: ['error-snackbar'] }
-        );
-        this.isLoading = false;
-      },
-    });
+  onSubmit() {
+    if (this.registerForm.invalid) return;
+
+    this.isLoading = true;
+    this.errorMessage = '';
+    const formData = this.registerForm.value;
+    this.registerForm.disable();
+
+    this.authService.register(formData)
+      .pipe(
+        finalize(() => {
+          this.isLoading = false;
+          this.registerForm.enable();
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.snackBar.open('Inscription réussie!', 'Fermer', {
+            duration: 5000,
+            panelClass: ['success-snackbar'],
+          });
+          this.router.navigate(['/login']);
+        },
+        error: (error) => {
+          this.errorMessage = error.error?.message || 'Erreur lors de l’inscription';
+          this.snackBar.open(this.errorMessage, 'Fermer', {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
   }
 
   goToLogin() {
-    this.router.navigate(['/login']); // Rediriger vers la page de connexion
+    this.router.navigate(['/login']);
   }
 }
