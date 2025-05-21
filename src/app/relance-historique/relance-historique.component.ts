@@ -55,8 +55,8 @@ export class RelanceHistoriqueComponent implements OnInit {
           statut_code: item.statut?.code ?? 'BROUILLON',  // Pour la classe CSS (exemple: "OUVERT")
           numero_relance: etape?.numero_relance ?? '—',
           date_rappel: this.formatDate(etape?.date_rappel),
-          statut_detail: etape?.statut_detail ?? 'BROUILLON',
-          utilisateur_creation: item.utilisateur_creation ?? '—'
+          statut_detail: etape ? etape.statut_detail : '—',
+          utilisateur_creation: etape?.utilisateur ?? '—'
         };
       });
 
