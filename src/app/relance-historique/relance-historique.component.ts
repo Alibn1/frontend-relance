@@ -56,7 +56,7 @@ export class RelanceHistoriqueComponent implements OnInit {
           numero_relance: etape?.numero_relance ?? '—',
           date_rappel: this.formatDate(etape?.date_rappel),
           statut_detail: etape ? etape.statut_detail : '—',
-          utilisateur_creation: etape?.utilisateur ?? '—'
+          utilisateur_creation: etape?.executant_envoi ?? '—'
         };
       });
 

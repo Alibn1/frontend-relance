@@ -132,24 +132,24 @@ export class ClientDetailsComponent implements OnInit {
 
   private loadFakeImpayes(): void {
     this.impayes.data = [
-      {
-        recouvrement: 'RCV001',
-        date: '2025-04-10',
-        type: 'Facture',
-        echeance: '2025-04-30',
-        valeur_initiale: 5000,
-        valeur_reglee: 2000,
-        reste: 3000
-      },
-      {
-        recouvrement: 'RCV002',
-        date: '2025-03-15',
-        type: 'Avoir',
-        echeance: '2025-03-31',
-        valeur_initiale: 3000,
-        valeur_reglee: 3000,
-        reste: 0
-      }
+      // {
+      //   recouvrement: 'RCV001',
+      //   date: '2025-04-10',
+      //   type: 'Facture',
+      //   echeance: '2025-04-30',
+      //   valeur_initiale: 5000,
+      //   valeur_reglee: 2000,
+      //   reste: 3000
+      // },
+      // {
+      //   recouvrement: 'RCV002',
+      //   date: '2025-03-15',
+      //   type: 'Avoir',
+      //   echeance: '2025-03-31',
+      //   valeur_initiale: 3000,
+      //   valeur_reglee: 3000,
+      //   reste: 0
+      // }
     ];
   }
 }

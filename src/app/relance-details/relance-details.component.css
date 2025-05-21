@@ -10,13 +10,12 @@ html, body {
   overflow-x: hidden;
   font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
   width: 100%;
-  background-color: #fcfaff; /* fond violet très clair */
+  background-color: #fcfaff;
 }
 
-/* ===== En-tête violet étendu ===== */
 .relance-header {
   width: 100%;
-  background-color: #8f50ec; /* violet doux */
+  background-color: #8f50ec;
   color: white;
   padding: 1.5rem;
   box-sizing: border-box;
@@ -73,7 +72,6 @@ html, body {
   flex-wrap: wrap;
 }
 
-/* ===== Boutons style INES rectangulaires ===== */
 button[mat-flat-button],
 button[mat-raised-button],
 button[mat-stroked-button] {
@@ -123,91 +121,101 @@ button.btn-light {
   color: #333;
 }
 
-/* Bouton de statut dynamique */
 button.statut-button {
   font-weight: 600;
 }
 
-/* Icônes dans boutons */
 .mat-icon {
   font-size: 16px;
   vertical-align: middle;
   margin-right: 4px;
 }
 
-/* ===== Structure principale ===== */
 .container {
   padding: 1.5rem;
   box-sizing: border-box;
   width: 100%;
 }
 
-.content-grid {
+.relance-full-card {
+  margin-top: 2rem;
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
   display: flex;
-  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start; /* changement ici */
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem; /* espace entre boutons et divider */
+  margin-top: 0.5rem; /* fait descendre un peu "Détails relance" */
+}
+
+.card-header mat-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  margin-top: 1.5rem; /* petit décalage vers le bas */
+  margin-bottom: -1rem;
+}
+
+.card-header mat-icon {
+  margin-right: 6px;
+}
+
+.relance-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: -0.3rem; /* remonte légèrement les boutons */
+}
+
+.relance-layout {
+  display: flex;
+  justify-content: space-between;
   gap: 2rem;
-  align-items: flex-start;
+  margin-top: 1.5rem;
   flex-wrap: wrap;
 }
 
-.left-column {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.right-column {
-  flex: 1;
-  min-width: 400px;
-}
-
-/* ===== Cartes Générales ===== */
-.detail-card,
-.creance-table-card {
-  background: #fafafa;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 1.5rem;
-  box-sizing: border-box;
-}
-
-/* ===== Informations client (grille personnalisée) ===== */
-.client-info-grid {
+.left-details {
+  flex: 1.2;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem 3rem;
-  margin-top: 1.2rem;
+  gap: 2rem;
   font-size: 16px;
 }
 
-.client-info-item {
+.detail-item {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
   font-size: 16px;
 }
 
-.client-info-item mat-icon {
+.detail-item mat-icon {
   font-size: 28px;
   color: #6a1b9a;
   margin-top: 2px;
 }
 
-.label-title {
+.info-label .label-title {
   font-weight: bold;
   font-size: 15px;
-  color: #444;
   margin-bottom: 3px;
 }
 
-mat-card-title mat-icon {
-  font-size: 20px;
-  margin-right: 6px;
-  vertical-align: bottom;
+.right-table {
+  flex: 1;
+  min-width: 400px;
 }
 
-/* ===== Tableau Angular Material ===== */
 table.mat-table {
   width: 100%;
   font-size: 14px;
@@ -233,7 +241,6 @@ table.mat-table {
   text-align: center;
 }
 
-/* ===== Footer externe ===== */
 .footer-only-table {
   width: 100%;
   border-spacing: 0;
