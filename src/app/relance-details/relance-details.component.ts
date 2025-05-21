@@ -53,10 +53,14 @@ export class DetailRelanceComponent implements OnInit {
           this.relance = {
             ...data,
             ndr: data.numero_relance_dossier,
-            date: data.date_relance,
-            statut: data.statut?.code_statut ?? 'INCONNU',
-            libelle: data.statut?.libelle_statut ?? 'Inconnu',
-            couleur_statut: data.statut?.couleur_statut ?? '#9e9e9e',
+            //date: data.date_relance,
+            //statut: data.statut?.code_statut ?? 'INCONNU',
+            //libelle: data.statut?.libelle_statut ?? 'Inconnu',
+            //couleur_statut: data.statut?.couleur_statut ?? '#9e9e9e',
+            date: data.date_relance_dossier,
+            statut: data.statut?.code ?? 'INCONNU',
+            libelle: data.statut?.libelle ?? 'Inconnu',
+            couleur_statut: data.statut?.couleur ?? '#9e9e9e',
             user: data.user_creation ?? 'Utilisateur inconnu',
             historique: data.historiques ?? [],
             etapes: data.etapes ?? [],
@@ -103,7 +107,15 @@ export class DetailRelanceComponent implements OnInit {
   }
 
   getStatutColor(): string {
-    return this.relance?.couleur_statut || '#9e9e9e';
+    const statut = this.relance?.statut?.toUpperCase();
+    switch (statut) {
+      case 'OUVERT':
+        return '#4CAF50'; // ✅ Vert
+      case 'CLOTURE':
+        return '#F44336'; // 🔒 Rouge
+      default:
+        return '#9e9e9e'; // Gris
+    }
   }
 
   getStatutIcon(): string {
