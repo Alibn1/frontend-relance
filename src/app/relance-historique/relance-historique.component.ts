@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { RelanceService } from '../services/relance.service';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { MATERIAL_PROVIDERS } from '../material';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-relance-historique',
@@ -30,6 +31,8 @@ export class RelanceHistoriqueComponent implements OnInit {
     'action'
   ];
 
+  @ViewChild(MatSort) sort!: MatSort;
+
   constructor(
     private relanceService: RelanceService,
     private datePipe: DatePipe,
@@ -50,9 +53,8 @@ export class RelanceHistoriqueComponent implements OnInit {
           numero_relance_dossier: item.numero_relance_dossier,
           date_relance_dossier: this.formatDate(item.date_relance_dossier),
           client: `${item.client?.code_client ?? ''} ${item.client?.raison_sociale ?? ''}`,
-          //statut: item.statut?.libelle ?? item.statut,
-          statut: item.statut?.libelle ?? '—',  // Pour l'affichage (exemple: "Ouvert")
-          statut_code: item.statut?.code ?? 'BROUILLON',  // Pour la classe CSS (exemple: "OUVERT")
+          statut: item.statut?.libelle ?? '—',
+          statut_code: item.statut?.code ?? 'BROUILLON',
           numero_relance: etape?.numero_relance ?? '—',
           date_rappel: this.formatDate(etape?.date_rappel),
           statut_detail: etape ? etape.statut_detail : '—',
@@ -61,6 +63,22 @@ export class RelanceHistoriqueComponent implements OnInit {
       });
 
       this.dataSource.data = mapped;
+
+      // 🔁 Forcer le tri logique sur numero_relance_dossier
+      this.dataSource.sort = this.sort;
+
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        if (property === 'numero_relance_dossier') {
+          const match = item.numero_relance_dossier?.match(/\d+$/);
+          return match ? parseInt(match[0], 10) : 0;
+        }
+        return item[property];
+      };
+
+      // this.dataSource.sort.active = 'numero_relance_dossier';
+      // this.dataSource.sort.direction = 'asc';
+      // this.dataSource.sort.sortChange.emit();
+
       this.isLoading = false;
     });
   }

@@ -25,6 +25,7 @@ import {MatToolbar} from '@angular/material/toolbar';
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
+import {MatCheckbox} from '@angular/material/checkbox';
 
 
 export const MATERIAL_PROVIDERS = [
@@ -70,6 +71,7 @@ export const MATERIAL_PROVIDERS = [
     MatDatepicker,
     MatDatepickerInput,
     MatSelect,
-    MatOption
+    MatOption,
+    MatCheckbox
   // ),
 ];

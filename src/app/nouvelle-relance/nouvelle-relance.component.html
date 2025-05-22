@@ -1,104 +1,150 @@
 <div class="page-container">
-    <!-- Bouton retour -->
-    <div class="header-bar">
-        <button mat-icon-button color="primary" (click)="goBack()">
-            <mat-icon>arrow_back</mat-icon>
-        </button>
-        <h2>Nouvelle Étape de Relance</h2>
+  <!-- Bouton retour -->
+  <div class="header-bar">
+    <button mat-icon-button color="primary" (click)="goBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>Nouvelle Étape de Relance</h2>
+  </div>
+
+  <!-- ✅ Le FORM englobe les deux cartes -->
+  <form [formGroup]="relanceForm" (ngSubmit)="onSubmit()" [class.disabled]="isLoading">
+
+    <mat-card class="relance-card">
+      <mat-card-title class="section-title">Sélection des relevés à relancer</mat-card-title>
+
+      <table mat-table [dataSource]="releves" class="mat-elevation-z1 full-width custom-table">
+
+        <!-- ✅ Checkbox avec sélection globale -->
+        <ng-container matColumnDef="select">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox
+              (change)="toggleAllReleves($event)"
+              [checked]="isAllSelected()"
+              [indeterminate]="isIndeterminate()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let releve">
+            <mat-checkbox
+              (change)="toggleReleveSelection(releve.code_releve, $event)"
+              [checked]="isSelected(releve.code_releve)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Date -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let releve">{{ releve.date_releve | date: 'yyyy-MM' }}</td>
+        </ng-container>
+
+        <!-- Valeur Initiale -->
+        <ng-container matColumnDef="valeur_initiale">
+          <th mat-header-cell *matHeaderCellDef>Valeur Initiale</th>
+          <td mat-cell *matCellDef="let releve">{{ releve.solde_initiale | number: '1.0-0' }}</td>
+        </ng-container>
+
+        <!-- Valeur Réglée -->
+        <ng-container matColumnDef="valeur_reglee">
+          <th mat-header-cell *matHeaderCellDef>Valeur Réglée</th>
+          <td mat-cell *matCellDef="let releve">{{ releve.solde_finale | number: '1.0-0' }}</td>
+        </ng-container>
+
+        <!-- Reste à régler -->
+        <ng-container matColumnDef="reste">
+          <th mat-header-cell *matHeaderCellDef>Reste à Régler</th>
+          <td mat-cell *matCellDef="let releve">{{ releve.solde_initiale - releve.solde_finale | number: '1.0-0' }}</td>
+        </ng-container>
+
+        <!-- En-têtes + lignes -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </mat-card>
+
+    <div class="cards-grid">
+      <!-- 🟦 Carte Informations Relance -->
+      <mat-card class="relance-card">
+        <mat-card-title class="section-title">Informations relance</mat-card-title>
+
+        <!-- Client -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Client</mat-label>
+          <input matInput [value]="clientCode + ' - ' + raisonSociale" disabled />
+        </mat-form-field>
+
+        <!-- TITRE -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Titre</mat-label>
+          <input matInput type="text" formControlName="titre" required />
+        </mat-form-field>
+
+        <!-- DATE -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Date Rappel</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="date_rappel" required />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <!-- NOMBRE DE JOURS -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Nombre de jours</mat-label>
+          <mat-select formControlName="nb_jours_rappel" required>
+            <mat-option [value]="30">30 jours</mat-option>
+            <mat-option [value]="60">60 jours</mat-option>
+            <mat-option [value]="90">90 jours</mat-option>
+            <mat-option [value]="120">120 jours</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- METHODE -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Méthode d'envoi</mat-label>
+          <mat-select formControlName="methode_envoi" required>
+            <mat-option value="Email">Email</mat-option>
+            <mat-option value="Courrier">Courrier</mat-option>
+            <mat-option value="Téléphone">Téléphone</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <!-- OBSERVATIONS -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Objet Relance 01</mat-label>
+          <textarea matInput formControlName="objet_relance1"></textarea>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Objet Relance 02</mat-label>
+          <textarea matInput formControlName="objet_relance2"></textarea>
+        </mat-form-field>
+      </mat-card>
+
+      <!-- 🟩 Carte Modèle Relance -->
+      <mat-card class="relance-card">
+        <mat-card-title class="section-title">Modèle relance</mat-card-title>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Choisir un modèle</mat-label>
+          <mat-select formControlName="code_sous_modele" required>
+            <mat-option value="AMIABLE">Relance 1 - Amiable</mat-option>
+            <mat-option value="SERIEUX">Relance 2 - Sérieux</mat-option>
+            <mat-option value="DEMEURE">Relance 3 - Mise en Demeure</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card>
     </div>
 
-    <!-- ✅ Le FORM englobe les deux cartes -->
-    <form [formGroup]="relanceForm" (ngSubmit)="onSubmit()" [class.disabled]="isLoading">
+    <!-- Boutons -->
+    <div class="button-group">
+      <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+        <mat-icon *ngIf="!isLoading">save</mat-icon>
+        <span *ngIf="!isLoading">Enregistrer</span>
+        <span *ngIf="isLoading">Enregistrement...</span>
+      </button>
 
-        <div class="cards-grid">
-            <!-- 🟦 Carte Informations Relance -->
-            <mat-card class="relance-card">
-                <mat-card-title class="section-title">Informations relance</mat-card-title>
-
-                <!-- Client -->
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Client</mat-label>
-                    <input matInput [value]="clientCode + ' - ' + raisonSociale" disabled />
-                </mat-form-field>
-
-                <!-- TITRE -->
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Titre</mat-label>
-                    <input matInput type="text" formControlName="titre" required />
-                </mat-form-field>
-
-                <!-- ORDRE -->
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Ordre</mat-label>
-                    <input matInput type="number" formControlName="ordre" required />
-                </mat-form-field>
-
-                <!-- DATE -->
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Date Rappel</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="date_rappel" required />
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-
-                <!-- NOMBRE DE JOURS -->
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Nombre de jours</mat-label>
-                    <mat-select formControlName="nb_jours_rappel" required>
-                        <mat-option [value]="30">30 jours</mat-option>
-                        <mat-option [value]="60">60 jours</mat-option>
-                        <mat-option [value]="90">90 jours</mat-option>
-                        <mat-option [value]="120">120 jours</mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <!-- METHODE -->
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Méthode d'envoi</mat-label>
-                    <mat-select formControlName="methode_envoi" required>
-                        <mat-option value="Email">Email</mat-option>
-                        <mat-option value="Courrier">Courrier</mat-option>
-                        <mat-option value="Téléphone">Téléphone</mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <!-- OBSERVATIONS -->
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Observation 1</mat-label>
-                    <textarea matInput formControlName="objet_relance1"></textarea>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Observation 2</mat-label>
-                    <textarea matInput formControlName="objet_relance2"></textarea>
-                </mat-form-field>
-            </mat-card>
-
-            <!-- 🟩 Carte Modèle Relance -->
-            <mat-card class="relance-card">
-                <mat-card-title class="section-title">Modèle relance</mat-card-title>
-
-                <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>Choisir un modèle</mat-label>
-                    <mat-select formControlName="code_sous_modele" required>
-                        <mat-option value="AMIABLE">Relance 1 - Amiable</mat-option>
-                        <mat-option value="SERIEUX">Relance 2 - Sérieux</mat-option>
-                        <mat-option value="DEMEURE">Relance 3 - Demeure</mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </mat-card>
-        </div>
-
-        <!-- Boutons -->
-        <div class="button-group">
-            <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
-                <mat-icon *ngIf="!isLoading">save</mat-icon>
-                <span *ngIf="!isLoading">Enregistrer</span>
-                <span *ngIf="isLoading">Enregistrement...</span>
-            </button>
-
-            <button mat-stroked-button type="button" (click)="cancel()">Annuler</button>
-        </div>
-
-    </form>
+      <button mat-stroked-button type="button" (click)="cancel()">Annuler</button>
+    </div>
+  </form>
 </div>

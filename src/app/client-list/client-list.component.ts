@@ -131,6 +131,15 @@ export class ClientListComponent implements OnInit, AfterViewInit {
     return Math.floor(diffTime / (1000 * 60 * 60 * 24));
   }
 
+  getElapsedBadgeClass(date: string | Date): string {
+    const days = this.getDaysElapsed(date);
+    if (days <= 30) {
+      return 'badge badge-warning'; // orange
+    } else {
+      return 'badge badge-danger'; // rouge
+    }
+  }
+
   handlePageEvent(event: any): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;

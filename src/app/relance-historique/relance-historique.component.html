@@ -1,73 +1,82 @@
+<mat-card class="main-card">
+  <mat-card-title class="title">Historique des relances</mat-card-title>
 
-  <mat-card class="main-card">
-    <mat-card-title class="title">Historique des relances</mat-card-title>
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Recherche</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Rechercher...">
+  </mat-form-field>
 
-    <mat-form-field appearance="outline" class="search-field">
-      <mat-label>Recherche</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Rechercher...">
-    </mat-form-field>
+  <div class="table-wrapper">
 
-    <div class="table-wrapper">
-      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z1 striped">
-
-        <!-- Colonnes -->
-        <ng-container matColumnDef="numero_relance_dossier">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Dossier</th>
-          <td mat-cell *matCellDef="let row">{{ row.numero_relance_dossier }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="date_relance_dossier">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Création</th>
-          <td mat-cell *matCellDef="let row">{{ row.date_relance_dossier }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="client">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Client</th>
-          <td mat-cell *matCellDef="let row">{{ row.client }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="statut">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut Dossier</th>
-          <td mat-cell *matCellDef="let row">
-            <span [ngClass]="getStatusClass(row.statut_code)" class="badge">{{ row.statut }}</span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="numero_relance">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Relance</th>
-          <td mat-cell *matCellDef="let row">{{ row.numero_relance }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="date_rappel">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Rappel</th>
-          <td mat-cell *matCellDef="let row">{{ row.date_rappel }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="statut_detail">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut Relance</th>
-          <td mat-cell *matCellDef="let row">
-            <span [ngClass]="getStatusClass(row.statut_detail)" class="badge">{{ row.statut_detail }}</span>
-          </td>
-        </ng-container>
-
-        <ng-container matColumnDef="utilisateur_creation">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Utilisateur</th>
-          <td mat-cell *matCellDef="let row">{{ row.utilisateur_creation }}</td>
-        </ng-container>
-
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>Action</th>
-          <td mat-cell *matCellDef="let row">
-            <button mat-icon-button color="primary" (click)="voirDossier(row.numero_relance_dossier)">
-              <mat-icon>visibility</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-
-      <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+    <!-- ✅ En-tête visuelle personnalisée (HORS de <table>) -->
+    <div class="custom-header-row">
+      <div class="group-title dossier">Informations dossier</div>
+      <div class="group-title relance">Informations relance</div>
     </div>
-  </mat-card>
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z1 striped">
+
+      <!-- En-tête Angular Material -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+      <!-- Colonnes -->
+      <ng-container matColumnDef="numero_relance_dossier">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Dossier</th>
+        <td mat-cell *matCellDef="let row">{{ row.numero_relance_dossier }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="date_relance_dossier">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Création</th>
+        <td mat-cell *matCellDef="let row">{{ row.date_relance_dossier }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="client">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Client</th>
+        <td mat-cell *matCellDef="let row">{{ row.client }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="statut">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut Dossier</th>
+        <td mat-cell *matCellDef="let row">
+          <span [ngClass]="getStatusClass(row.statut_code)" class="badge">{{ row.statut }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="numero_relance">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>N° Relance</th>
+        <td mat-cell *matCellDef="let row">{{ row.numero_relance }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="date_rappel">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Rappel</th>
+        <td mat-cell *matCellDef="let row">{{ row.date_rappel }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="statut_detail">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut Relance</th>
+        <td mat-cell *matCellDef="let row">
+          <span [ngClass]="getStatusClass(row.statut_detail)" class="badge">{{ row.statut_detail }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="utilisateur_creation">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Utilisateur</th>
+        <td mat-cell *matCellDef="let row">{{ row.utilisateur_creation }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>Action</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button color="primary" (click)="voirDossier(row.numero_relance_dossier)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <!-- Données -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+  </div>
+</mat-card>

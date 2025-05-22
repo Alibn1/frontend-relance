@@ -5,7 +5,7 @@
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 24px;
-  margin: 0; /* ✅ enlève les marges */
+  margin: 0;
 }
 
 .title {
@@ -25,6 +25,41 @@
   overflow-x: auto;
 }
 
+/* ✅ Ligne d’en-tête visuelle personnalisée */
+.custom-header-row {
+  display: flex;
+  background-color: #5c6bc0;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 4px 4px 0 0;
+  height: 42px; /* légèrement plus haut */
+  overflow: hidden;
+
+}
+
+.group-title {
+  padding: 12px;
+  align-items: center;
+  flex-grow: 1;
+  text-align: center;
+  font-weight: normal;       /* ⛔️ plus de gras */
+  font-size: 13.5px; /* légèrement plus grand */           /* ⬇️ plus discret */
+  color: #ffffffcc;          /* blanc doux */
+  height: 32px;              /* légèrement plus bas */
+}
+
+.group-title.dossier {
+  background-color: #5c6bc0;
+  flex: 4.5 0 0; /* correspond à 4 colonnes */
+}
+
+.group-title.relance {
+  background-color: #7986cb;
+  flex: 5 0 0; /* correspond à 5 colonnes */
+
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
@@ -32,16 +67,6 @@ table {
 
 .striped tr:nth-child(even) td {
   background-color: #f9f9f9;
-}
-
-.badge {
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-  color: white;
-  display: inline-block;
-  text-transform: uppercase;
 }
 
 mat-paginator {
@@ -53,6 +78,16 @@ mat-paginator {
 mat-header-cell, mat-cell {
   text-align: center;
   padding: 12px 8px;
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  display: inline-block;
+  text-transform: uppercase;
 }
 
 .badge.BROUILLON { background-color: #9e9e9e; }

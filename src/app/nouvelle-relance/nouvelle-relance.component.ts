@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RelanceService } from '../services/relance.service';
 import { AuthService } from '../services/auth.service';
+import { ClientService } from '../services/client.service';
+import { Location } from '@angular/common';
 import { catchError, switchMap, take, finalize, map } from 'rxjs/operators';
 import { of, throwError } from 'rxjs';
-
-import {ClientService} from "../services/client.service";
-import { Location } from '@angular/common';
-import {MATERIAL_PROVIDERS} from '../material';
+import { MATERIAL_PROVIDERS } from '../material';
 
 
 @Component({
@@ -18,25 +17,14 @@ import {MATERIAL_PROVIDERS} from '../material';
   styleUrls: ['./nouvelle-relance.component.css'],
   standalone: true,
   imports: [
-    MATERIAL_PROVIDERS
-    // CommonModule,
-    // ReactiveFormsModule,
-    // MatCardModule,
-    // MatFormFieldModule,
-    // MatInputModule,
-    // MatSelectModule,
-    // MatDatepickerModule,
-    // MatNativeDateModule,
-    // MatButtonModule,
-    // MatProgressSpinnerModule,
-    // MatIconModule,
+    MATERIAL_PROVIDERS,
   ]
 })
 export class NouvelleRelanceComponent implements OnInit {
   clientCode: string = '';
   raisonSociale: string = '';
-
-
+  releves: any[] = [];
+  displayedColumns: string[] = ['select', 'date', 'valeur_initiale', 'valeur_reglee', 'reste'];
   relanceForm!: FormGroup;
   today = new Date();
   isLoading = false;
@@ -50,9 +38,8 @@ export class NouvelleRelanceComponent implements OnInit {
     private snackBar: MatSnackBar,
     private relanceService: RelanceService,
     private authService: AuthService,
-    private clientService:  ClientService,
+    private clientService: ClientService,
     private location: Location
-
   ) {}
 
   ngOnInit(): void {
@@ -63,29 +50,25 @@ export class NouvelleRelanceComponent implements OnInit {
     }
 
     this.clientService.getClientById(this.clientCode).pipe(take(1)).subscribe({
-      next: (data) => {
-        this.raisonSociale = data?.raison_sociale || '';
-      },
-      error: (err) => {
-        console.error('Erreur lors du chargement du client :', err);
-        this.showNotification('Impossible de charger la raison sociale', true);
-      }
+      next: (data) => this.raisonSociale = data?.raison_sociale || '',
+      error: () => this.showNotification('Impossible de charger la raison sociale', true)
     });
 
     this.initForm();
     this.loadExistingRelances();
+    this.loadClientReleves();
   }
 
   private initForm(): void {
     this.relanceForm = this.fb.group({
       titre: ['Rappel de paiement', Validators.required],
-      ordre: ['1', Validators.required],
       date_rappel: [this.today, Validators.required],
       nb_jours_rappel: [30, [Validators.required, Validators.min(1)]],
       methode_envoi: ['Email', Validators.required],
       objet_relance1: [''],
       objet_relance2: [''],
-      code_sous_modele: [null, Validators.required]
+      code_sous_modele: [null, Validators.required],
+      code_releves: [[]] // tableau de code_releves sélectionnés
     });
   }
 
@@ -106,14 +89,26 @@ export class NouvelleRelanceComponent implements OnInit {
     });
   }
 
-  private handleRelancesError(error: any): void {
-    console.error('Erreur API:', error);
-    let errorMessage = 'Erreur lors du chargement des relances';
-    if (error.status === 401) {
-      errorMessage = 'Authentification requise - Veuillez vous reconnecter';
-      this.authService.logout();
+  private loadClientReleves(): void {
+    this.clientService.getClientReleves(this.clientCode).pipe(take(1)).subscribe({
+      next: (data) => this.releves = data,
+      error: () => this.showNotification('Impossible de charger les relevés', true)
+    });
+  }
+
+  toggleReleveSelection(code: string, event: any): void {
+    const selected = this.relanceForm.get('code_releves')?.value || [];
+    if (event.checked) {
+      if (!selected.includes(code)) selected.push(code);
+    } else {
+      const index = selected.indexOf(code);
+      if (index !== -1) selected.splice(index, 1);
     }
-    this.showNotification(errorMessage, true);
+    this.relanceForm.get('code_releves')?.setValue([...selected]);
+  }
+
+  isSelected(code: string): boolean {
+    return this.relanceForm.get('code_releves')?.value?.includes(code);
   }
 
   onSubmit(): void {
@@ -159,7 +154,6 @@ export class NouvelleRelanceComponent implements OnInit {
   }
 
   private useExistingRelance(relance: any) {
-    console.error('Structure relance reçue:', JSON.stringify(relance));  // 👈 Pour bien voir la structure
     const ndr = relance?.numero_relance_dossier;
     if (!ndr) {
       console.error('Structure relance reçue:', relance);
@@ -173,18 +167,14 @@ export class NouvelleRelanceComponent implements OnInit {
     const etapeData = {
       code_sous_modele: formValues.code_sous_modele,
       titre_sous_modele: formValues.titre,
-      ordre: +formValues.ordre,
       statut_detail: 'BROUILLON',
-      date_rappel: this.formatDate(formValues.date_rappel),        // ✅ ici
-      nb_jours_rappel: +formValues.nb_jours_rappel,                // ✅ ici
-      methode_envoi: formValues.methode_envoi,                     // ✅ ici
-      objet_relance_1: formValues.objet_relance1,                  // ✅ ici
-      objet_relance_2: formValues.objet_relance2,                  // ✅ ici
-      //utilisateur_creation: 'System'
+      date_rappel: this.formatDate(formValues.date_rappel),
+      nb_jours_rappel: +formValues.nb_jours_rappel,
+      methode_envoi: formValues.methode_envoi,
+      objet_relance_1: formValues.objet_relance1,
+      objet_relance_2: formValues.objet_relance2,
+      code_releves: formValues.code_releves
     };
-
-
-    console.log(' Données envoyées :', etapeData);
 
     return this.relanceService.addRelanceStep(ndr, etapeData).pipe(
       catchError(error => {
@@ -220,6 +210,16 @@ export class NouvelleRelanceComponent implements OnInit {
     this.showNotification(errorMessage, true);
   }
 
+  private handleRelancesError(error: any): void {
+    console.error('Erreur API:', error);
+    let errorMessage = 'Erreur lors du chargement des relances';
+    if (error.status === 401) {
+      errorMessage = 'Authentification requise - Veuillez vous reconnecter';
+      this.authService.logout();
+    }
+    this.showNotification(errorMessage, true);
+  }
+
   private showNotification(message: string, isError: boolean = false): void {
     this.snackBar.open(message, 'Fermer', {
       duration: 5000,
@@ -247,4 +247,25 @@ export class NouvelleRelanceComponent implements OnInit {
   cancel(): void {
     this.navigateToClientRelances();
   }
+
+  isAllSelected(): boolean {
+    return this.releves.length > 0 &&
+      this.relanceForm.get('code_releves')?.value?.length === this.releves.length;
+  }
+
+  isIndeterminate(): boolean {
+    const selected = this.relanceForm.get('code_releves')?.value?.length || 0;
+    return selected > 0 && selected < this.releves.length;
+  }
+
+  toggleAllReleves(event: any): void {
+    const control = this.relanceForm.get('code_releves');
+    if (event.checked) {
+      const allCodes = this.releves.map(r => r.code_releve);
+      control?.setValue(allCodes);
+    } else {
+      control?.setValue([]);
+    }
+  }
+
 }
