@@ -1,28 +1,9 @@
-<!-- En-tête violet -->
-<div class="relance-header mat-elevation-z4">
-  <div class="relance-header-content">
-    <!-- Gauche -->
-    <div class="relance-left">
-      <button mat-icon-button (click)="goBack()" matTooltip="Retour">
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      <div class="relance-info">
-        <span><mat-icon>folder</mat-icon> {{ relance?.ndr }}</span>
-        <span><mat-icon>apartment</mat-icon> {{ relance?.client?.code_client }} - {{ relance?.client?.raison_sociale }}</span>
-      </div>
-    </div>
-
-    <!-- Droite -->
-    <div class="relance-right">
-      <button mat-flat-button class="btn-light" (click)="navigateToEventHistory()">
-        <mat-icon>history</mat-icon> Historique
-      </button>
-      <button mat-flat-button class="statut-button" [ngStyle]="{ 'background-color': getStatutColor() }" (click)="toggleStatus()">
-        <mat-icon>{{ getStatutIcon() }}</mat-icon> {{ relance?.libelle }}
-      </button>
-    </div>
-  </div>
-</div>
+<app-relance-info
+  [relance]="relance"
+  (goBack)="goBack()"
+  (toggle)="toggleStatus()"
+  (history)="navigateToEventHistory()"
+></app-relance-info>
 
 <!-- CONTENU UNIQUE -->
 <div class="container">
@@ -34,16 +15,16 @@
 
       <!-- Boutons d'action alignés à droite -->
       <div class="relance-card-actions">
-        <button mat-flat-button class="btn-light" (click)="navigateToCreateEvent()">
+        <button mat-flat-button class="btn-action btn-light" (click)="navigateToCreateEvent()">
           <mat-icon>event</mat-icon> Événement
         </button>
-        <button mat-flat-button class="btn-print" (click)="printRelance()">
+        <button mat-flat-button class="btn-action btn-print" (click)="printRelance()">
           <mat-icon>print</mat-icon> Imprimer
         </button>
-        <button mat-flat-button class="btn-draft" (click)="markAsDraft()">
+        <button mat-flat-button class="btn-action btn-draft" (click)="markAsDraft()">
           <mat-icon>edit</mat-icon> Brouillon
         </button>
-        <button mat-flat-button class="mat-warn" (click)="confirmDelete()">
+        <button mat-flat-button class="btn-action mat-warn" (click)="confirmDelete()">
           <mat-icon>delete</mat-icon> Supprimer
         </button>
       </div>

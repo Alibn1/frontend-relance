@@ -7,13 +7,14 @@ import { Location } from '@angular/common';
 import { MATERIAL_PROVIDERS } from '../material';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatTableDataSource } from '@angular/material/table';
+import { RelanceInfoComponent } from '../relance-info/relance-info.component';
 
 @Component({
   selector: 'app-detail-relance',
   templateUrl: './relance-details.component.html',
   styleUrls: ['./relance-details.component.css'],
   standalone: true,
-  imports: [...MATERIAL_PROVIDERS],
+  imports: [...MATERIAL_PROVIDERS, RelanceInfoComponent],
   providers: [provideNativeDateAdapter()]
 })
 export class DetailRelanceComponent implements OnInit {
@@ -22,11 +23,9 @@ export class DetailRelanceComponent implements OnInit {
   relance: any = null;
   isLoading = true;
 
-  creances = [
-    { libelle: 'Relevé', date: '2024-10', debit: 221280, credit: 0, solde: 221280 }
-  ];
+  relevesEtape: any[] = [];
   displayedColumns: string[] = ['libelle', 'date', 'debit', 'credit', 'solde'];
-  dataSource = new MatTableDataSource<any>(this.creances);
+  dataSource = new MatTableDataSource<any>([]);
 
   constructor(
     private route: ActivatedRoute,
@@ -39,37 +38,38 @@ export class DetailRelanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.relanceId = this.route.snapshot.paramMap.get('id') || '';
-    console.log('relanceId:', this.relanceId);
     this.loadRelanceDetails();
-    this.dataSource.data = this.creances;
   }
 
   loadRelanceDetails(): void {
     this.isLoading = true;
     this.relanceService.getRelanceDetails(this.relanceId).subscribe({
       next: (response) => {
-        if (response.success && response.data) {
-          const data = response.data;
-          this.relance = {
-            ...data,
-            ndr: data.numero_relance_dossier,
-            //date: data.date_relance,
-            //statut: data.statut?.code_statut ?? 'INCONNU',
-            //libelle: data.statut?.libelle_statut ?? 'Inconnu',
-            //couleur_statut: data.statut?.couleur_statut ?? '#9e9e9e',
-            date: data.date_relance_dossier,
-            statut: data.statut?.code ?? 'INCONNU',
-            libelle: data.statut?.libelle ?? 'Inconnu',
-            couleur_statut: data.statut?.couleur ?? '#9e9e9e',
-            user: data.user_creation ?? 'Utilisateur inconnu',
-            historique: data.historiques ?? [],
-            etapes: data.etapes ?? [],
-            documents: data.documents ?? [],
-          };
-        } else {
-          this.showError(response.message || 'Erreur lors du chargement');
-          this.router.navigate(['/relance-dossiers']);
+        const data = response?.data || response;
+
+        this.relance = {
+          ...data,
+          ndr: data.numero_relance_dossier,
+          date: data.date_relance_dossier,
+          statut: data.statut?.code ?? 'INCONNU',
+          libelle: data.statut?.libelle ?? 'Inconnu',
+          couleur_statut: data.statut?.couleur ?? '#9e9e9e',
+          user: data.utilisateur_creation ?? 'Utilisateur inconnu',
+          modele: data.sous_modele ?? null,
+          etapes: data.etapes ?? [],
+        };
+
+        const firstEtape = data.etapes?.[0];
+        if (firstEtape) {
+          this.relance.titre = firstEtape.titre_sous_modele;
+          this.relance.date = firstEtape.date_rappel;
+          this.relance.methode_envoi = firstEtape.methode_envoi;
+          this.relance.modele = firstEtape.sous_modele;
+
+          this.relevesEtape = firstEtape.releves ?? [];
+          this.dataSource.data = this.relevesEtape;
         }
+
         this.isLoading = false;
       },
       error: (error) => {
@@ -81,17 +81,13 @@ export class DetailRelanceComponent implements OnInit {
     });
   }
 
-  showError(message: string): void {
-    this.snackBar.open(message, 'Fermer', { duration: 4000, panelClass: ['error-snackbar'] });
-  }
 
-  showSuccess(message: string): void {
-    this.snackBar.open(message, 'OK', { duration: 3000, panelClass: ['success-snackbar'] });
+  get totalSolde() {
+    return this.relevesEtape.reduce((sum, r) => sum + r.solde, 0);
   }
 
   toggleStatus(): void {
     if (!this.relance?.statut) return;
-
     const newStatus = this.relance.statut.toUpperCase() === 'OUVERT' ? 'Cloture' : 'Ouvert';
 
     this.apiService.patch(`relance-dossiers/${this.relanceId}/status`, { status: newStatus }).subscribe({
@@ -106,31 +102,18 @@ export class DetailRelanceComponent implements OnInit {
     });
   }
 
-  getStatutColor(): string {
-    const statut = this.relance?.statut?.toUpperCase();
-    switch (statut) {
-      case 'OUVERT':
-        return '#4CAF50'; // ✅ Vert
-      case 'CLOTURE':
-        return '#F44336'; // 🔒 Rouge
-      default:
-        return '#9e9e9e'; // Gris
-    }
+  showError(message: string): void {
+    this.snackBar.open(message, 'Fermer', { duration: 4000, panelClass: ['error-snackbar'] });
   }
 
-  getStatutIcon(): string {
-    switch (this.relance?.statut?.toUpperCase()) {
-      case 'CLOTURE': return 'lock';
-      case 'OUVERT': return 'lock_open';
-      default: return 'lock_outline';
-    }
+  showSuccess(message: string): void {
+    this.snackBar.open(message, 'OK', { duration: 3000, panelClass: ['success-snackbar'] });
   }
 
   navigateToCreateEvent(): void {
     const firstEtape = this.relance?.etapes?.[0];
     if (this.relance?.ndr && firstEtape?.numero_relance) {
-      this.router.navigate([`/relance-dossiers/${this.relance.ndr}/etapes/${firstEtape.numero_relance}/evenements/create`])
-        .catch(() => this.showError('Erreur lors de la redirection'));
+      this.router.navigate([`/relance-dossiers/${this.relance.ndr}/etapes/${firstEtape.numero_relance}/evenements/create`]);
     } else {
       this.showError('Aucune étape disponible pour cette relance.');
     }
@@ -145,14 +128,9 @@ export class DetailRelanceComponent implements OnInit {
     }
   }
 
-  get totalSolde() {
-    return this.dataSource.data.reduce((sum, c) => sum + c.solde, 0);
-  }
-
   goBack(): void {
     window.history.length > 1 ? this.location.back() : this.router.navigate(['/relance-dossiers']);
   }
-
 
   confirmDelete(): void {
     this.snackBar.open('Suppression à implémenter', 'OK', { duration: 2500 });

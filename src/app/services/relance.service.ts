@@ -55,7 +55,8 @@ export class RelanceService {
       methode_envoi: etapeData.methode_envoi,
       objet_relance_1: etapeData.objet_relance_1 || null,
       objet_relance_2: etapeData.objet_relance_2 || null,
-      utilisateur_creation: etapeData.user_envoi || 'System'
+      utilisateur_creation: etapeData.user_envoi || 'System',
+      code_releves: etapeData.code_releves
     };
 
     console.log('Ajout étape relance avec :', formattedData);
