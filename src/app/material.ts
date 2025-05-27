@@ -26,6 +26,7 @@ import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/m
 import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
 import {MatCheckbox} from '@angular/material/checkbox';
+import {MatDialogActions, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
 
 
 export const MATERIAL_PROVIDERS = [
@@ -72,6 +73,10 @@ export const MATERIAL_PROVIDERS = [
     MatDatepickerInput,
     MatSelect,
     MatOption,
-    MatCheckbox
+    MatCheckbox,
+    MatDialogContent,
+    MatDialogActions,
+    MatDialogTitle
+
   // ),
 ];

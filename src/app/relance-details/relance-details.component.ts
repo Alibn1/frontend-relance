@@ -6,15 +6,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { MATERIAL_PROVIDERS } from '../material';
 import { provideNativeDateAdapter } from '@angular/material/core';
-import { MatTableDataSource } from '@angular/material/table';
 import { RelanceInfoComponent } from '../relance-info/relance-info.component';
+import { MatDialog } from '@angular/material/dialog';
+import {ConfirmDeleteComponent} from '../confirm-delete/confirm-delete.component';
 
 @Component({
   selector: 'app-detail-relance',
   templateUrl: './relance-details.component.html',
   styleUrls: ['./relance-details.component.css'],
   standalone: true,
-  imports: [...MATERIAL_PROVIDERS, RelanceInfoComponent],
+  imports: [MATERIAL_PROVIDERS, RelanceInfoComponent],
   providers: [provideNativeDateAdapter()]
 })
 export class DetailRelanceComponent implements OnInit {
@@ -23,9 +24,7 @@ export class DetailRelanceComponent implements OnInit {
   relance: any = null;
   isLoading = true;
 
-  relevesEtape: any[] = [];
   displayedColumns: string[] = ['libelle', 'date', 'debit', 'credit', 'solde'];
-  dataSource = new MatTableDataSource<any>([]);
 
   constructor(
     private route: ActivatedRoute,
@@ -34,6 +33,7 @@ export class DetailRelanceComponent implements OnInit {
     private location: Location,
     private snackBar: MatSnackBar,
     private relanceService: RelanceService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -56,24 +56,26 @@ export class DetailRelanceComponent implements OnInit {
           couleur_statut: data.statut?.couleur ?? '#9e9e9e',
           user: data.utilisateur_creation ?? 'Utilisateur inconnu',
           modele: data.sous_modele ?? null,
-          etapes: data.etapes ?? [],
+          etapes: (data.etape_relances ?? [])
+            .sort((a: any, b: any) =>
+              new Date(b.date_creation_debut).getTime() - new Date(a.date_creation_debut).getTime()
+            )
+            .map((etape: any) => ({
+              ...etape,
+              releves: (etape.releves ?? []).map((rel: any) => ({
+                libelle: rel.code_releve,
+                date: rel.date_releve,
+                debit: rel.solde_initiale,
+                credit: rel.solde_finale,
+                solde: rel.solde_initiale - rel.solde_finale
+              }))
+            }))
+
         };
-
-        const firstEtape = data.etapes?.[0];
-        if (firstEtape) {
-          this.relance.titre = firstEtape.titre_sous_modele;
-          this.relance.date = firstEtape.date_rappel;
-          this.relance.methode_envoi = firstEtape.methode_envoi;
-          this.relance.modele = firstEtape.sous_modele;
-
-          this.relevesEtape = firstEtape.releves ?? [];
-          this.dataSource.data = this.relevesEtape;
-        }
 
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('Erreur de récupération :', error);
         this.showError('Erreur de connexion au serveur');
         this.isLoading = false;
         this.router.navigate(['/relance-dossiers']);
@@ -81,9 +83,8 @@ export class DetailRelanceComponent implements OnInit {
     });
   }
 
-
-  get totalSolde() {
-    return this.relevesEtape.reduce((sum, r) => sum + r.solde, 0);
+  getTotalSolde(releves: any[]): number {
+    return (releves ?? []).reduce((sum, r) => sum + r.solde, 0);
   }
 
   toggleStatus(): void {
@@ -132,15 +133,107 @@ export class DetailRelanceComponent implements OnInit {
     window.history.length > 1 ? this.location.back() : this.router.navigate(['/relance-dossiers']);
   }
 
-  confirmDelete(): void {
-    this.snackBar.open('Suppression à implémenter', 'OK', { duration: 2500 });
+  Delete(numero_relance: string): void {
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      data: { message: 'Voulez-vous vraiment supprimer cette étape ?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.apiService.delete(`etape-relances/${numero_relance}`).subscribe({
+          next: () => {
+            this.showSuccess('Étape supprimée avec succès');
+            this.loadRelanceDetails(); // recharge les données
+          },
+          error: () => {
+            this.showError('Erreur lors de la suppression');
+          }
+        });
+      }
+    });
   }
 
-  printRelance() {
-    console.log('Impression en cours...');
+  printRelance(): void {
+    const etape = this.relance?.etapes?.[0];
+
+    if (!etape || !etape.id) {
+      this.showError('Aucune étape à imprimer.');
+      return;
+    }
+
+    const token = localStorage.getItem('access_token');
+    const url = `http://localhost:8000/api/etape-relances/${etape.id}/pdf?token=${token}`;
+
+    window.open(url, '_blank');
   }
 
-  markAsDraft() {
-    console.log('Marquer comme brouillon...');
+  changerStatut(numero_relance: string, nouveauStatut: string): void {
+    this.apiService.patch(`etape-relances/${numero_relance}/change`, {
+      statut_detail: nouveauStatut
+  }).subscribe({
+      next: () => {
+        this.showSuccess('Statut mis à jour');
+        this.loadRelanceDetails();
+      },
+      error: () => {
+        this.showError('Erreur lors du changement de statut');
+      }
+    });
   }
+
+
+  getLibelleStatut(code: string): string {
+    return this.statuts.find(s => s.code === code)?.libelle || 'Statut inconnu';
+  }
+
+  getStatutIcon(code: string): string {
+    return this.statuts.find(s => s.code === code)?.icon || 'help';
+  }
+
+  getStatutButtonColorClass(code: string): string {
+    switch (code) {
+      case 'BROUILLON': return 'btn-olive';
+      case 'VALIDE': return 'btn-vert';
+      case 'ENVOYE': return 'btn-bleu';
+      case 'REFUSE': return 'btn-rouge';
+      case 'CLOTURE': return 'btn-violet';
+      default: return 'btn-light';
+    }
+  }
+
+  statuts = [
+    {
+      code: 'BROUILLON',
+      libelle: 'Brouillon',
+      icon: 'edit',
+      color: 'statut-icon-brouillon'
+    },
+    {
+      code: 'VALIDE',
+      libelle: 'Validé',
+      icon: 'check_circle',
+      color: 'statut-icon-vert'
+    },
+    {
+      code: 'ENVOYE',
+      libelle: 'Envoyé',
+      icon: 'send',
+      color: 'statut-icon-bleu'
+    },
+    {
+      code: 'REFUSE',
+      libelle: 'Refusé',
+      icon: 'cancel',
+      color: 'statut-icon-rouge'
+    },
+    {
+      code: 'CLOTURE',
+      libelle: 'Clôturé',
+      icon: 'lock',
+      color: 'statut-icon-violet'
+    }
+  ];
+
+
+
 }

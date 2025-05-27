@@ -1,308 +1,3 @@
-/*:host {*/
-/*  display: block;*/
-/*  margin: 0;*/
-/*  padding: 0;*/
-/*}*/
-
-/*html, body {*/
-/*  margin: 0;*/
-/*  padding: 0;*/
-/*  overflow-x: hidden;*/
-/*  font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;*/
-/*  width: 100%;*/
-/*  background-color: #fcfaff;*/
-/*}*/
-
-/*.relance-header {*/
-/*  width: 100%;*/
-/*  background-color: #8f50ec;*/
-/*  color: white;*/
-/*  padding: 1.5rem;*/
-/*  box-sizing: border-box;*/
-/*  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);*/
-/*}*/
-
-/*.relance-header-content {*/
-/*  display: flex;*/
-/*  justify-content: space-between;*/
-/*  align-items: center;*/
-/*  flex-wrap: wrap;*/
-/*}*/
-
-/*.relance-left {*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  gap: 1.5rem;*/
-/*}*/
-
-/*.relance-left button[mat-icon-button] {*/
-/*  color: white;*/
-/*  transform: translateY(-4px);*/
-/*}*/
-
-/*.relance-left mat-icon {*/
-/*  font-size: 28px;*/
-/*  vertical-align: middle;*/
-/*}*/
-
-/*.relance-info {*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  gap: 2rem;*/
-/*  font-size: 15px;*/
-/*  font-weight: 500;*/
-/*  flex-wrap: wrap;*/
-/*}*/
-
-/*.relance-info mat-icon {*/
-/*  vertical-align: middle;*/
-/*  margin-right: 0.4rem;*/
-/*}*/
-
-/*.relance-right {*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  gap: 0.75rem;*/
-/*}*/
-
-/*.relance-subactions {*/
-/*  display: flex;*/
-/*  gap: 0.75rem;*/
-/*  margin-top: 1rem;*/
-/*  flex-wrap: wrap;*/
-/*}*/
-
-/*button[mat-flat-button],*/
-/*button[mat-raised-button],*/
-/*button[mat-stroked-button] {*/
-/*  border-radius: 4px !important;*/
-/*  min-width: auto;*/
-/*  padding: 4px 12px;*/
-/*  font-size: 13px;*/
-/*  font-weight: 500;*/
-/*  height: 32px;*/
-/*  text-transform: none;*/
-/*  box-shadow: none;*/
-/*  line-height: 1.2;*/
-/*}*/
-
-/*button[mat-flat-button].mat-primary {*/
-/*  background-color: #3949ab;*/
-/*  color: #fff;*/
-/*}*/
-
-/*button[mat-flat-button].mat-accent {*/
-/*  background-color: #039be5;*/
-/*  color: #fff;*/
-/*}*/
-
-/*button[mat-flat-button].mat-warn {*/
-/*  background-color: #e53935;*/
-/*  color: #fff;*/
-/*}*/
-
-/*button[mat-stroked-button] {*/
-/*  border: 1px solid rgba(255, 255, 255, 0.6);*/
-/*  color: white;*/
-/*}*/
-
-/*button.btn-print {*/
-/*  background-color: #003366 !important;*/
-/*  color: white;*/
-/*}*/
-
-/*button.btn-draft {*/
-/*  background-color: #708238 !important;*/
-/*  color: white;*/
-/*}*/
-
-/*button.btn-light {*/
-/*  background-color: #eaeaea !important;*/
-/*  color: #333;*/
-/*}*/
-
-/*button.statut-button {*/
-/*  font-weight: 600;*/
-/*}*/
-
-/*button.btn-action {*/
-/*  border-radius: 4px !important;*/
-/*  min-width: 120px;*/
-/*  padding: 6px 14px;*/
-/*  font-size: 14px;*/
-/*  font-weight: 500;*/
-/*  height: 40px;*/
-/*  text-transform: none;*/
-/*  box-shadow: none;*/
-/*  line-height: 1.2;*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  justify-content: center;*/
-/*}*/
-
-/*!* Pour que les icônes restent parfaitement alignées *!*/
-/*button.btn-action mat-icon {*/
-/*  margin-right: 6px;*/
-/*  font-size: 18px;*/
-/*}*/
-
-/*.mat-icon {*/
-/*  font-size: 16px;*/
-/*  vertical-align: middle;*/
-/*  margin-right: 4px;*/
-/*}*/
-
-/*.container {*/
-/*  padding: 1.5rem;*/
-/*  box-sizing: border-box;*/
-/*  width: 100%;*/
-/*}*/
-
-/*.relance-full-card {*/
-/*  margin-top: 2rem;*/
-/*  background: #fafafa;*/
-/*  border-radius: 12px;*/
-/*  padding: 2rem;*/
-/*  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);*/
-/*}*/
-
-/*.card-header {*/
-/*  display: flex;*/
-/*  justify-content: space-between;*/
-/*  align-items: flex-start; !* changement ici *!*/
-/*  flex-wrap: wrap;*/
-/*  gap: 1rem;*/
-/*  margin-bottom: 1.5rem; !* espace entre boutons et divider *!*/
-/*  margin-top: 0.5rem; !* fait descendre un peu "Détails relance" *!*/
-/*}*/
-
-/*.card-header mat-card-title {*/
-/*  font-size: 18px;*/
-/*  font-weight: 600;*/
-/*  display: flex;*/
-/*  align-items: center;*/
-/*  margin-top: 1.5rem; !* petit décalage vers le bas *!*/
-/*  margin-bottom: -1rem;*/
-/*}*/
-
-/*.card-header mat-icon {*/
-/*  margin-right: 6px;*/
-/*}*/
-
-/*.relance-card-actions {*/
-/*  display: flex;*/
-/*  justify-content: flex-end;*/
-/*  gap: 0.75rem;*/
-/*  flex-wrap: wrap;*/
-/*  margin-top: -0.3rem; !* remonte légèrement les boutons *!*/
-/*}*/
-
-/*.relance-layout {*/
-/*  display: flex;*/
-/*  justify-content: space-between;*/
-/*  gap: 2rem;*/
-/*  margin-top: 1.5rem;*/
-/*  flex-wrap: wrap;*/
-/*}*/
-
-/*.left-details {*/
-/*  flex: 1.2;*/
-/*  display: grid;*/
-/*  grid-template-columns: 1fr 1fr;*/
-/*  gap: 2rem;*/
-/*  font-size: 16px;*/
-/*}*/
-
-/*.detail-item {*/
-/*  display: flex;*/
-/*  align-items: flex-start;*/
-/*  gap: 1rem;*/
-/*  font-size: 16px;*/
-/*}*/
-
-/*.detail-item mat-icon {*/
-/*  font-size: 28px;*/
-/*  color: #6a1b9a;*/
-/*  margin-top: 2px;*/
-/*}*/
-
-/*.info-label .label-title {*/
-/*  font-weight: bold;*/
-/*  font-size: 15px;*/
-/*  margin-bottom: 3px;*/
-/*}*/
-
-/*.right-table {*/
-/*  flex: 1;*/
-/*  min-width: 400px;*/
-/*}*/
-
-/*table.mat-table {*/
-/*  width: 100%;*/
-/*  font-size: 14px;*/
-/*  border-spacing: 0;*/
-/*  border-collapse: collapse;*/
-/*  border-bottom: none;*/
-/*}*/
-
-/*.mat-header-cell,*/
-/*.mat-cell {*/
-/*  padding: 14px 24px;*/
-/*  border-bottom: 1px solid #ccc;*/
-/*  text-align: center;*/
-/*}*/
-
-/*.mat-header-row {*/
-/*  font-weight: bold;*/
-/*}*/
-
-/*.creance-table th,*/
-/*.creance-table td {*/
-/*  width: 20%;*/
-/*  text-align: center;*/
-/*}*/
-
-/*.footer-only-table {*/
-/*  width: 100%;*/
-/*  border-spacing: 0;*/
-/*  border-collapse: collapse;*/
-/*  margin-top: -1px;*/
-/*}*/
-
-/*.footer-total-row {*/
-/*  background-color: #d3d3d3;*/
-/*  font-weight: bold;*/
-/*  font-size: 15px;*/
-/*  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.25);*/
-/*  height: 56px;*/
-/*}*/
-
-/*.footer-total-row td {*/
-/*  padding: 18px 24px;*/
-/*  border-top: 1px solid #bbb;*/
-/*  vertical-align: middle;*/
-/*}*/
-
-/*.footer-label {*/
-/*  text-align: left;*/
-/*  font-weight: bold;*/
-/*  font-size: 15px;*/
-/*  padding-left: 24px;*/
-/*  white-space: nowrap;*/
-/*}*/
-
-/*.footer-value {*/
-/*  text-align: right;*/
-/*  font-weight: bold;*/
-/*  font-size: 15px;*/
-/*  padding-right: 24px;*/
-/*}*/
-
-/*.statut-button {*/
-/*  font-weight: 450 !important; !* écriture fine *!*/
-/*  color: white;*/
-/*}*/
-
 :host {
   display: block;
   margin: 0;
@@ -316,6 +11,141 @@ html, body {
   font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
   width: 100%;
   background-color: #fcfaff;
+}
+
+.relance-header {
+  width: 100%;
+  background-color: #8f50ec;
+  color: white;
+  padding: 1.5rem;
+  box-sizing: border-box;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.relance-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.relance-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.relance-left button[mat-icon-button] {
+  color: white;
+  transform: translateY(-4px);
+}
+
+.relance-left mat-icon {
+  font-size: 28px;
+  vertical-align: middle;
+}
+
+.relance-info {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  font-size: 15px;
+  font-weight: 500;
+  flex-wrap: wrap;
+}
+
+.relance-info mat-icon {
+  vertical-align: middle;
+  margin-right: 0.4rem;
+}
+
+.relance-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.relance-subactions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+button[mat-flat-button],
+button[mat-raised-button],
+button[mat-stroked-button] {
+  border-radius: 4px !important;
+  min-width: auto;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  height: 32px;
+  text-transform: none;
+  box-shadow: none;
+  line-height: 1.2;
+}
+
+button[mat-flat-button].mat-primary {
+  background-color: #3949ab;
+  color: #fff;
+}
+
+button[mat-flat-button].mat-accent {
+  background-color: #039be5;
+  color: #fff;
+}
+
+button[mat-flat-button].mat-warn {
+  background-color: #e53935;
+  color: #fff;
+}
+
+button[mat-stroked-button] {
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  color: white;
+}
+
+button.btn-print {
+  background-color: #003366 !important;
+  color: white;
+}
+
+
+button.btn-light {
+  background-color: #eaeaea !important;
+  color: #333;
+}
+
+button.statut-button {
+  font-weight: 600;
+}
+
+button.btn-action {
+  border-radius: 4px !important;
+  min-width: 120px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  text-transform: none;
+  box-shadow: none;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Pour que les icônes restent parfaitement alignées */
+button.btn-action mat-icon {
+  margin-right: 6px;
+  font-size: 18px;
+}
+
+.mat-icon {
+  font-size: 16px;
+  vertical-align: middle;
+  margin-right: 4px;
 }
 
 .container {
@@ -335,11 +165,11 @@ html, body {
 .card-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-start; /* changement ici */
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 1.5rem;
-  margin-top: 0.5rem;
+  margin-bottom: 1.5rem; /* espace entre boutons et divider */
+  margin-top: 0.5rem; /* fait descendre un peu "Détails relance" */
 }
 
 .card-header mat-card-title {
@@ -347,12 +177,14 @@ html, body {
   font-weight: 600;
   display: flex;
   align-items: center;
-  margin-top: 1.5rem;
+  margin-top: 1.5rem; /* petit décalage vers le bas */
   margin-bottom: -1rem;
 }
 
 .card-header mat-icon {
   margin-right: 6px;
+  vertical-align: middle;
+  transform: translateY(2px); /* ✅ Nouvelle ligne ajoutée */
 }
 
 .relance-card-actions {
@@ -360,47 +192,7 @@ html, body {
   justify-content: flex-end;
   gap: 0.75rem;
   flex-wrap: wrap;
-  margin-top: -0.3rem;
-}
-
-button.btn-action {
-  border-radius: 4px !important;
-  min-width: 120px;
-  padding: 6px 14px;
-  font-size: 14px;
-  font-weight: 500;
-  height: 40px;
-  text-transform: none;
-  box-shadow: none;
-  line-height: 1.2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-button.btn-action mat-icon {
-  margin-right: 6px;
-  font-size: 18px;
-}
-
-button.btn-light {
-  background-color: #eaeaea !important;
-  color: #333;
-}
-
-button.btn-print {
-  background-color: #003366 !important;
-  color: white;
-}
-
-button.btn-draft {
-  background-color: #708238 !important;
-  color: white;
-}
-
-button.mat-warn {
-  background-color: #e53935 !important;
-  color: white;
+  margin-top: -0.3rem; /* remonte légèrement les boutons */
 }
 
 .relance-layout {
@@ -421,9 +213,24 @@ button.mat-warn {
 
 .detail-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
   font-size: 16px;
+}
+
+.detail-item mat-icon {
+  font-size: 24px;       /* taille plus compacte, plus propre */
+  color: #6a1b9a;
+  flex-shrink: 0;        /* empêche de se compresser */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-label .label-title {
+  font-weight: bold;
+  font-size: 15px;
+  margin-bottom: 3px;
 }
 
 .right-table {
@@ -431,12 +238,29 @@ button.mat-warn {
   min-width: 400px;
 }
 
-.creance-table {
+table.mat-table {
   width: 100%;
   font-size: 14px;
   border-spacing: 0;
   border-collapse: collapse;
   border-bottom: none;
+}
+
+.mat-header-cell,
+.mat-cell {
+  padding: 14px 24px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+
+.mat-header-row {
+  font-weight: bold;
+}
+
+.creance-table th,
+.creance-table td {
+  width: 20%;
+  text-align: center;
 }
 
 .footer-only-table {
@@ -474,3 +298,106 @@ button.mat-warn {
   font-size: 15px;
   padding-right: 24px;
 }
+
+.statut-button {
+  font-weight: 450 !important; /* écriture fine */
+  color: white;
+}
+
+/* === COULEURS DES STATUTS (Icones) === */
+.statut-icon-brouillon {
+  color: #708238; /* Vert olive */
+}
+
+.statut-icon-vert {
+  color: #4CAF50; /* Vert "Validé" */
+}
+
+.statut-icon-bleu {
+  color: #1e88e5; /* Bleu "Envoyé" */
+}
+
+.statut-icon-rouge {
+  color: #e53935; /* Rouge "Refusé" */
+}
+
+.statut-icon-violet {
+  color: #5D3A9B; /* violet moyen */
+}
+
+/* === COULEURS DES BOUTONS SELON STATUT === */
+.btn-vert {
+  background-color: #4CAF50 !important; /* Vert Validé */
+  color: white;
+}
+
+.btn-bleu {
+  background-color: #1e88e5 !important; /* Bleu Envoyé */
+  color: white;
+}
+
+.btn-rouge {
+  background-color: #e53935 !important; /* Rouge Refusé */
+  color: white;
+}
+
+.btn-olive {
+  background-color: #708238 !important; /* Brouillon olive */
+  color: white;
+}
+
+.btn-violet {
+  background-color: #5D3A9B !important; /* violet */
+  color: white;
+  pointer-events: none; /* désactive les interactions */
+  opacity: 0.8;
+}
+
+/* Effet visuel désactivé sur toute la carte */
+.etape-cloturee {
+  background-color: #f2f2f2;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* === Styles généraux du bouton d'action statut === */
+button.statut-button {
+  font-weight: 600;
+  border-radius: 4px !important;
+  min-width: 120px;
+  padding: 6px 14px;
+  font-size: 14px;
+  height: 40px;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: none;
+}
+
+/* Icône dans le bouton statut */
+.statut-button mat-icon {
+  margin-right: 6px;
+  font-size: 18px;
+}
+
+/*Animations--------*/
+
+::ng-deep .mat-menu-panel {
+  transition: all 300ms ease-in-out !important;
+  opacity: 0;
+  transform: translateY(-15px) scale(0.95);
+}
+
+::ng-deep .mat-menu-panel.mat-menu-after-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+
+::ng-deep .mat-menu-item:hover {
+  background-color: #f0f0f0 !important;
+  transform: translateX(8px);
+  transition: transform 200ms ease;
+}
+

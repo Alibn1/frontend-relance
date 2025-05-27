@@ -117,6 +117,14 @@ export class NouvelleRelanceComponent implements OnInit {
       return;
     }
 
+    if (this.relanceForm.get('code_releves')?.value?.length === 0) {
+      this.snackBar.open("Vous devez sélectionner au moins un relevé pour créer une relance.", "Fermer", {
+        duration: 4000,
+        panelClass: ['error-snackbar']
+      });
+      return;
+    }
+
     this.isLoading = true;
     this.getOrCreateRelance().pipe(
       switchMap((ndr: string) => this.addRelanceStep(ndr)),
