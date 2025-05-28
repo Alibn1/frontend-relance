@@ -32,12 +32,6 @@
         <td mat-cell *matCellDef="let client">{{ client.total_impaye | number:'1.0-0':'fr-FR' }}</td>
       </ng-container>
 
-      <!-- Statut -->
-      <ng-container matColumnDef="statut">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut</th>
-        <td mat-cell *matCellDef="let client">{{ client.statut }}</td>
-      </ng-container>
-
       <!-- Date Relevée -->
       <ng-container matColumnDef="date_relevee">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Relevée</th>

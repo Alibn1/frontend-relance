@@ -1,29 +1,20 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { catchError, throwError } from 'rxjs';
-import { Router } from '@angular/router';
-import { HttpContextToken } from '@angular/common/http';
-import { isPlatformBrowser } from '@angular/common';
-import { PLATFORM_ID } from '@angular/core';
-
-export const SKIP_AUTH = new HttpContextToken(() => false);
+import {throwError} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  const platformId = inject(PLATFORM_ID);
 
-  // 🎯 Ignore les requêtes publiques
-  if (req.context.get(SKIP_AUTH) || req.url.includes('/login') || req.url.includes('/register')) {
+  // Ne pas intercepter les requêtes vers /login ou /register
+  if (req.url.includes('/login') || req.url.includes('/register')) {
     return next(req);
   }
 
-  // ⚙️ Sécuriser l'accès au localStorage uniquement si on est dans le navigateur
-  let token: string | null = null;
-  if (isPlatformBrowser(platformId)) {
-    token = authService.getToken();
-  }
+  const token = authService.getToken();
 
   if (token) {
     const cloned = req.clone({
@@ -31,7 +22,6 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
         Authorization: `Bearer ${token}`
       }
     });
-
     return next(cloned).pipe(
       catchError(err => {
         if (err.status === 401) {
@@ -42,8 +32,9 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
       })
     );
   } else {
-    // ❗ Si pas de token, NE PAS faire de logout forcé ni d'erreur levée
-    // Juste envoyer la requête telle quelle (par exemple pour pages publiques)
-    return next(req);
+    // Si pas de token, rediriger vers login
+    authService.logout();
+    router.navigate(['/login']);
+    return throwError(() => new Error('No authentication token available'));
   }
 };

@@ -20,7 +20,7 @@ import {MATERIAL_PROVIDERS} from '../material';
 })
 export class ClientListComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
-    'code_client', 'raison_sociale', 'solde_releve', 'total_impaye', 'statut', 'date_relevee', 'derniere_relance', 'details'
+    'code_client', 'raison_sociale', 'solde_releve', 'total_impaye', 'date_relevee', 'derniere_relance', 'details'
   ];
 
   dataSource: MatTableDataSource<any> = new MatTableDataSource();
@@ -84,7 +84,6 @@ export class ClientListComponent implements OnInit, AfterViewInit {
         raison_sociale: client.R_sociale ?? client.raison_sociale,
         solde_releve: totalSoldeInitiale,
         total_impaye: totalImpayes,
-        statut: releves?.[0]?.statut ?? 'AUCUN',
         date_relevee: releves?.[0]?.date_releve ?? null,
         derniere_relance: this.getDerniereEtapeRelance(client.etape_relances)
       };

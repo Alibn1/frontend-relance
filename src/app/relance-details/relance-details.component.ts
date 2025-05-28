@@ -9,6 +9,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { RelanceInfoComponent } from '../relance-info/relance-info.component';
 import { MatDialog } from '@angular/material/dialog';
 import {ConfirmDeleteComponent} from '../confirm-delete/confirm-delete.component';
+import {EtapeRelanceService} from '../services/etape-relance.service';
 
 @Component({
   selector: 'app-detail-relance',
@@ -33,7 +34,8 @@ export class DetailRelanceComponent implements OnInit {
     private location: Location,
     private snackBar: MatSnackBar,
     private relanceService: RelanceService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private etapeRelanceService: EtapeRelanceService
   ) {}
 
   ngOnInit(): void {
@@ -153,19 +155,13 @@ export class DetailRelanceComponent implements OnInit {
     });
   }
 
-  printRelance(): void {
-    const etape = this.relance?.etapes?.[0];
-
-    if (!etape || !etape.id) {
-      this.showError('Aucune étape à imprimer.');
-      return;
-    }
-
-    const token = localStorage.getItem('access_token');
-    const url = `http://localhost:8000/api/etape-relances/${etape.id}/pdf?token=${token}`;
-
-    window.open(url, '_blank');
+  printRelance(numero_relance: string) {
+    window.open(`http://localhost:8000/api/public/etape-relances/${numero_relance}/pdf`, '_blank');
   }
+
+
+
+
 
   changerStatut(numero_relance: string, nouveauStatut: string): void {
     this.apiService.patch(`etape-relances/${numero_relance}/change`, {

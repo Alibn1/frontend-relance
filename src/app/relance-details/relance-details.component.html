@@ -18,9 +18,10 @@
           <button mat-flat-button class="btn-action btn-light" (click)="navigateToCreateEvent()">
             <mat-icon>event</mat-icon> Événement
           </button>
-          <button mat-flat-button class="btn-action btn-print" (click)="printRelance()">
+          <button mat-flat-button class="btn-action btn-print" (click)="printRelance(etape.numero_relance)">
             <mat-icon>print</mat-icon> Imprimer
           </button>
+
           <button
             mat-flat-button
             class="btn-action statut-button"

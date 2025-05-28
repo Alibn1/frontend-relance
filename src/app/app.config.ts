@@ -17,4 +17,5 @@ export const appConfig: ApplicationConfig = {
     provideNativeDateAdapter(),
     ...MATERIAL_PROVIDERS
   ]
+
 };
