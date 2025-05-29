@@ -257,6 +257,10 @@ table.mat-table {
   font-weight: bold;
 }
 
+.divider{
+  border-color: #D3D3D3;
+}
+
 .creance-table th,
 .creance-table td {
   width: 20%;
