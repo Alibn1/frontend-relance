@@ -1,130 +1,113 @@
-<div class="page-container">
-  <!-- Bouton retour -->
-  <div class="header-bar">
-    <button mat-icon-button color="primary" (click)="goBack()">
-      <mat-icon>arrow_back</mat-icon>
-    </button>
-    <h2>Nouvelle Étape de Relance</h2>
-  </div>
+<!-- Nouvelle version avec Angular Material Stepper Vertical + Toolbar -->
+<mat-toolbar color="primary" class="relance-toolbar">
+  <span class="toolbar-title">Nouvelle Étape de Relance</span>
+</mat-toolbar>
 
-  <!-- ✅ Le FORM englobe les deux cartes -->
-  <form [formGroup]="relanceForm" (ngSubmit)="onSubmit()" [class.disabled]="isLoading">
+<form [formGroup]="relanceForm" (ngSubmit)="onSubmit()" [class.disabled]="isLoading">
+  <mat-vertical-stepper #stepper linear class="custom-stepper-vertical">
+    <!-- Étape 1 : Sélection des relevés -->
+    <mat-step [stepControl]="relanceForm.get('code_releves')!">
+      <ng-template matStepLabel>Sélection des relances</ng-template>
 
-    <mat-card class="relance-card">
-      <mat-card-title class="section-title">Sélection des relevés à relancer</mat-card-title>
+      <mat-card class="step-card">
+        <table mat-table [dataSource]="releves" class="mat-elevation-z1 full-width">
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox (change)="toggleAllReleves($event)" [checked]="isAllSelected()" [indeterminate]="isIndeterminate()"></mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let releve">
+              <mat-checkbox (change)="toggleReleveSelection(releve.code_releve, $event)" [checked]="isSelected(releve.code_releve)"></mat-checkbox>
+            </td>
+          </ng-container>
 
-      <table mat-table [dataSource]="releves" class="mat-elevation-z1 full-width custom-table">
+          <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let releve">{{ releve.date_releve | date: 'yyyy-MM' }}</td>
+          </ng-container>
 
-        <!-- ✅ Checkbox avec sélection globale -->
-        <ng-container matColumnDef="select">
-          <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox
-              (change)="toggleAllReleves($event)"
-              [checked]="isAllSelected()"
-              [indeterminate]="isIndeterminate()">
-            </mat-checkbox>
-          </th>
-          <td mat-cell *matCellDef="let releve">
-            <mat-checkbox
-              (change)="toggleReleveSelection(releve.code_releve, $event)"
-              [checked]="isSelected(releve.code_releve)">
-            </mat-checkbox>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="valeur_initiale">
+            <th mat-header-cell *matHeaderCellDef>Valeur Initiale</th>
+            <td mat-cell *matCellDef="let releve">{{ releve.solde_initiale | number: '1.0-0' }}</td>
+          </ng-container>
 
-        <!-- Date -->
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef>Date</th>
-          <td mat-cell *matCellDef="let releve">{{ releve.date_releve | date: 'yyyy-MM' }}</td>
-        </ng-container>
+          <ng-container matColumnDef="valeur_reglee">
+            <th mat-header-cell *matHeaderCellDef>Valeur Réglée</th>
+            <td mat-cell *matCellDef="let releve">{{ releve.solde_finale | number: '1.0-0' }}</td>
+          </ng-container>
 
-        <!-- Valeur Initiale -->
-        <ng-container matColumnDef="valeur_initiale">
-          <th mat-header-cell *matHeaderCellDef>Valeur Initiale</th>
-          <td mat-cell *matCellDef="let releve">{{ releve.solde_initiale | number: '1.0-0' }}</td>
-        </ng-container>
+          <ng-container matColumnDef="reste">
+            <th mat-header-cell *matHeaderCellDef>Reste à Régler</th>
+            <td mat-cell *matCellDef="let releve">{{ releve.solde_initiale - releve.solde_finale | number: '1.0-0' }}</td>
+          </ng-container>
 
-        <!-- Valeur Réglée -->
-        <ng-container matColumnDef="valeur_reglee">
-          <th mat-header-cell *matHeaderCellDef>Valeur Réglée</th>
-          <td mat-cell *matCellDef="let releve">{{ releve.solde_finale | number: '1.0-0' }}</td>
-        </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
 
-        <!-- Reste à régler -->
-        <ng-container matColumnDef="reste">
-          <th mat-header-cell *matHeaderCellDef>Reste à Régler</th>
-          <td mat-cell *matCellDef="let releve">{{ releve.solde_initiale - releve.solde_finale | number: '1.0-0' }}</td>
-        </ng-container>
-
-        <!-- En-têtes + lignes -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </mat-card>
-
-    <div class="cards-grid">
-      <!-- 🟦 Carte Informations Relance -->
-      <mat-card class="relance-card">
-        <mat-card-title class="section-title">Informations relance</mat-card-title>
-
-        <!-- Client -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Client</mat-label>
-          <input matInput [value]="clientCode + ' - ' + raisonSociale" disabled />
-        </mat-form-field>
-
-        <!-- TITRE -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Titre</mat-label>
-          <input matInput type="text" formControlName="titre" required />
-        </mat-form-field>
-
-        <!-- DATE -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Date Rappel</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="date_rappel" required />
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        <!-- NOMBRE DE JOURS -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Nombre de jours</mat-label>
-          <mat-select formControlName="nb_jours_rappel" required>
-            <mat-option [value]="30">30 jours</mat-option>
-            <mat-option [value]="60">60 jours</mat-option>
-            <mat-option [value]="90">90 jours</mat-option>
-            <mat-option [value]="120">120 jours</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <!-- METHODE -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Méthode d'envoi</mat-label>
-          <mat-select formControlName="methode_envoi" required>
-            <mat-option value="Email">Email</mat-option>
-            <mat-option value="Courrier">Courrier</mat-option>
-            <mat-option value="Téléphone">Téléphone</mat-option>
-          </mat-select>
-        </mat-form-field>
-
-
-        <!-- OBSERVATIONS -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Objet Relance 01</mat-label>
-          <textarea matInput formControlName="objet_relance1"></textarea>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Objet Relance 02</mat-label>
-          <textarea matInput formControlName="objet_relance2"></textarea>
-        </mat-form-field>
+        <div class="button-group">
+          <button mat-button matStepperNext [disabled]="relanceForm.get('code_releves')?.value.length === 0">Suivant</button>
+        </div>
       </mat-card>
+    </mat-step>
 
-      <!-- 🟩 Carte Modèle Relance -->
-      <mat-card class="relance-card">
-        <mat-card-title class="section-title">Modèle relance</mat-card-title>
+    <!-- Étape 2 : Informations relance -->
+    <mat-step [stepControl]="relanceForm">
+      <ng-template matStepLabel>Informations relance</ng-template>
+      <mat-card class="step-card">
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Titre</mat-label>
+            <input matInput type="text" formControlName="titre" required />
+          </mat-form-field>
 
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Date Rappel</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date_rappel" required />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre de jours</mat-label>
+            <mat-select formControlName="nb_jours_rappel" required>
+              <mat-option [value]="30">30 jours</mat-option>
+              <mat-option [value]="60">60 jours</mat-option>
+              <mat-option [value]="90">90 jours</mat-option>
+              <mat-option [value]="120">120 jours</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Méthode d'envoi</mat-label>
+            <mat-select formControlName="methode_envoi" required>
+              <mat-option value="Email">Email</mat-option>
+              <mat-option value="Courrier">Courrier</mat-option>
+              <mat-option value="Téléphone">Téléphone</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Objet Relance 1</mat-label>
+            <textarea matInput formControlName="objet_relance1"></textarea>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Objet Relance 2</mat-label>
+            <textarea matInput formControlName="objet_relance2"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div class="button-group">
+          <button mat-button matStepperPrevious>Retour</button>
+          <button mat-button matStepperNext>Suivant</button>
+        </div>
+      </mat-card>
+    </mat-step>
+
+    <!-- Étape 3 : Modèle relance -->
+    <mat-step>
+      <ng-template matStepLabel>Modèle relance</ng-template>
+      <mat-card class="step-card">
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Choisir un modèle</mat-label>
           <mat-select formControlName="code_sous_modele" required>
@@ -133,18 +116,25 @@
             <mat-option value="DEMEURE">Relance 3 - Mise en Demeure</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <mat-card class="summary-card">
+          <h3>Résumé</h3>
+          <p><strong>Client :</strong> {{ clientCode }} - {{ raisonSociale }}</p>
+          <p><strong>Date Rappel :</strong> {{ relanceForm.get('date_rappel')?.value | date:'yyyy-MM-dd' }}</p>
+          <p><strong>Méthode :</strong> {{ relanceForm.get('methode_envoi')?.value }}</p>
+          <p><strong>Titre :</strong> {{ relanceForm.get('titre')?.value }}</p>
+          <p><strong>Nombre de jours :</strong> {{ relanceForm.get('nb_jours_rappel')?.value }}</p>
+        </mat-card>
+
+        <div class="button-group">
+          <button mat-button matStepperPrevious>Retour</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
+            <mat-icon *ngIf="!isLoading">save</mat-icon>
+            <span *ngIf="!isLoading">Enregistrer</span>
+            <span *ngIf="isLoading">Enregistrement...</span>
+          </button>
+        </div>
       </mat-card>
-    </div>
-
-    <!-- Boutons -->
-    <div class="button-group">
-      <button mat-raised-button color="primary" type="submit" [disabled]="isLoading">
-        <mat-icon *ngIf="!isLoading">save</mat-icon>
-        <span *ngIf="!isLoading">Enregistrer</span>
-        <span *ngIf="isLoading">Enregistrement...</span>
-      </button>
-
-      <button mat-stroked-button type="button" (click)="cancel()">Annuler</button>
-    </div>
-  </form>
-</div>
+    </mat-step>
+  </mat-vertical-stepper>
+</form>

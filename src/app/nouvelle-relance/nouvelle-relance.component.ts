@@ -9,6 +9,7 @@ import { Location } from '@angular/common';
 import { catchError, switchMap, take, finalize, map } from 'rxjs/operators';
 import { of, throwError } from 'rxjs';
 import { MATERIAL_PROVIDERS } from '../material';
+import {MatStepperModule} from '@angular/material/stepper';
 
 
 @Component({
@@ -17,6 +18,7 @@ import { MATERIAL_PROVIDERS } from '../material';
   styleUrls: ['./nouvelle-relance.component.css'],
   standalone: true,
   imports: [
+    MatStepperModule,
     MATERIAL_PROVIDERS,
   ]
 })

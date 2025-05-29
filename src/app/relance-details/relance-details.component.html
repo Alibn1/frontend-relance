@@ -11,13 +11,15 @@
     <mat-card class="relance-full-card" [ngClass]="{ 'etape-cloturee': etape.statut_detail === 'CLOTURE' }">
     <div class="card-header">
         <mat-card-title>
-          <mat-icon>info</mat-icon> Détails relance
+          <mat-icon>info</mat-icon> {{ etape.numero_relance }}
         </mat-card-title>
 
-        <div class="relance-card-actions">
-          <button mat-flat-button class="btn-action btn-light" (click)="navigateToCreateEvent()">
-            <mat-icon>event</mat-icon> Événement
-          </button>
+
+      <div class="relance-card-actions">
+        <button mat-flat-button class="btn-action btn-light"
+                (click)="openEvenementDialog(relance.ndr, etape.numero_relance, relance.code_client)">
+          <mat-icon>event</mat-icon> Événement
+        </button>
           <button mat-flat-button class="btn-action btn-print" (click)="printRelance(etape.numero_relance)">
             <mat-icon>print</mat-icon> Imprimer
           </button>
@@ -49,10 +51,10 @@
         <!-- Colonne gauche : Infos étape -->
         <div class="left-details">
           <div class="detail-item">
-            <mat-icon>confirmation_number</mat-icon>
+            <mat-icon>event_note</mat-icon>
             <div class="info-label">
-              <div class="label-title">Numéro relance</div>
-              <div>{{ etape.numero_relance }}</div>
+              <div class="label-title">Date de création</div>
+              <div>{{ etape.date_creation_debut | date: 'dd/MM/yyyy' }}</div>
             </div>
           </div>
 
@@ -68,7 +70,7 @@
             <mat-icon>update</mat-icon>
             <div class="info-label">
               <div class="label-title">Période d'activation</div>
-              <div>Non définie</div>
+              <div>{{ etape.date_creation_debut | date:'dd/MM/yyyy' }} - {{ etape.date_rappel | date:'dd/MM/yyyy' }}</div>
             </div>
           </div>
 

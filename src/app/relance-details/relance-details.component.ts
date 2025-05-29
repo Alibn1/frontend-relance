@@ -10,6 +10,8 @@ import { RelanceInfoComponent } from '../relance-info/relance-info.component';
 import { MatDialog } from '@angular/material/dialog';
 import {ConfirmDeleteComponent} from '../confirm-delete/confirm-delete.component';
 import {EtapeRelanceService} from '../services/etape-relance.service';
+import {EvenementAjoutComponent} from '../evenement-ajout/evenement-ajout.component';
+import {EvenementService} from '../services/evenement.service';
 
 @Component({
   selector: 'app-detail-relance',
@@ -35,7 +37,8 @@ export class DetailRelanceComponent implements OnInit {
     private snackBar: MatSnackBar,
     private relanceService: RelanceService,
     private dialog: MatDialog,
-    private etapeRelanceService: EtapeRelanceService
+    private etapeRelanceService: EtapeRelanceService,
+    private evenementService: EvenementService
   ) {}
 
   ngOnInit(): void {
@@ -157,6 +160,31 @@ export class DetailRelanceComponent implements OnInit {
 
   printRelance(numero_relance: string) {
     window.open(`http://localhost:8000/api/public/etape-relances/${numero_relance}/pdf`, '_blank');
+  }
+
+  openEvenementDialog(ndr: string, ner: string, code_client: string): void {
+    const dialogRef = this.dialog.open(EvenementAjoutComponent, {
+      width: '500px',
+      data: {
+        numero_relance: ner,
+        code_client: code_client,
+        user_creation: 'admin' // tu peux récupérer dynamiquement plus tard
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.evenementService.createEvenement(ndr, ner, result).subscribe({
+          next: () => {
+            this.showSuccess('Événement ajouté avec succès');
+            this.loadRelanceDetails(); // recharge les données
+          },
+          error: () => {
+            this.showError('Erreur lors de la création de l\'événement');
+          }
+        });
+      }
+    });
   }
 
 

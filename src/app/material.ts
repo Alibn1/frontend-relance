@@ -27,6 +27,7 @@ import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {MatDialogActions, MatDialogContent, MatDialogTitle} from '@angular/material/dialog';
+import {MatStepperModule} from '@angular/material/stepper';
 
 
 export const MATERIAL_PROVIDERS = [
@@ -76,7 +77,8 @@ export const MATERIAL_PROVIDERS = [
     MatCheckbox,
     MatDialogContent,
     MatDialogActions,
-    MatDialogTitle
+    MatDialogTitle,
+    MatStepperModule
 
   // ),
 ];

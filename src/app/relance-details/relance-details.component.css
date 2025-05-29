@@ -184,7 +184,6 @@ button.btn-action mat-icon {
 .card-header mat-icon {
   margin-right: 6px;
   vertical-align: middle;
-  transform: translateY(2px); /* ✅ Nouvelle ligne ajoutée */
 }
 
 .relance-card-actions {

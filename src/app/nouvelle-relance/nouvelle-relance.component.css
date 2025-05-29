@@ -1,76 +1,56 @@
-/* Layout principal */
-.page-container {
-  padding: 24px;
-  box-sizing: border-box;
-}
-
-/* Header bar : retour + titre */
-.header-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.relance-toolbar {
+  background-color: #8f50ec;
+  color: white;
+  padding: 1rem 2rem;
+  font-size: 1.25rem;
+  font-weight: 600;
   margin-bottom: 24px;
 }
 
-/* Grille : 2 colonnes égales */
-.cards-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* chaque colonne = 50% */
-  gap: 24px;
-  align-items: start;
+.toolbar-title {
+  font-size: 1.5rem;
 }
 
-/* Carte relance (les deux cartes) */
-.relance-card {
-  padding: 16px;
-  box-sizing: border-box;
+.custom-stepper-vertical {
+  display: flex;
+  padding: 32px;
+  max-width: 1024px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 12px;
+}
+
+.step-card {
   width: 100%;
+  background: #ffffff;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  padding: 24px;
+  border-radius: 8px;
+  margin-top: 16px;
 }
 
-/* Champ full width mais limité */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
 .full-width {
   width: 100%;
-  margin-bottom: 16px;
 }
 
-/* Boutons en bas */
+.summary-card {
+  background: #f4f4fc;
+  padding: 16px;
+  margin-top: 24px;
+  border-left: 5px solid #8f50ec;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
 .button-group {
+  margin-top: 24px;
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 24px;
-}
-
-/* Loading overlay */
-.loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-/* Quand le formulaire est désactivé */
-form.disabled {
-  pointer-events: none;
-  opacity: 0.6;
-}
-
-/* Section title */
-.section-title {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 16px;
-}
-
-/* Responsive : repasse en 1 colonne sur petit écran */
-@media (max-width: 960px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
 }
