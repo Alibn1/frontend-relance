@@ -61,16 +61,36 @@ export class NouvelleRelanceComponent implements OnInit {
     this.loadClientReleves();
   }
 
+  // private initForm(): void {
+  //   this.relanceForm = this.fb.group({
+  //     titre: ['Rappel de paiement', Validators.required],
+  //     date_rappel: [this.today, Validators.required],
+  //     nb_jours_rappel: [30, Validators.required],
+  //     methode_envoi: ['Email', Validators.required],
+  //     objet_relance1: [''],
+  //     objet_relance2: [''],
+  //     code_sous_modele: [null, Validators.required],
+  //     code_releves: [[]] // tableau de code_releves sélectionnés
+  //   });
+  // }
+
   private initForm(): void {
     this.relanceForm = this.fb.group({
-      titre: ['Rappel de paiement', Validators.required],
-      date_rappel: [this.today, Validators.required],
-      nb_jours_rappel: [30, [Validators.required, Validators.min(1)]],
-      methode_envoi: ['Email', Validators.required],
-      objet_relance1: [''],
-      objet_relance2: [''],
-      code_sous_modele: [null, Validators.required],
-      code_releves: [[]] // tableau de code_releves sélectionnés
+      // Étape 1 : sélection des relevés
+      code_releves: [[], Validators.required],
+
+      // Étape 2 : groupe d'infos relance
+      info: this.fb.group({
+        titre: ['Rappel de paiement', Validators.required],
+        date_rappel: [this.today, Validators.required],
+        nb_jours_rappel: [30, Validators.required],
+        methode_envoi: ['Email', Validators.required],
+        objet_relance1: [''], // ✅ ajouté ici
+        objet_relance2: ['']  // ✅ ajouté ici
+      }),
+
+      // Étape 3 : modèle à choisir
+      code_sous_modele: [null, Validators.required]
     });
   }
 
@@ -176,13 +196,13 @@ export class NouvelleRelanceComponent implements OnInit {
     const formValues = this.relanceForm.getRawValue();
     const etapeData = {
       code_sous_modele: formValues.code_sous_modele,
-      titre_sous_modele: formValues.titre,
+      titre_sous_modele: formValues.info?.titre || '',
       statut_detail: 'BROUILLON',
-      date_rappel: this.formatDate(formValues.date_rappel),
-      nb_jours_rappel: +formValues.nb_jours_rappel,
-      methode_envoi: formValues.methode_envoi,
-      objet_relance_1: formValues.objet_relance1,
-      objet_relance_2: formValues.objet_relance2,
+      date_rappel: this.formatDate(formValues.info?.date_rappel),
+      nb_jours_rappel: +formValues.info?.nb_jours_rappel || 0,
+      methode_envoi: formValues.info?.methode_envoi || '',
+      objet_relance_1: formValues.info?.objet_relance1 || '',
+      objet_relance_2: formValues.info?.objet_relance2 || '',
       code_releves: formValues.code_releves
     };
 
@@ -195,6 +215,9 @@ export class NouvelleRelanceComponent implements OnInit {
   }
 
   private formatDate(date: Date): string {
+    if (!date || typeof date.toISOString !== 'function') {
+      return '';
+    }
     return date.toISOString().split('T')[0];
   }
 
@@ -276,6 +299,10 @@ export class NouvelleRelanceComponent implements OnInit {
     } else {
       control?.setValue([]);
     }
+  }
+
+  get infoForm(): FormGroup {
+    return this.relanceForm.get('info') as FormGroup;
   }
 
 }
