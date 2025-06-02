@@ -1,14 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {MatCardModule} from '@angular/material/card';
-import {MatListModule} from '@angular/material/list';
-import {MatIconModule} from '@angular/material/icon';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {MatButtonModule} from '@angular/material/button';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {NgFor, NgIf} from '@angular/common';
-import {ActivatedRoute} from '@angular/router';
-import {EvenementService} from '../services/evenement.service';
+import {Component, OnInit, Input, SimpleChanges} from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgFor, NgIf } from '@angular/common';
+import { EvenementService } from '../services/evenement.service';
 
 @Component({
   selector: 'app-evenement-history',
@@ -28,39 +27,31 @@ import {EvenementService} from '../services/evenement.service';
   standalone: true,
 })
 export class EventHistoryComponent implements OnInit {
+  @Input() dossierId!: string;
+
   events: any[] = [];
   isLoading = false;
   errorMessage: string | null = null;
-  private num_relance_dossier!: string;
-  private num_relance!: string;
 
-  constructor(
-    private route: ActivatedRoute,
-    private evenementService: EvenementService
-  ) {}
+  constructor(private evenementService: EvenementService) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['dossierId'] && changes['dossierId'].currentValue) {
+      this.loadEventHistory();
+    }
+  }
 
   ngOnInit(): void {
-    this.route.params.subscribe(params => {
-      this.num_relance_dossier = params['num_relance_dossier'];
-      this.num_relance = params['num_relance'];
-      if (this.num_relance_dossier && this.num_relance) {
-        this.loadEventHistory();
-      } else {
-        this.errorMessage = 'Paramètres manquants pour récupérer l\'historique';
-      }
-    });
+    if (this.dossierId) {
+      this.loadEventHistory();
+    } else {
+      this.errorMessage = 'Numéro de dossier manquant pour l\'historique';
+    }
   }
 
   loadEventHistory(): void {
-    if (!this.num_relance_dossier || !this.num_relance) {
-      this.errorMessage = 'Paramètres manquants pour récupérer l\'historique';
-      return;
-    }
-
     this.isLoading = true;
-    this.errorMessage = null;
-
-    this.evenementService.getEvenements(this.num_relance_dossier, this.num_relance).subscribe({
+    this.evenementService.getEvenementsByDossier(this.dossierId).subscribe({
       next: (response) => {
         this.events = Array.isArray(response) ? response : response?.evenements || [];
 
@@ -71,7 +62,7 @@ export class EventHistoryComponent implements OnInit {
         });
 
         if (this.events.length === 0) {
-          this.errorMessage = 'Aucun événement trouvé pour cette étape';
+          this.errorMessage = 'Aucun événement trouvé pour ce dossier';
         }
       },
       error: (error) => {
@@ -81,10 +72,6 @@ export class EventHistoryComponent implements OnInit {
       },
       complete: () => this.isLoading = false
     });
-  }
-
-  trackByEventId(index: number, event: any): string {
-    return event?.numero_evenement || index.toString();
   }
 
   formatDate(dateString: string | Date): string {
@@ -100,21 +87,4 @@ export class EventHistoryComponent implements OnInit {
     this.loadEventHistory();
   }
 
-  getStatusIcon(status: string): string {
-    switch (status) {
-      case 'REALISE': return 'check_circle';
-      case 'EN_COURS': return 'pending';
-      case 'ECHEC': return 'error';
-      default: return 'help_outline';
-    }
-  }
-
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'REALISE': return 'success';
-      case 'EN_COURS': return 'primary';
-      case 'ECHEC': return 'warn';
-      default: return '';
-    }
-  }
 }

@@ -7,7 +7,7 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+  overflow: hidden;
   font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
   width: 100%;
   background-color: #fcfaff;
@@ -402,5 +402,50 @@ button.statut-button {
   background-color: #f0f0f0 !important;
   transform: translateX(8px);
   transition: transform 200ms ease;
+}
+
+
+/*History drawer*/
+.relance-container {
+  height: 100vh;
+}
+
+.history-drawer {
+  width: 360px;
+  background-color: #fafafa;
+  border-left: 1px solid #ccc;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  color: #4b0082;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+::ng-deep .cdk-overlay-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000 !important;
+}
+
+.history-drawer {
+  width: 400px;
+  max-width: 90vw;
+  top: 88px; /* Pour qu’il démarre sous la toolbar violette */
+  height: calc(100vh - 88px); /* hauteur sans barre violette */
+  margin-top: 64px;           /* décalage sous la barre */
+  position: fixed !important;
+  z-index: 1100 !important;
+  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+  border-radius: 0 !important; /* ⬅️ important pour enlever les coins ronds */
+}
+
+body.cdk-global-scrollblock {
+  overflow: hidden !important;
 }
 

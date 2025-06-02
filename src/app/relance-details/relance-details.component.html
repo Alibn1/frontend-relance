@@ -1,148 +1,167 @@
-<app-relance-info
-  [relance]="relance"
-  (goBack)="goBack()"
-  (toggle)="toggleStatus()"
-  (history)="navigateToEventHistory()"
-></app-relance-info>
+<mat-drawer-container class="relance-container">
 
-<!-- CONTENU UNIQUE -->
-<div class="container">
-  <ng-container *ngFor="let etape of relance?.etapes">
-    <mat-card class="relance-full-card" [ngClass]="{ 'etape-cloturee': etape.statut_detail === 'CLOTURE' }">
-    <div class="card-header">
-        <mat-card-title>
-          <mat-icon>info</mat-icon> {{ etape.numero_relance }}
-        </mat-card-title>
+  <!-- 🟪 CONTENU PRINCIPAL -->
+  <mat-drawer-content>
 
+    <!-- Info relance haut de page -->
+    <app-relance-info
+      [relance]="relance"
+      (goBack)="goBack()"
+      (toggle)="toggleStatus()"
+      (history)="openEventHistory()"
+    ></app-relance-info>
 
-      <div class="relance-card-actions">
-        <button mat-flat-button class="btn-action btn-light"
-                (click)="openEvenementDialog(relance.ndr, etape.numero_relance, relance.code_client)">
-          <mat-icon>event</mat-icon> Événement
-        </button>
-          <button mat-flat-button class="btn-action btn-print" (click)="printRelance(etape.numero_relance)">
-            <mat-icon>print</mat-icon> Imprimer
-          </button>
+    <!-- Étapes de relance -->
+    <div class="container">
+      <ng-container *ngFor="let etape of relance?.etapes">
+        <mat-card class="relance-full-card" [ngClass]="{ 'etape-cloturee': etape.statut_detail === 'CLOTURE' }">
+          <div class="card-header">
+            <mat-card-title>
+              <mat-icon>info</mat-icon> {{ etape.numero_relance }}
+            </mat-card-title>
 
-          <button
-            mat-flat-button
-            class="btn-action statut-button"
-            [ngClass]="getStatutButtonColorClass(etape.statut_detail)"
-            [matMenuTriggerFor]="statutMenu">
-            <mat-icon>{{ getStatutIcon(etape.statut_detail) }}</mat-icon>
-            {{ getLibelleStatut(etape.statut_detail) }}
-          </button>
+            <div class="relance-card-actions">
+              <button mat-flat-button class="btn-action btn-light"
+                      (click)="openEvenementDialog(relance.ndr, etape.numero_relance, relance.code_client)">
+                <mat-icon>event</mat-icon> Événement
+              </button>
+              <button mat-flat-button class="btn-action btn-print" (click)="printRelance(etape.numero_relance)">
+                <mat-icon>print</mat-icon> Imprimer
+              </button>
 
-          <mat-menu #statutMenu="matMenu">
-            <button mat-menu-item *ngFor="let statut of statuts" (click)="changerStatut(etape.numero_relance, statut.code)">
-              <mat-icon [ngClass]="statut.color">{{ statut.icon }}</mat-icon>
-              {{ statut.libelle }}
-            </button>
-          </mat-menu>
-          <button mat-flat-button class="btn-action mat-warn" (click)="Delete(etape.numero_relance)">
-            <mat-icon>delete</mat-icon> Supprimer
-          </button>
-        </div>
-      </div>
+              <button mat-flat-button
+                      class="btn-action statut-button"
+                      [ngClass]="getStatutButtonColorClass(etape.statut_detail)"
+                      [matMenuTriggerFor]="statutMenu">
+                <mat-icon>{{ getStatutIcon(etape.statut_detail) }}</mat-icon>
+                {{ getLibelleStatut(etape.statut_detail) }}
+              </button>
 
-      <mat-divider class="divider"></mat-divider>
+              <mat-menu #statutMenu="matMenu">
+                <button mat-menu-item *ngFor="let statut of statuts"
+                        (click)="changerStatut(etape.numero_relance, statut.code)">
+                  <mat-icon [ngClass]="statut.color">{{ statut.icon }}</mat-icon>
+                  {{ statut.libelle }}
+                </button>
+              </mat-menu>
 
-      <div class="relance-layout">
-        <!-- Colonne gauche : Infos étape -->
-        <div class="left-details">
-          <div class="detail-item">
-            <mat-icon>event_note</mat-icon>
-            <div class="info-label">
-              <div class="label-title">Date de création</div>
-              <div>{{ etape.date_creation_debut | date: 'dd/MM/yyyy' }}</div>
+              <button mat-flat-button class="btn-action mat-warn" (click)="Delete(etape.numero_relance)">
+                <mat-icon>delete</mat-icon> Supprimer
+              </button>
             </div>
           </div>
 
-          <div class="detail-item">
-            <mat-icon>event</mat-icon>
-            <div class="info-label">
-              <div class="label-title">Date rappel</div>
-              <div>{{ etape.date_rappel | date:'dd/MM/yyyy' }}</div>
+          <mat-divider class="divider"></mat-divider>
+
+          <div class="relance-layout">
+            <!-- Colonne gauche : infos étape -->
+            <div class="left-details">
+              <div class="detail-item">
+                <mat-icon>event_note</mat-icon>
+                <div class="info-label">
+                  <div class="label-title">Date de création</div>
+                  <div>{{ etape.date_creation_debut | date: 'dd/MM/yyyy' }}</div>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <mat-icon>event</mat-icon>
+                <div class="info-label">
+                  <div class="label-title">Date rappel</div>
+                  <div>{{ etape.date_rappel | date: 'dd/MM/yyyy' }}</div>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <mat-icon>update</mat-icon>
+                <div class="info-label">
+                  <div class="label-title">Période d'activation</div>
+                  <div>{{ etape.date_creation_debut | date: 'dd/MM/yyyy' }} - {{ etape.date_rappel | date: 'dd/MM/yyyy' }}</div>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <mat-icon>send</mat-icon>
+                <div class="info-label">
+                  <div class="label-title">Méthode d’envoi</div>
+                  <div>{{ etape.methode_envoi ?? 'Inconnue' }}</div>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <mat-icon>person</mat-icon>
+                <div class="info-label">
+                  <div class="label-title">Créé par</div>
+                  <div>{{ etape.executant_envoi ?? 'Utilisateur inconnu' }}</div>
+                </div>
+              </div>
+
+              <div class="detail-item">
+                <mat-icon>description</mat-icon>
+                <div class="info-label">
+                  <div class="label-title">Modèle</div>
+                  <div>{{ etape.code_sous_modele }}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Colonne droite : tableau relevés -->
+            <div class="right-table">
+              <table mat-table [dataSource]="etape.releves" class="mat-elevation-z1 creance-table">
+                <ng-container matColumnDef="libelle">
+                  <th mat-header-cell *matHeaderCellDef> Libellé </th>
+                  <td mat-cell *matCellDef="let row"> {{ row.libelle }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                  <th mat-header-cell *matHeaderCellDef> Date </th>
+                  <td mat-cell *matCellDef="let row"> {{ row.date | date:'yyyy-MM' }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="debit">
+                  <th mat-header-cell *matHeaderCellDef> Débit </th>
+                  <td mat-cell *matCellDef="let row"> {{ row.debit | number:'1.0-0':'fr-FR' }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="credit">
+                  <th mat-header-cell *matHeaderCellDef> Crédit </th>
+                  <td mat-cell *matCellDef="let row"> {{ row.credit | number:'1.0-0':'fr-FR' }} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="solde">
+                  <th mat-header-cell *matHeaderCellDef> Solde </th>
+                  <td mat-cell *matCellDef="let row"> {{ row.solde | number:'1.0-0':'fr-FR' }} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+
+              <table class="mat-elevation-z1 creance-table footer-only-table">
+                <tr class="footer-total-row">
+                  <td colspan="4" class="footer-label">TOTAL SOLDE</td>
+                  <td class="footer-value">
+                    {{ getTotalSolde(etape.releves) | number:'1.0-0':'fr-FR' }}
+                  </td>
+                </tr>
+              </table>
             </div>
           </div>
+        </mat-card>
+      </ng-container>
+    </div>
 
-          <div class="detail-item">
-            <mat-icon>update</mat-icon>
-            <div class="info-label">
-              <div class="label-title">Période d'activation</div>
-              <div>{{ etape.date_creation_debut | date:'dd/MM/yyyy' }} - {{ etape.date_rappel | date:'dd/MM/yyyy' }}</div>
-            </div>
-          </div>
+  </mat-drawer-content>
 
-          <div class="detail-item">
-            <mat-icon>send</mat-icon>
-            <div class="info-label">
-              <div class="label-title">Méthode d’envoi</div>
-              <div>{{ etape.methode_envoi ?? 'Inconnue' }}</div>
-            </div>
-          </div>
+  <!-- 🟦 PANNEAU LATÉRAL : HISTORIQUE -->
+  <mat-drawer #drawer mode="over" position="end" [opened]="isHistoryOpen" class="history-drawer" (closedStart)="closeEventHistory()">
+  <div class="drawer-header">
+      <span>Historique des événements</span>
+      <button mat-icon-button (click)="closeEventHistory()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <app-evenement-history [dossierId]="relance?.ndr"></app-evenement-history>
+  </mat-drawer>
 
-          <div class="detail-item">
-            <mat-icon>person</mat-icon>
-            <div class="info-label">
-              <div class="label-title">Créé par</div>
-              <div>{{ etape.executant_envoi ?? 'Utilisateur inconnu' }}</div>
-            </div>
-          </div>
-
-          <div class="detail-item">
-            <mat-icon>description</mat-icon>
-            <div class="info-label">
-              <div class="label-title">Modèle</div>
-              <div>{{ etape.code_sous_modele }}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Colonne droite : Tableau relevés -->
-        <div class="right-table">
-          <table mat-table [dataSource]="etape.releves" class="mat-elevation-z1 creance-table">
-            <ng-container matColumnDef="libelle">
-              <th mat-header-cell *matHeaderCellDef> Libellé </th>
-              <td mat-cell *matCellDef="let row"> {{ row.libelle }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="date">
-              <th mat-header-cell *matHeaderCellDef> Date </th>
-              <td mat-cell *matCellDef="let row"> {{ row.date | date:'yyyy-MM' }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="debit">
-              <th mat-header-cell *matHeaderCellDef> Débit </th>
-              <td mat-cell *matCellDef="let row"> {{ row.debit | number:'1.0-0':'fr-FR' }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="credit">
-              <th mat-header-cell *matHeaderCellDef> Crédit </th>
-              <td mat-cell *matCellDef="let row"> {{ row.credit | number:'1.0-0':'fr-FR' }} </td>
-            </ng-container>
-
-            <ng-container matColumnDef="solde">
-              <th mat-header-cell *matHeaderCellDef> Solde </th>
-              <td mat-cell *matCellDef="let row"> {{ row.solde | number:'1.0-0':'fr-FR' }} </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-
-
-          <table class="mat-elevation-z1 creance-table footer-only-table">
-            <tr class="footer-total-row">
-              <td colspan="4" class="footer-label">TOTAL SOLDE</td>
-              <td class="footer-value">
-                {{ getTotalSolde(etape.releves) | number:'1.0-0':'fr-FR' }}
-              </td>
-            </tr>
-          </table>
-        </div>
-      </div>
-    </mat-card>
-  </ng-container>
-
-</div>
+</mat-drawer-container>

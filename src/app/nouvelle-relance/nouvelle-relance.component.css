@@ -1,72 +1,75 @@
-/* ✅ Évite tout débordement horizontal */
-html, body {
+:host {
+  display: block;
   margin: 0;
   padding: 0;
-  overflow-x: hidden;
+}
+
+/* === Réinitialisation totale === */
+html, body {
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100vw;
+  height: 100vh;
+  overflow-x: hidden !important;
   font-family: 'Segoe UI', sans-serif;
   background-color: #fcfaff;
 }
 
-/* ✅ Bande violette sans espace */
+/* === Colle bien le header violet sous la navbar === */
 .banner-header {
-  width: 100%;
+  margin: 0;
+  padding: 1.5rem 0;
   background-color: #8f50ec;
   color: white;
   font-size: 1.8rem;
   font-weight: 600;
-  padding: 1.2rem;
   text-align: center;
-  box-sizing: border-box;
-  margin: 0;
+  width: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
 }
 
-/* ✅ Container recentré, sans scroll horizontal */
+/* === Conteneur fluide pour tout le stepper === */
 .stepper-container {
-  max-width: 880px;
-  margin: 0 auto;
-  padding: 0 16px;
-  background-color: transparent;
-  overflow-x: hidden;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* ✅ Card claire */
+/* === Stepper parfaitement aligné à gauche === */
+::ng-deep .mat-vertical-stepper {
+  padding: 0;
+  margin: 0;
+  min-width: 240px;
+}
+
+/* === Stepper étape stylée comme ton schéma === */
+::ng-deep .mat-vertical-stepper-header {
+  padding: 1rem 0;
+  margin: 0;
+  align-items: center;
+  background: transparent;
+}
+
+::ng-deep .mat-step-icon {
+  background-color: #8f50ec !important;
+  color: white !important;
+}
+
+/* === Cartes de contenu à droite === */
 .step-card {
-  background: #fff;
+  background-color: #fff;
   border-radius: 12px;
   padding: 24px;
-  margin-top: 24px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-/* ✅ Champs */
-.full-width {
+  margin-left: 0;
+  margin-top: 2rem;
   width: 100%;
-  margin-bottom: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
-.form-grid {
-  display: grid;
-  gap: 16px;
-}
-
-/* ✅ Résumé */
-.summary-card {
-  background-color: #f6f2fe;
-  padding: 16px;
-  margin-top: 16px;
-  border-left: 5px solid #8f50ec;
-  border-radius: 8px;
-}
-
-/* ✅ Boutons */
-.button-group {
-  display: flex;
-  justify-content: flex-end;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-/* ✅ TABLEAU identique au modèle */
+/* === Tableau lisible */
 table.mat-table {
   width: 100%;
   border-collapse: collapse;
@@ -80,14 +83,10 @@ table.mat-table {
 table.mat-table th, table.mat-table td {
   padding: 14px 12px;
   border-bottom: 1px solid #eee;
+  text-align: center;
 }
 
-table.mat-table th {
-  font-weight: 600;
-  color: #333;
-}
-
-/* ✅ Checkboxes violettes */
+/* === Checkboxes violettes */
 .mat-checkbox .mat-checkbox-frame {
   border-color: #8f50ec;
 }
@@ -97,19 +96,25 @@ table.mat-table th {
   background-color: #8f50ec !important;
 }
 
-/* ✅ Stepper violet clair */
-::ng-deep .mat-step-icon {
-  background-color: #8f50ec !important;
-  color: white !important;
+/* === Résumé */
+.summary-card {
+  background-color: #f6f2fe;
+  padding: 16px;
+  margin-top: 20px;
+  border-left: 5px solid #8f50ec;
+  border-radius: 8px;
+  font-size: 15px;
 }
 
-::ng-deep .mat-vertical-stepper-header {
-  align-items: flex-start;
-  margin: 0;
-  padding: 0;
+/* === Boutons */
+.button-group {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
 }
 
-/* ✅ Supprimer scroll horizontal dû aux paddings */
-* {
-  box-sizing: border-box;
+button.mat-flat-button[color="primary"] {
+  background-color: #8f50ec;
+  color: white;
 }

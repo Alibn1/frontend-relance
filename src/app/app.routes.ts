@@ -6,10 +6,12 @@ import {ClientDetailsComponent} from './client-details/client-details.component'
 import {NouvelleRelanceComponent} from './nouvelle-relance/nouvelle-relance.component';
 import { RelanceHistoriqueComponent } from './relance-historique/relance-historique.component';
 import { DetailRelanceComponent } from './relance-details/relance-details.component';
+import {EventHistoryComponent} from './evenement-history/evenement-history.component';
 import {AuthenticatedLayoutComponent} from './layouts/authenticated-layout.component';
 import {PublicLayoutComponent} from './layouts/public-layout.component';
 import {AuthGuard} from './guards/auth.guard';
 import {AuthResolver} from './resolver/auth.resolver';
+
 
 
 
@@ -60,6 +62,12 @@ export const routes: Routes = [
       {
         path: 'relance-dossiers/:id',
         component: DetailRelanceComponent,
+        canActivate: [AuthGuard],
+        resolve: { user: AuthResolver }
+      },
+      {
+        path: 'relance-dossiers/:numero_relance_dossier/evenements',
+        component: EventHistoryComponent,
         canActivate: [AuthGuard],
         resolve: { user: AuthResolver }
       },

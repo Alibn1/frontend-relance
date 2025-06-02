@@ -12,13 +12,15 @@ import {ConfirmDeleteComponent} from '../confirm-delete/confirm-delete.component
 import {EtapeRelanceService} from '../services/etape-relance.service';
 import {EvenementAjoutComponent} from '../evenement-ajout/evenement-ajout.component';
 import {EvenementService} from '../services/evenement.service';
+import {environment} from '../../environments/environment';
+import {EventHistoryComponent} from '../evenement-history/evenement-history.component';
 
 @Component({
   selector: 'app-detail-relance',
   templateUrl: './relance-details.component.html',
   styleUrls: ['./relance-details.component.css'],
   standalone: true,
-  imports: [MATERIAL_PROVIDERS, RelanceInfoComponent],
+  imports: [MATERIAL_PROVIDERS, RelanceInfoComponent, EventHistoryComponent],
   providers: [provideNativeDateAdapter()]
 })
 export class DetailRelanceComponent implements OnInit {
@@ -26,6 +28,9 @@ export class DetailRelanceComponent implements OnInit {
   relanceId = '';
   relance: any = null;
   isLoading = true;
+  isHistoryOpen = false;
+
+  readonly apiUrl = environment.apiUrl;
 
   displayedColumns: string[] = ['libelle', 'date', 'debit', 'credit', 'solde'];
 
@@ -128,7 +133,7 @@ export class DetailRelanceComponent implements OnInit {
   navigateToEventHistory(): void {
     const firstEtape = this.relance?.etapes?.[0];
     if (this.relance?.ndr && firstEtape?.numero_relance) {
-      this.router.navigate([`/relance-dossiers/${this.relance.ndr}/etapes/${firstEtape.numero_relance}/evenements`]);
+      this.router.navigate([`/relance-dossiers/${this.relance.ndr}/evenements`]);
     } else {
       this.showError('Aucune étape disponible pour afficher l\'historique');
     }
@@ -159,7 +164,7 @@ export class DetailRelanceComponent implements OnInit {
   }
 
   printRelance(numero_relance: string) {
-    window.open(`http://localhost:8000/api/public/etape-relances/${numero_relance}/pdf`, '_blank');
+    window.open(`${this.apiUrl}/public/etape-relances/${numero_relance}/pdf`, '_blank');
   }
 
   openEvenementDialog(ndr: string, ner: string, code_client: string): void {
@@ -212,6 +217,14 @@ export class DetailRelanceComponent implements OnInit {
 
   getStatutIcon(code: string): string {
     return this.statuts.find(s => s.code === code)?.icon || 'help';
+  }
+
+  openEventHistory(): void {
+    this.isHistoryOpen = true;
+  }
+
+  closeEventHistory(): void {
+    this.isHistoryOpen = false;
   }
 
   getStatutButtonColorClass(code: string): string {

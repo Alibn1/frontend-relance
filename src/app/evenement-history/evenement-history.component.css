@@ -1,0 +1,61 @@
+.event-history-wrapper {
+  padding: 1rem;
+  max-width: 400px;
+  overflow-y: auto;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.error-message {
+  color: #d32f2f;
+  text-align: center;
+  padding: 2rem;
+}
+
+.event-card-compact {
+  background: #f5f3ff;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.event-header {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.event-header mat-icon {
+  margin-right: 6px;
+  color: #8f50ec;
+}
+
+.event-step {
+  flex-grow: 1;
+}
+
+.event-date {
+  font-size: 13px;
+  color: #666;
+}
+
+.event-line {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  margin: 3px 0;
+  color: #444;
+}
+
+.event-line mat-icon {
+  font-size: 18px;
+  margin-right: 6px;
+  color: #777;
+}

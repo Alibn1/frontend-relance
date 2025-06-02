@@ -9,8 +9,7 @@ import { Location } from '@angular/common';
 import { catchError, switchMap, take, finalize, map } from 'rxjs/operators';
 import { of, throwError } from 'rxjs';
 import { MATERIAL_PROVIDERS } from '../material';
-import {MatStepperModule} from '@angular/material/stepper';
-
+import { MatStepperModule } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-nouvelle-relance',
@@ -61,35 +60,17 @@ export class NouvelleRelanceComponent implements OnInit {
     this.loadClientReleves();
   }
 
-  // private initForm(): void {
-  //   this.relanceForm = this.fb.group({
-  //     titre: ['Rappel de paiement', Validators.required],
-  //     date_rappel: [this.today, Validators.required],
-  //     nb_jours_rappel: [30, Validators.required],
-  //     methode_envoi: ['Email', Validators.required],
-  //     objet_relance1: [''],
-  //     objet_relance2: [''],
-  //     code_sous_modele: [null, Validators.required],
-  //     code_releves: [[]] // tableau de code_releves sélectionnés
-  //   });
-  // }
-
   private initForm(): void {
     this.relanceForm = this.fb.group({
-      // Étape 1 : sélection des relevés
       code_releves: [[], Validators.required],
-
-      // Étape 2 : groupe d'infos relance
       info: this.fb.group({
         titre: ['Rappel de paiement', Validators.required],
         date_rappel: [this.today, Validators.required],
         nb_jours_rappel: [30, Validators.required],
         methode_envoi: ['Email', Validators.required],
-        objet_relance1: [''], // ✅ ajouté ici
-        objet_relance2: ['']  // ✅ ajouté ici
+        objet_relance1: [''],
+        objet_relance2: ['']
       }),
-
-      // Étape 3 : modèle à choisir
       code_sous_modele: [null, Validators.required]
     });
   }
@@ -103,9 +84,6 @@ export class NouvelleRelanceComponent implements OnInit {
       next: (relances: any[]) => {
         this.existingRelances = relances;
         this.hasExistingRelances = relances.length > 0;
-        if (this.hasExistingRelances) {
-          this.showNotification(`Ce client a déjà ${relances.length} relance(s) existante(s)`);
-        }
       },
       error: (error) => this.handleRelancesError(error)
     });
@@ -134,10 +112,7 @@ export class NouvelleRelanceComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.relanceForm.invalid || !this.clientCode) {
-      this.showNotification('Veuillez remplir tous les champs obligatoires', true);
-      return;
-    }
+    if (this.relanceForm.invalid || !this.clientCode) return;
 
     if (this.relanceForm.get('code_releves')?.value?.length === 0) {
       this.snackBar.open("Vous devez sélectionner au moins un relevé pour créer une relance.", "Fermer", {
@@ -149,10 +124,12 @@ export class NouvelleRelanceComponent implements OnInit {
 
     this.isLoading = true;
     this.getOrCreateRelance().pipe(
-      switchMap((ndr: string) => this.addRelanceStep(ndr)),
+      switchMap((ndr: string) =>
+        this.addRelanceStep(ndr).pipe(map(() => ndr))
+      ),
       finalize(() => this.isLoading = false)
     ).subscribe({
-      next: () => this.handleSuccess(),
+      next: (ndr) => this.handleSuccess(ndr),
       error: (error) => this.handleSubmitError(error)
     });
   }
@@ -187,7 +164,7 @@ export class NouvelleRelanceComponent implements OnInit {
     const ndr = relance?.numero_relance_dossier;
     if (!ndr) {
       console.error('Structure relance reçue:', relance);
-      throw new Error('Impossible de trouver le numéro de dossier (numero relance dossier)');
+      throw new Error('Impossible de trouver le numéro de dossier');
     }
     return of(ndr);
   }
@@ -215,18 +192,16 @@ export class NouvelleRelanceComponent implements OnInit {
   }
 
   private formatDate(date: Date): string {
-    if (!date || typeof date.toISOString !== 'function') {
-      return '';
-    }
+    if (!date || typeof date.toISOString !== 'function') return '';
     return date.toISOString().split('T')[0];
   }
 
-  private handleSuccess(): void {
+  private handleSuccess(ndr: string): void {
     const message = this.hasExistingRelances
       ? 'Nouvelle étape ajoutée avec succès'
       : 'Relance et étape créées avec succès';
     this.showNotification(message);
-    this.goBack();
+    this.router.navigate(['/relance-dossiers', ndr]);
   }
 
   private handleSubmitError(error: any): void {
@@ -304,5 +279,4 @@ export class NouvelleRelanceComponent implements OnInit {
   get infoForm(): FormGroup {
     return this.relanceForm.get('info') as FormGroup;
   }
-
 }

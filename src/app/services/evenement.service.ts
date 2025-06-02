@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import {Observable, of, throwError} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
@@ -17,16 +17,16 @@ export class EvenementService {
    * @param ndr Numéro du dossier de relance (ex: REL25001)
    * @param ner Numéro d'étape de relance (ex: ETR25001)
    */
-  getEvenements(ndr: string, ner: string): Observable<any> {
-    const url = `${this.apiUrl}/relances/${ndr}/etapes/${ner}/evenements`;
+  getEvenementsByDossier(ndr: string): Observable<any> {
+    const url = `${this.apiUrl}/relances/${ndr}/evenements`;
     return this.http.get(url).pipe(
       catchError(error => {
         console.error('Erreur lors de la récupération des événements:', error);
-        if (error.status === 404) return of({ evenements: [] });
-        throw error;
+        return throwError(() => error);
       })
     );
   }
+
 
   /**
    * Crée un nouvel événement pour une étape de relance
