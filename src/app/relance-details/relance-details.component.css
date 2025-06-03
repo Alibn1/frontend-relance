@@ -10,8 +10,10 @@ html, body {
   overflow: hidden;
   font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
   width: 100%;
+  height: 100%;
   background-color: #fcfaff;
 }
+
 
 .relance-header {
   width: 100%;
@@ -404,48 +406,68 @@ button.statut-button {
   transition: transform 200ms ease;
 }
 
+/* === Drawer / Historique événement === */
 
-/*History drawer*/
-.relance-container {
-  height: 100vh;
+/* Overlay sombre sauf en-tête */
+.custom-drawer-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 999;
 }
 
-.history-drawer {
-  width: 360px;
-  background-color: #fafafa;
-  border-left: 1px solid #ccc;
-  padding: 1rem;
+/* Conteneur du drawer (overlay + panel) */
+.custom-drawer-wrapper {
+  position: fixed;
+  top: 152px;; /* ✅ Plus flexible */
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 152px);
+  z-index: 1000;
+}
+
+/* Drawer latéral à droite */
+.custom-drawer-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 420px;
+  height: 100%;
+  background-color: white;
+  z-index: 1001;
   overflow-y: auto;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.drawer-header {
+/* Header du drawer */
+.custom-drawer-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1rem;
   font-weight: bold;
-  color: #4b0082;
   font-size: 1.1rem;
-  margin-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+  color: #5d3a9b;
 }
 
-::ng-deep .cdk-overlay-backdrop {
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000 !important;
+
+body.no-scroll {
+  overflow: hidden !important; /* ← important pour forcer */
+  position: fixed;
+  width: 100%;
 }
 
-.history-drawer {
-  width: 400px;
-  max-width: 90vw;
-  top: 88px; /* Pour qu’il démarre sous la toolbar violette */
-  height: calc(100vh - 88px); /* hauteur sans barre violette */
-  margin-top: 64px;           /* décalage sous la barre */
-  position: fixed !important;
-  z-index: 1100 !important;
-  box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
-  border-radius: 0 !important; /* ⬅️ important pour enlever les coins ronds */
-}
 
-body.cdk-global-scrollblock {
+body.no-scroll,
+html.no-scroll,
+.container.no-scroll,
+cdk-overlay-container.no-scroll {
   overflow: hidden !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 100% !important;
 }
-

@@ -1,3 +1,4 @@
+<!-- 🟪 En-tête violette -->
 <div class="relance-header mat-elevation-z4">
   <div class="relance-header-content">
     <!-- Gauche -->
@@ -16,7 +17,9 @@
       <button mat-flat-button class="btn-light" (click)="history.emit()">
         <mat-icon>history</mat-icon> Historique des événements
       </button>
-      <button mat-flat-button class="statut-button" [ngStyle]="{ 'background-color': getStatutColor() }" (click)="toggle.emit()">
+      <button mat-flat-button class="statut-button"
+              [ngStyle]="{ 'background-color': getStatutColor() }"
+              (click)="toggle.emit()">
         <mat-icon>{{ getStatutIcon() }}</mat-icon> {{ relance?.libelle }}
       </button>
     </div>

@@ -1,15 +1,28 @@
-<mat-drawer-container class="relance-container">
-
-  <!-- 🟪 CONTENU PRINCIPAL -->
-  <mat-drawer-content>
 
     <!-- Info relance haut de page -->
     <app-relance-info
       [relance]="relance"
       (goBack)="goBack()"
       (toggle)="toggleStatus()"
-      (history)="openEventHistory()"
+      (history)="openDrawer()"
     ></app-relance-info>
+
+    <!-- 🟦 Overlay et drawer custom -->
+    <div class="custom-drawer-wrapper" *ngIf="isHistoryOpen">
+      <!-- Fond sombre -->
+      <div class="custom-drawer-overlay" (click)="isHistoryOpen = false"></div>
+
+      <!-- Drawer latéral -->
+      <div class="custom-drawer-panel">
+        <div class="custom-drawer-header">
+          <span>Historique des événements</span>
+          <button mat-icon-button (click)="closeDrawer()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <app-evenement-history [dossierId]="relance?.ndr"></app-evenement-history>
+      </div>
+    </div>
 
     <!-- Étapes de relance -->
     <div class="container">
@@ -151,17 +164,4 @@
       </ng-container>
     </div>
 
-  </mat-drawer-content>
 
-  <!-- 🟦 PANNEAU LATÉRAL : HISTORIQUE -->
-  <mat-drawer #drawer mode="over" position="end" [opened]="isHistoryOpen" class="history-drawer" (closedStart)="closeEventHistory()">
-  <div class="drawer-header">
-      <span>Historique des événements</span>
-      <button mat-icon-button (click)="closeEventHistory()">
-        <mat-icon>close</mat-icon>
-      </button>
-    </div>
-    <app-evenement-history [dossierId]="relance?.ndr"></app-evenement-history>
-  </mat-drawer>
-
-</mat-drawer-container>

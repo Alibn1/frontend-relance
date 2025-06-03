@@ -15,6 +15,7 @@ import {EvenementService} from '../services/evenement.service';
 import {environment} from '../../environments/environment';
 import {EventHistoryComponent} from '../evenement-history/evenement-history.component';
 
+
 @Component({
   selector: 'app-detail-relance',
   templateUrl: './relance-details.component.html',
@@ -29,6 +30,7 @@ export class DetailRelanceComponent implements OnInit {
   relance: any = null;
   isLoading = true;
   isHistoryOpen = false;
+
 
   readonly apiUrl = environment.apiUrl;
 
@@ -192,8 +194,23 @@ export class DetailRelanceComponent implements OnInit {
     });
   }
 
+  openDrawer(): void {
+    this.isHistoryOpen = true;
+    document.body.classList.add('no-scroll');
+    document.documentElement.classList.add('no-scroll');
 
+    const container = document.querySelector('.container');
+    if (container) container.classList.add('no-scroll');
+  }
 
+  closeDrawer(): void {
+    this.isHistoryOpen = false;
+    document.body.classList.remove('no-scroll');
+    document.documentElement.classList.remove('no-scroll');
+
+    const container = document.querySelector('.container');
+    if (container) container.classList.remove('no-scroll');
+  }
 
 
   changerStatut(numero_relance: string, nouveauStatut: string): void {
@@ -219,13 +236,6 @@ export class DetailRelanceComponent implements OnInit {
     return this.statuts.find(s => s.code === code)?.icon || 'help';
   }
 
-  openEventHistory(): void {
-    this.isHistoryOpen = true;
-  }
-
-  closeEventHistory(): void {
-    this.isHistoryOpen = false;
-  }
 
   getStatutButtonColorClass(code: string): string {
     switch (code) {

@@ -5,30 +5,29 @@
 
   <ng-container *ngIf="!isLoading && events.length > 0">
     <div *ngFor="let event of events" class="event-card-compact mat-elevation-z1">
-      <!-- Ligne 1 : Étape & Date -->
+
+      <!-- Ligne 1 : Identifiant à gauche, meta à droite -->
       <div class="event-header">
-        <mat-icon>sync_alt</mat-icon>
-        <span class="event-step">{{ event.numero_relance }}</span>
-        <span class="event-date">{{ event.formattedDate }}</span>
+        <div class="event-step">{{ event.numero_relance }}</div>
+        <div class="event-meta">
+          <span class="event-meta-item">
+            <mat-icon>person</mat-icon> {{ event.user_creation || '-' }}
+          </span>
+          <span class="event-meta-item">
+            <mat-icon>calendar_today</mat-icon> {{ event.formattedDate }}
+          </span>
+        </div>
       </div>
 
-      <!-- Ligne 2 : Créateur -->
-      <div class="event-line">
-        <mat-icon>person</mat-icon>
-        <span>{{ event.user_creation || '-' }}</span>
+      <!-- Ligne 2 : Observation -->
+      <div class="event-body">
+        <div class="event-line">
+          <mat-icon>chat</mat-icon>
+          <span>{{ event.observation || 'Aucune observation' }}</span>
+        </div>
+        <div class="event-type">Type événement : <em>{{ event.statut || '-' }}</em></div>
       </div>
 
-      <!-- Ligne 3 : Observation -->
-      <div class="event-line">
-        <mat-icon>comment</mat-icon>
-        <span>{{ event.observation || 'Aucune observation' }}</span>
-      </div>
-
-      <!-- Ligne 4 : Statut -->
-      <div class="event-line">
-        <mat-icon>label</mat-icon>
-        <span><strong>Type événement :</strong> {{ event.statut || '-' }}</span>
-      </div>
     </div>
   </ng-container>
 </div>

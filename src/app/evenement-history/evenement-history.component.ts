@@ -35,12 +35,6 @@ export class EventHistoryComponent implements OnInit {
 
   constructor(private evenementService: EvenementService) {}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['dossierId'] && changes['dossierId'].currentValue) {
-      this.loadEventHistory();
-    }
-  }
-
   ngOnInit(): void {
     if (this.dossierId) {
       this.loadEventHistory();

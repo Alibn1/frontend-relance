@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import {MATERIAL_PROVIDERS} from '../material';
-
+import { MATERIAL_PROVIDERS } from '../material';
 
 @Component({
   selector: 'app-relance-info',
@@ -16,29 +15,26 @@ export class RelanceInfoComponent {
   @Input() relance: any;
   @Output() goBack = new EventEmitter<void>();
   @Output() toggle = new EventEmitter<void>();
-  @Output() history = new EventEmitter<void>();
+  @Output() history = new EventEmitter<void>(); // ✅ pour déclencher le drawer depuis relance-details
 
+  openDrawer() {
+    this.history.emit();
+  }
 
   getStatutColor(): string {
     const statut = this.relance?.statut?.toUpperCase();
     switch (statut) {
-      case 'OUVERT':
-        return '#4CAF50'; // ✅ Vert
-      case 'CLOTURE':
-        return '#F44336'; // 🔒 Rouge
-      default:
-        return '#9e9e9e'; // Gris
+      case 'OUVERT': return '#4CAF50';
+      case 'CLOTURE': return '#F44336';
+      default: return '#9e9e9e';
     }
   }
 
   getStatutIcon(): string {
     switch (this.relance?.statut?.toUpperCase()) {
-      case 'CLOTURE':
-        return 'lock';
-      case 'OUVERT':
-        return 'lock_open';
-      default:
-        return 'lock_outline';
+      case 'CLOTURE': return 'lock';
+      case 'OUVERT': return 'lock_open';
+      default: return 'lock_outline';
     }
   }
 }
