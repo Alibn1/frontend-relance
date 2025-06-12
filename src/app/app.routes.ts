@@ -7,10 +7,12 @@ import {NouvelleRelanceComponent} from './nouvelle-relance/nouvelle-relance.comp
 import { RelanceHistoriqueComponent } from './relance-historique/relance-historique.component';
 import { DetailRelanceComponent } from './relance-details/relance-details.component';
 import {EventHistoryComponent} from './evenement-history/evenement-history.component';
+import {GestionClientsComponent} from './gestion-clients/gestion-clients.component';
 import {AuthenticatedLayoutComponent} from './layouts/authenticated-layout.component';
 import {PublicLayoutComponent} from './layouts/public-layout.component';
 import {AuthGuard} from './guards/auth.guard';
 import {AuthResolver} from './resolver/auth.resolver';
+
 
 
 
@@ -38,6 +40,12 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'clients', pathMatch: 'full' },
       { path: 'clients', component: ClientListComponent,
+        canActivate: [AuthGuard],
+        resolve: { user: AuthResolver }
+      },
+      {
+        path: 'clients/gestion',
+        component: GestionClientsComponent,
         canActivate: [AuthGuard],
         resolve: { user: AuthResolver }
       },
@@ -71,6 +79,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         resolve: { user: AuthResolver }
       },
+
 
     ]
   },
