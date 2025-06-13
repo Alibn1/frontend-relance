@@ -7,7 +7,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
-import {MATERIAL_PROVIDERS} from '../material'; // Correction ici : utiliser MatButtonModule
+import {MATERIAL_PROVIDERS} from '../material';
+
 
 @Component({
   selector: 'app-navbar',
@@ -21,7 +22,7 @@ import {MATERIAL_PROVIDERS} from '../material'; // Correction ici : utiliser Mat
     MatButtonModule,  // Correct pour mat-icon-button
     RouterLink,
     RouterOutlet,
-    MATERIAL_PROVIDERS
+    MATERIAL_PROVIDERS,
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],

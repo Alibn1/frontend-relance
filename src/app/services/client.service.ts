@@ -51,6 +51,21 @@ export class ClientService {
     });
   }
 
+  // Ajouter un client
+  addClient(client: any): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/clients`, client, this.getAuthHeaders());
+  }
+
+// Modifier un client
+  updateClient(id: number | string, client: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/clients/${id}`, client, this.getAuthHeaders());
+  }
+
+// Supprimer un client
+  deleteClient(id: number | string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/clients/${id}`, this.getAuthHeaders());
+  }
+
 
   getClientReleves(clientId: string, params: any = {}): Observable<any> {
     const httpParams = new HttpParams({ fromObject: params });
