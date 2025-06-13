@@ -30,7 +30,7 @@
         <mat-card class="relance-full-card" [ngClass]="{ 'etape-cloturee': etape.statut_detail === 'CLOTURE' }">
           <div class="card-header">
             <mat-card-title>
-              <mat-icon>info</mat-icon> {{ etape.numero_relance }}
+              <mat-icon class="etape-icon">info</mat-icon> {{ etape.numero_relance }}
             </mat-card-title>
 
             <div class="relance-card-actions">
@@ -53,7 +53,7 @@
               <mat-menu #statutMenu="matMenu">
                 <button mat-menu-item *ngFor="let statut of statuts"
                         (click)="changerStatut(etape.numero_relance, statut.code)">
-                  <mat-icon [ngClass]="statut.color">{{ statut.icon }}</mat-icon>
+                  <mat-icon class="menu-icon" [ngClass]="statut.color">{{ statut.icon }}</mat-icon>
                   {{ statut.libelle }}
                 </button>
               </mat-menu>

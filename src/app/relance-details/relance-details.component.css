@@ -184,7 +184,7 @@ button.btn-action mat-icon {
 }
 
 .card-header mat-icon {
-  margin-right: 6px;
+  /*margin-right: 6px;*/
   vertical-align: middle;
 }
 
@@ -302,6 +302,16 @@ table.mat-table {
   font-weight: bold;
   font-size: 15px;
   padding-right: 24px;
+}
+
+.menu-icon{
+  transform: translateY(0.2rem);
+}
+
+.etape-icon{
+  font-size: 18px;
+  height: 20px;
+  width: 20px;
 }
 
 .statut-button {
