@@ -1,0 +1,143 @@
+/* === LAYOUT PRINCIPAL === */
+.gestion-releve-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  padding: 1rem;
+  background-color: #f9f9fb;
+  gap: 2rem;
+}
+
+.client-column {
+  width: 30%;
+  min-width: 280px;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.client-search {
+  margin-bottom: 1rem;
+}
+
+.client-scroll {
+  max-height: calc(100vh - 200px);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.client-card {
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-left: 4px solid transparent;
+  padding: 0.75rem;
+}
+
+.client-card:hover {
+  background-color: #f2f2fc;
+}
+
+.client-card.selected {
+  background-color: #e3ddfa;
+  border-left-color: #8f50ec;
+}
+
+.client-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.client-name {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.client-ville {
+  font-size: 13px;
+  color: #777;
+}
+
+/* === RELEVES COLUMN === */
+.releve-column {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.releve-table-card {
+  padding: 1rem;
+}
+
+.mat-table {
+  width: 100%;
+  background: white;
+}
+
+.mat-header-cell, .mat-cell {
+  padding: 12px 8px;
+  font-size: 13px;
+}
+
+.mat-header-cell {
+  background-color: #efefef;
+  font-weight: bold;
+}
+
+.no-releve {
+  font-style: italic;
+  color: #666;
+  margin-top: 1rem;
+}
+
+.releve-form-card {
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+mat-form-field {
+  width: 100%;
+  font-size: 14px;
+}
+
+mat-form-field input,
+mat-form-field textarea {
+  font-size: 13px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+mat-icon {
+  margin-right: 4px;
+}
+
+/* Uniformisation globale des champs Angular Material */
+:host ::ng-deep .mat-mdc-text-field-wrapper {
+  height: 56px !important;
+  align-items: center;
+  padding: 0 12px;
+  font-size: 14px;
+}
+
+:host ::ng-deep .mat-mdc-form-field {
+  font-family: "Segoe UI", sans-serif;
+  font-size: 14px;
+}

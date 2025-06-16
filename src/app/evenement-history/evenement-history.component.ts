@@ -1,26 +1,11 @@
-import {Component, OnInit, Input, SimpleChanges} from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { NgFor, NgIf } from '@angular/common';
+import {Component, OnInit, Input} from '@angular/core';
 import { EvenementService } from '../services/evenement.service';
+import {MATERIAL_PROVIDERS} from '../material';
 
 @Component({
   selector: 'app-evenement-history',
   imports: [
-    MatCardModule,
-    MatListModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatButtonModule,
-    MatDividerModule,
-    MatTooltipModule,
-    NgFor,
-    NgIf,
+    MATERIAL_PROVIDERS
   ],
   templateUrl: './evenement-history.component.html',
   styleUrl: './evenement-history.component.css',
@@ -80,5 +65,20 @@ export class EventHistoryComponent implements OnInit {
   retryLoadEventHistory(): void {
     this.loadEventHistory();
   }
+
+  StatusLibelle: { [key: string]: string } = {
+    CLOTURE: 'Clôturé',
+    CREE: 'Créé',
+    EXPIRE: 'Expiré',
+    REFUSE: 'Refusé',
+    RELANCE: 'Relancé',
+    TELEPHONE: 'Téléphone',
+    VISITE: 'Visite'
+  };
+
+  getLibelleFromStatut(code: string): string {
+    return this.StatusLibelle[code] || code; // Affiche le code si pas trouvé
+  }
+
 
 }

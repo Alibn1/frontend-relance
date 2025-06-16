@@ -25,7 +25,7 @@
           <mat-icon>chat</mat-icon>
           <span>{{ event.observation || 'Aucune observation' }}</span>
         </div>
-        <div class="event-type">Type événement : <em>{{ event.statut || '-' }}</em></div>
+        <div class="event-type">Statut Relance : <em>{{ getLibelleFromStatut(event.statut) || '-' }}</em></div>
       </div>
 
     </div>

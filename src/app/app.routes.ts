@@ -8,6 +8,7 @@ import { RelanceHistoriqueComponent } from './relance-historique/relance-histori
 import { DetailRelanceComponent } from './relance-details/relance-details.component';
 import {EventHistoryComponent} from './evenement-history/evenement-history.component';
 import {GestionClientsComponent} from './gestion-clients/gestion-clients.component';
+import {GestionReleveComponent} from './gestion-releve/gestion-releve.component';
 import {AuthenticatedLayoutComponent} from './layouts/authenticated-layout.component';
 import {PublicLayoutComponent} from './layouts/public-layout.component';
 import {AuthGuard} from './guards/auth.guard';
@@ -46,6 +47,12 @@ export const routes: Routes = [
       {
         path: 'clients/gestion',
         component: GestionClientsComponent,
+        canActivate: [AuthGuard],
+        resolve: { user: AuthResolver }
+      },
+      {
+        path: 'clients/releves',
+        component: GestionReleveComponent,
         canActivate: [AuthGuard],
         resolve: { user: AuthResolver }
       },
