@@ -6,6 +6,7 @@
       (toggle)="toggleStatus()"
       (history)="openDrawer()"
     ></app-relance-info>
+    <app-flash-message *ngIf="showFlash" [message]="flashMessage" [type]="flashType" />
 
     <!-- 🟦 Overlay et drawer custom -->
     <div class="custom-drawer-wrapper" *ngIf="isHistoryOpen">

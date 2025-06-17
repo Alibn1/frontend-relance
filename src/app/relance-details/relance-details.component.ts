@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RelanceService } from '../services/relance.service';
 import { ApiService } from '../services/api.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Location } from '@angular/common';
 import { MATERIAL_PROVIDERS } from '../material';
 import { provideNativeDateAdapter } from '@angular/material/core';
@@ -14,6 +13,7 @@ import {EvenementAjoutComponent} from '../evenement-ajout/evenement-ajout.compon
 import {EvenementService} from '../services/evenement.service';
 import {environment} from '../../environments/environment';
 import {EventHistoryComponent} from '../evenement-history/evenement-history.component';
+import {FlashMessageComponent} from '../flash-message/flash-message.component';
 
 
 @Component({
@@ -21,7 +21,7 @@ import {EventHistoryComponent} from '../evenement-history/evenement-history.comp
   templateUrl: './relance-details.component.html',
   styleUrls: ['./relance-details.component.css'],
   standalone: true,
-  imports: [MATERIAL_PROVIDERS, RelanceInfoComponent, EventHistoryComponent],
+  imports: [MATERIAL_PROVIDERS, RelanceInfoComponent, EventHistoryComponent, FlashMessageComponent],
   providers: [provideNativeDateAdapter()]
 })
 export class DetailRelanceComponent implements OnInit {
@@ -31,6 +31,9 @@ export class DetailRelanceComponent implements OnInit {
   isLoading = true;
   isHistoryOpen = false;
 
+  flashMessage = '';
+  flashType: 'success' | 'error' | 'info' = 'success';
+  showFlash = false;
 
   readonly apiUrl = environment.apiUrl;
 
@@ -41,7 +44,6 @@ export class DetailRelanceComponent implements OnInit {
     private apiService: ApiService,
     private router: Router,
     private location: Location,
-    private snackBar: MatSnackBar,
     private relanceService: RelanceService,
     private dialog: MatDialog,
     private etapeRelanceService: EtapeRelanceService,
@@ -50,7 +52,18 @@ export class DetailRelanceComponent implements OnInit {
 
   ngOnInit(): void {
     this.relanceId = this.route.snapshot.paramMap.get('id') || '';
+    const state = history.state;
+    if (state && state.flashMessage) {
+      this.showFlashMsg(state.flashMessage, state.flashType || 'success');
+    }
     this.loadRelanceDetails();
+  }
+
+  showFlashMsg(message: string, type: 'success' | 'error' | 'info' = 'success') {
+    this.flashMessage = message;
+    this.flashType = type;
+    this.showFlash = true;
+    setTimeout(() => this.showFlash = false, 3200);
   }
 
   loadRelanceDetails(): void {
@@ -82,13 +95,12 @@ export class DetailRelanceComponent implements OnInit {
                 solde: rel.solde_initiale - rel.solde_finale
               }))
             }))
-
         };
 
         this.isLoading = false;
       },
-      error: (error) => {
-        this.showError('Erreur de connexion au serveur');
+      error: () => {
+        this.showFlashMsg('Erreur de connexion au serveur', 'error');
         this.isLoading = false;
         this.router.navigate(['/relance-dossiers']);
       }
@@ -105,22 +117,13 @@ export class DetailRelanceComponent implements OnInit {
 
     this.apiService.patch(`relance-dossiers/${this.relanceId}/status`, { status: newStatus }).subscribe({
       next: () => {
-        this.showSuccess(`Statut changé vers "${newStatus}"`);
+        this.showFlashMsg(`Statut changé vers "${newStatus}"`, 'success');
         this.loadRelanceDetails();
       },
-      error: (err) => {
-        console.error('Erreur changement de statut', err);
-        this.showError('Impossible de changer le statut');
+      error: () => {
+        this.showFlashMsg('Impossible de changer le statut', 'error');
       }
     });
-  }
-
-  showError(message: string): void {
-    this.snackBar.open(message, 'Fermer', { duration: 4000, panelClass: ['error-snackbar'] });
-  }
-
-  showSuccess(message: string): void {
-    this.snackBar.open(message, 'OK', { duration: 3000, panelClass: ['success-snackbar'] });
   }
 
   navigateToCreateEvent(): void {
@@ -128,7 +131,7 @@ export class DetailRelanceComponent implements OnInit {
     if (this.relance?.ndr && firstEtape?.numero_relance) {
       this.router.navigate([`/relance-dossiers/${this.relance.ndr}/etapes/${firstEtape.numero_relance}/evenements/create`]);
     } else {
-      this.showError('Aucune étape disponible pour cette relance.');
+      this.showFlashMsg('Aucune étape disponible pour cette relance.', 'error');
     }
   }
 
@@ -137,7 +140,7 @@ export class DetailRelanceComponent implements OnInit {
     if (this.relance?.ndr && firstEtape?.numero_relance) {
       this.router.navigate([`/relance-dossiers/${this.relance.ndr}/evenements`]);
     } else {
-      this.showError('Aucune étape disponible pour afficher l\'historique');
+      this.showFlashMsg('Aucune étape disponible pour afficher l\'historique', 'error');
     }
   }
 
@@ -154,11 +157,11 @@ export class DetailRelanceComponent implements OnInit {
       if (result === true) {
         this.apiService.delete(`etape-relances/${numero_relance}`).subscribe({
           next: () => {
-            this.showSuccess('Étape supprimée avec succès');
-            this.loadRelanceDetails(); // recharge les données
+            this.showFlashMsg('Étape supprimée avec succès', 'success');
+            this.loadRelanceDetails();
           },
           error: () => {
-            this.showError('Erreur lors de la suppression');
+            this.showFlashMsg('Erreur lors de la suppression', 'error');
           }
         });
       }
@@ -175,7 +178,7 @@ export class DetailRelanceComponent implements OnInit {
       data: {
         numero_relance: ner,
         code_client: code_client,
-        user_creation: 'admin' // tu peux récupérer dynamiquement plus tard
+        user_creation: 'admin'
       }
     });
 
@@ -183,11 +186,11 @@ export class DetailRelanceComponent implements OnInit {
       if (result) {
         this.evenementService.createEvenement(ndr, ner, result).subscribe({
           next: () => {
-            this.showSuccess('Événement ajouté avec succès');
-            this.loadRelanceDetails(); // recharge les données
+            this.showFlashMsg('Événement ajouté avec succès', 'success');
+            this.loadRelanceDetails();
           },
           error: () => {
-            this.showError('Erreur lors de la création de l\'événement');
+            this.showFlashMsg('Erreur lors de la création de l\'événement', 'error');
           }
         });
       }
@@ -198,35 +201,29 @@ export class DetailRelanceComponent implements OnInit {
     this.isHistoryOpen = true;
     document.body.classList.add('no-scroll');
     document.documentElement.classList.add('no-scroll');
-
-    const container = document.querySelector('.container');
-    if (container) container.classList.add('no-scroll');
+    document.querySelector('.container')?.classList.add('no-scroll');
   }
 
   closeDrawer(): void {
     this.isHistoryOpen = false;
     document.body.classList.remove('no-scroll');
     document.documentElement.classList.remove('no-scroll');
-
-    const container = document.querySelector('.container');
-    if (container) container.classList.remove('no-scroll');
+    document.querySelector('.container')?.classList.remove('no-scroll');
   }
-
 
   changerStatut(numero_relance: string, nouveauStatut: string): void {
     this.apiService.patch(`etape-relances/${numero_relance}/change`, {
       statut_detail: nouveauStatut
-  }).subscribe({
+    }).subscribe({
       next: () => {
-        this.showSuccess('Statut mis à jour');
+        this.showFlashMsg('Statut mis à jour', 'success');
         this.loadRelanceDetails();
       },
       error: () => {
-        this.showError('Erreur lors du changement de statut');
+        this.showFlashMsg('Erreur lors du changement de statut', 'error');
       }
     });
   }
-
 
   getLibelleStatut(code: string): string {
     return this.statuts.find(s => s.code === code)?.libelle || 'Statut inconnu';
@@ -235,7 +232,6 @@ export class DetailRelanceComponent implements OnInit {
   getStatutIcon(code: string): string {
     return this.statuts.find(s => s.code === code)?.icon || 'help';
   }
-
 
   getStatutButtonColorClass(code: string): string {
     switch (code) {

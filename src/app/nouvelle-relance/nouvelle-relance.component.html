@@ -2,6 +2,7 @@
 <div class="banner-header">
   <span>Nouvelle Étape de Relance</span>
 </div>
+<app-flash-message *ngIf="showFlash" [message]="flashMessage" [type]="flashType" />
 
 <!-- Formulaire avec Stepper vertical -->
 <form [formGroup]="relanceForm" (ngSubmit)="onSubmit()" [class.disabled]="isLoading">

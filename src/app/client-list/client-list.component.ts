@@ -40,7 +40,13 @@ export class ClientListComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     this.clientService.getClients().subscribe({
       next: (data) => {
-        const enrichedData = this.enrichirClients(data);
+        let enrichedData = this.enrichirClients(data);
+
+        // 🔽 Tri croissant par code_client (ex: CLT001, CLT002...)
+        enrichedData = enrichedData.sort((a, b) =>
+          a.code_client.localeCompare(b.code_client)
+        );
+
         this.dataSource.data = enrichedData;
         this.loading = false;
         this.totalItems = enrichedData.length;

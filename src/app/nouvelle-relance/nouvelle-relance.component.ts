@@ -10,6 +10,7 @@ import { catchError, switchMap, take, finalize, map } from 'rxjs/operators';
 import { of, throwError } from 'rxjs';
 import { MATERIAL_PROVIDERS } from '../material';
 import { MatStepperModule } from '@angular/material/stepper';
+import {FlashMessageComponent} from '../flash-message/flash-message.component';
 
 @Component({
   selector: 'app-nouvelle-relance',
@@ -19,6 +20,7 @@ import { MatStepperModule } from '@angular/material/stepper';
   imports: [
     MatStepperModule,
     MATERIAL_PROVIDERS,
+    FlashMessageComponent
   ]
 })
 export class NouvelleRelanceComponent implements OnInit {
@@ -31,6 +33,10 @@ export class NouvelleRelanceComponent implements OnInit {
   isLoading = false;
   existingRelances: any[] = [];
   hasExistingRelances = false;
+
+  flashMessage = '';
+  flashType: 'success' | 'error' | 'info' = 'success';
+  showFlash = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -58,6 +64,13 @@ export class NouvelleRelanceComponent implements OnInit {
     this.initForm();
     this.loadExistingRelances();
     this.loadClientReleves();
+  }
+
+  showFlashMsg(message: string, type: 'success' | 'error' | 'info' = 'success') {
+    this.flashMessage = message;
+    this.flashType = type;
+    this.showFlash = true;
+    setTimeout(() => this.showFlash = false, 3200);
   }
 
   private initForm(): void {
@@ -115,10 +128,7 @@ export class NouvelleRelanceComponent implements OnInit {
     if (this.relanceForm.invalid || !this.clientCode) return;
 
     if (this.relanceForm.get('code_releves')?.value?.length === 0) {
-      this.snackBar.open("Vous devez sélectionner au moins un relevé pour créer une relance.", "Fermer", {
-        duration: 4000,
-        panelClass: ['error-snackbar']
-      });
+      this.showFlashMsg("Vous devez sélectionner au moins un relevé pour créer une relance.", 'error');
       return;
     }
 
@@ -199,9 +209,16 @@ export class NouvelleRelanceComponent implements OnInit {
   private handleSuccess(ndr: string): void {
     const message = this.hasExistingRelances
       ? 'Nouvelle étape ajoutée avec succès'
-      : 'Relance et étape créées avec succès';
+      : 'Relance et étape crée avec succès';
     this.showNotification(message);
-    this.router.navigate(['/relance-dossiers', ndr]);
+    this.router.navigate(['/relance-dossiers', ndr], {
+      state: {
+        flashMessage: this.hasExistingRelances
+          ? 'Nouvelle étape ajoutée avec succès'
+          : 'Relance et étape créées avec succès',
+        flashType: 'success'
+      }
+    });
   }
 
   private handleSubmitError(error: any): void {
@@ -229,10 +246,7 @@ export class NouvelleRelanceComponent implements OnInit {
   }
 
   private showNotification(message: string, isError: boolean = false): void {
-    this.snackBar.open(message, 'Fermer', {
-      duration: 5000,
-      panelClass: isError ? ['error-snackbar'] : []
-    });
+    this.showFlashMsg(message, isError ? 'error' : 'success');
   }
 
   private showErrorAndRedirect(message: string): void {

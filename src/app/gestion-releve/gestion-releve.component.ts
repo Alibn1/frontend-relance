@@ -1,38 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClientService } from '../services/client.service';
 import { ReleveService } from '../services/releve.service';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { FormsModule } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
-import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
+import {MATERIAL_PROVIDERS} from '../material';
+import {FlashMessageComponent} from '../flash-message/flash-message.component';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmDeleteComponent} from '../confirm-delete/confirm-delete.component';
 
 @Component({
   selector: 'app-gestion-releve',
   standalone: true,
   imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    MatButtonModule,
-    MatTableModule,
-    MatIconModule,
-    MatCardModule,
-    MatProgressSpinnerModule,
-    MatDatepickerToggle,
-    MatDatepicker,
-    MatDatepickerInput
+    MATERIAL_PROVIDERS,
+    FlashMessageComponent
   ],
   templateUrl: './gestion-releve.component.html',
   styleUrls: ['./gestion-releve.component.css'],
@@ -55,10 +36,16 @@ export class GestionReleveComponent implements OnInit {
 
   releveForm!: FormGroup;
 
+  flashMessage = '';
+  flashType: 'success' | 'error' | 'info' = 'success';
+  showFlash = false;
+  private isUpdate = !!this.editingReleve;
+
   constructor(
     private fb: FormBuilder,
     private clientService: ClientService,
-    private releveService: ReleveService
+    private releveService: ReleveService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -75,6 +62,13 @@ export class GestionReleveComponent implements OnInit {
       commentaire: [''],
       created_by: ['admin']
     });
+  }
+
+  showFlashMsg(message: string, type: 'success' | 'error' | 'info' = 'success') {
+    this.flashMessage = message;
+    this.flashType = type;
+    this.showFlash = true;
+    setTimeout(() => this.showFlash = false, 3200);
   }
 
   onClientSelect(client: any) {
@@ -117,8 +111,15 @@ export class GestionReleveComponent implements OnInit {
         this.releveForm.reset({ created_by: 'admin', code_client: this.selectedClient.code_client });
         this.editingReleve = null;
         this.isLoading = false;
+        this.showFlashMsg(
+          this.isUpdate ? 'Relevé mis à jour avec succès' : 'Relevé ajouté avec succès',
+          'success'
+        );
       },
-      error: () => this.isLoading = false
+      error: () => {
+        this.isLoading = false;
+        this.showFlashMsg('Erreur lors de l\'enregistrement du relevé', 'error');
+      }
     });
   }
 
@@ -133,9 +134,27 @@ export class GestionReleveComponent implements OnInit {
   }
 
   deleteReleve(id: number) {
-    if (confirm('Confirmer la suppression ?')) {
-      this.releveService.deleteReleve(id).subscribe(() => this.fetchReleves());
-    }
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      width: '350px',
+      data: { message: 'Voulez-vous vraiment supprimer ce relevé ?' }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.isLoading = true;
+        this.releveService.deleteReleve(id).subscribe({
+          next: () => {
+            this.fetchReleves();
+            this.showFlashMsg('Relevé supprimé avec succès', 'success');
+            this.isLoading = false;
+          },
+          error: () => {
+            this.showFlashMsg('Erreur lors de la suppression du relevé', 'error');
+            this.isLoading = false;
+          }
+        });
+      }
+    });
   }
 
   get filteredClients(): any[] {
