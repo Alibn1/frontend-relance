@@ -1,0 +1,23 @@
+<div class="etapes-wrapper">
+  <div class="etapes-grid">
+    <mat-card class="etape-card" *ngFor="let etape of etapes">
+      <mat-card-header>
+        <div mat-card-avatar class="etape-icon">
+          <mat-icon>notifications</mat-icon>
+        </div>
+        <mat-card-title>Rappel de paiement</mat-card-title>
+        <mat-card-subtitle>Numéro : {{ etape.numero_relance }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p><strong>Statut :</strong> {{ etape.statut_detail }}</p>
+        <p><strong>Date création :</strong> {{ etape.date_creation_debut | date:'dd MMMM yyyy' }}</p>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button mat-stroked-button color="primary" (click)="mettreAJourStatut(etape.numero_relance, 'VALIDE')">Valider</button>
+        <button mat-stroked-button color="warn" (click)="mettreAJourStatut(etape.numero_relance, 'REFUSE')">Rejeter</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

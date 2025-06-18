@@ -1,18 +1,20 @@
 import { Routes } from '@angular/router';
 import {LoginComponent} from './auth/login/login.component';
 import {RegisterComponent} from './auth/register/register.component';
-import {ClientListComponent} from './client-list/client-list.component';
-import {ClientDetailsComponent} from './client-details/client-details.component';
-import {NouvelleRelanceComponent} from './nouvelle-relance/nouvelle-relance.component';
-import { RelanceHistoriqueComponent } from './relance-historique/relance-historique.component';
-import { DetailRelanceComponent } from './relance-details/relance-details.component';
-import {EventHistoryComponent} from './evenement-history/evenement-history.component';
-import {GestionClientsComponent} from './gestion-clients/gestion-clients.component';
+import {ClientListComponent} from './client/client-list/client-list.component';
+import {ClientDetailsComponent} from './client/client-details/client-details.component';
+import {NouvelleRelanceComponent} from './relance/nouvelle-relance/nouvelle-relance.component';
+import { RelanceHistoriqueComponent } from './relance/relance-historique/relance-historique.component';
+import { DetailRelanceComponent } from './relance/relance-details/relance-details.component';
+import {EventHistoryComponent} from './evenement/evenement-history/evenement-history.component';
+import {GestionClientsComponent} from './client/gestion-clients/gestion-clients.component';
+import {ValidationEtapeComponent} from './validation-etape/validation-etape.component';
 import {GestionReleveComponent} from './gestion-releve/gestion-releve.component';
 import {AuthenticatedLayoutComponent} from './layouts/authenticated-layout.component';
 import {PublicLayoutComponent} from './layouts/public-layout.component';
-import {AuthGuard} from './guards/auth.guard';
-import {AuthResolver} from './resolver/auth.resolver';
+import {AuthGuard} from './security/guards/auth.guard';
+import {AuthResolver} from './security/resolver/auth.resolver';
+
 
 
 
@@ -86,6 +88,13 @@ export const routes: Routes = [
         canActivate: [AuthGuard],
         resolve: { user: AuthResolver }
       },
+      {
+        path: 'relances/validation',
+        component: ValidationEtapeComponent,
+        canActivate: [AuthGuard],
+        resolve: { user: AuthResolver }
+      },
+
 
 
     ]

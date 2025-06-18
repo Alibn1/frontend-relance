@@ -4,9 +4,9 @@ import { ClientService } from '../services/client.service';
 import { ReleveService } from '../services/releve.service';
 import { trigger, transition, style, animate } from '@angular/animations';
 import {MATERIAL_PROVIDERS} from '../material';
-import {FlashMessageComponent} from '../flash-message/flash-message.component';
+import {FlashMessageComponent} from '../UI-UX/flash-message/flash-message.component';
 import {MatDialog} from '@angular/material/dialog';
-import {ConfirmDeleteComponent} from '../confirm-delete/confirm-delete.component';
+import {ConfirmDeleteComponent} from '../UI-UX/confirm-delete/confirm-delete.component';
 
 @Component({
   selector: 'app-gestion-releve',

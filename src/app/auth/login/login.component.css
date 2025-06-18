@@ -1,11 +1,23 @@
+.login-background {
+  background-image: url('/assets/images/background.jpg');
+  background-size: cover;               /* remplis sans bandes */
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100dvh;                       /* hauteur réelle du viewport */
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
 /* Style de la carte de login */
 .login-container {
   max-width: 450px;
-  margin: 80px auto; /* Centré et espacé du haut */
+  width: 100%;
   padding: 30px;
-  background-color: #fff; /* Fond blanc pour la carte de login */
+  background-color: rgba(255, 255, 255, 0.95); /* blanc semi-transparent */
   border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 /* Titre centré */
@@ -15,18 +27,20 @@ h2 {
   margin-bottom: 30px;
 }
 
-/* Style des champs du formulaire */
+/* Champs du formulaire */
 .form-field {
   width: 100%;
   margin-bottom: 25px;
 }
 
-/* Bouton plein largeur */
+/* Bouton large */
 .full-width-button {
   width: 100%;
   padding: 12px;
   font-size: 16px;
   margin-top: 10px;
+  background-color: #4CAF50 !important; /* Vert */
+  color: white !important;
 }
 
 /* Message d'erreur */
@@ -47,19 +61,8 @@ h2 {
   font-weight: 600;
 }
 
-/* Supprimer l'icône native du champ password */
-input::-ms-reveal,
-input::-ms-clear,
-input::-webkit-clear-button {
-  display: none !important;
-}
-
+/* Ajustements de l'icône du champ */
 mat-form-field .mat-icon-button {
   padding: 0;
-  margin-right: -4px; /* ajustement fin si l'icône dépasse un peu */
-}
-
-.full-width-button {
-  background-color: #4CAF50 !important; /* vert Material */
-  color: white !important;
+  margin-right: -4px;
 }

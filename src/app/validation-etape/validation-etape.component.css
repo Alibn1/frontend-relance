@@ -1,0 +1,52 @@
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f5f2fc;
+}
+
+.etapes-wrapper {
+  padding: 2rem;
+}
+
+.etapes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: flex-start;
+}
+
+.etape-card {
+  width: 280px;
+  flex: 0 0 auto;
+  background-color: white;
+  border-left: 5px solid #7b1fa2;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.etape-card:hover {
+  transform: translateY(-3px);
+}
+
+.etape-icon {
+  background-color: #d1c4e9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+mat-card-content p {
+  margin: 0.2rem 0;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem 1rem;
+}
