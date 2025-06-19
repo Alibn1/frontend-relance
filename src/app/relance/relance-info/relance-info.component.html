@@ -18,10 +18,16 @@
         <mat-icon>history</mat-icon> Historique des événements
       </button>
       <button mat-flat-button class="statut-button"
-              [ngStyle]="{ 'background-color': getStatutColor() }"
-              (click)="toggle.emit()">
+              [matMenuTriggerFor]="statutMenu"
+              [ngStyle]="{ 'background-color': getStatutColor() }">
         <mat-icon>{{ getStatutIcon() }}</mat-icon> {{ relance?.libelle }}
       </button>
+
+      <mat-menu #statutMenu="matMenu">
+        <button mat-menu-item *ngFor="let s of getStatutsDisponibles()" (click)="emitStatutChange(s)">
+          {{ s }}
+        </button>
+      </mat-menu>
     </div>
   </div>
 </div>

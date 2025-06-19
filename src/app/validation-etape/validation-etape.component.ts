@@ -1,33 +1,80 @@
 import { Component, OnInit } from '@angular/core';
 import { RelanceService } from '../services/relance.service';
-import {MATERIAL_PROVIDERS} from '../material';
+import { MATERIAL_PROVIDERS } from '../material';
+import {ConfirmDeleteComponent} from '../UI-UX/confirm-delete/confirm-delete.component';
+import {MatDialog} from '@angular/material/dialog';
+import {FlashMessageComponent} from '../UI-UX/flash-message/flash-message.component';
 
 @Component({
   selector: 'app-validation-etape',
   templateUrl: './validation-etape.component.html',
+  styleUrls: ['./validation-etape.component.css'],
   imports: [
-    MATERIAL_PROVIDERS
+    MATERIAL_PROVIDERS,
+    FlashMessageComponent
   ]
 })
 export class ValidationEtapeComponent implements OnInit {
   etapes: any[] = [];
 
-  constructor(private relanceService: RelanceService) {}
+  constructor(
+    private relanceService: RelanceService,
+    private dialog: MatDialog
+
+  ) {}
 
   ngOnInit() {
     this.relanceService.getAllRelances().subscribe((relances: any[]) => {
       this.etapes = relances
         .flatMap(r => r.etape_relances || [])
-        .filter(e => e.statut_detail === 'BROUILLON'); // Affiche que les brouillons
+        .filter(e => e.statut_detail === 'BROUILLON')
+        .sort((a, b) => new Date(a.date_creation_debut).getTime() - new Date(b.date_creation_debut).getTime());
     });
   }
 
-  mettreAJourStatut(numero: string, nouveauStatut: 'VALIDE' | 'REFUSE') {
-    this.relanceService.updateEtapeStatut(numero, nouveauStatut).subscribe(() => {
-      const index = this.etapes.findIndex(e => e.numero_relance === numero);
-      if (index !== -1) {
-        this.etapes[index].statut_detail = nouveauStatut;
+  showFlash = false;
+  flashMessage = '';
+  flashType: 'success' | 'error' | 'info' = 'success';
+
+  valider(etape: any): void {
+    this.mettreAJourStatut(etape.numero_relance, 'VALIDE');
+  }
+
+  rejeter(etape: any): void {
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      data: {
+        message: `Voulez-vous vraiment rejeter l'étape ${etape.numero_relance} ?`,
+        confirmLabel: 'Rejeter'
       }
     });
+
+    dialogRef.afterClosed().subscribe((result: boolean) => {
+      if (result) {
+        this.mettreAJourStatut(etape.numero_relance, 'REFUSE');
+      }
+    });
+  }
+
+  mettreAJourStatut(numeroRelance: string, nouveauStatut: 'VALIDE' | 'REFUSE'): void {
+    const index = this.etapes.findIndex(e => e.numero_relance === numeroRelance);
+    if (index === -1) return;
+
+    const card = document.querySelector(`#etape-${numeroRelance}`) as HTMLElement;
+    if (card) {
+      card.classList.add('removing');
+    }
+
+    setTimeout(() => {
+      this.relanceService.updateEtapeStatut(numeroRelance, nouveauStatut).subscribe(() => {
+        this.etapes.splice(index, 1);
+        this.flashMessage = `Étape ${nouveauStatut === 'VALIDE' ? 'validée' : 'rejetée'} avec succès`;
+        this.flashType = 'success';
+        this.showFlash = true;
+
+        setTimeout(() => {
+          this.showFlash = false;
+        }, 3000);
+      });
+    }, 400);
   }
 }

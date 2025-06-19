@@ -96,18 +96,40 @@ export class RelanceHistoriqueComponent implements OnInit {
     this.router.navigate(['/relance-dossiers', numero]);
   }
 
-  getStatusClass(statut: string): string {
-    switch (statut?.toUpperCase()) {
-      case 'BROUILLON': return 'badge BROUILLON';
-      case 'ENVOYE':
-      case 'ENVOYÉ': return 'badge ENVOYE';
-      case 'OUVERT': return 'badge OUVERT';
-      case 'CLOTURE': return 'badge CLOTURE';
-      case 'VALIDE': return 'badge VALIDE';
-      case 'REFUSE':
-      case 'REFUSÉ': return 'badge REFUSE';
-      case 'EN COURS': return 'badge ENCOURS';
-      default: return 'badge DEFAULT';
-    }
+  // getStatusClass(statut: string): string {
+  //   switch (statut?.toUpperCase()) {
+  //     case 'BROUILLON': return 'badge BROUILLON';
+  //     case 'ENVOYE':
+  //     case 'ENVOYÉ': return 'badge ENVOYE';
+  //     case 'OUVERT': return 'badge OUVERT';
+  //     case 'CLOTURE': return 'badge CLOTURE';
+  //     case 'VALIDE': return 'badge VALIDE';
+  //     case 'REFUSE':
+  //     case 'REFUSÉ': return 'badge REFUSE';
+  //     case 'EN COURS': return 'badge ENCOURS';
+  //     default: return 'badge DEFAULT';
+  //   }
+  // }
+
+  statuts = [
+    { code: 'BROUILLON', libelle: 'Brouillon', color: 'badge BROUILLON' },
+    { code: 'VALIDE', libelle: 'Validé', color: 'badge VALIDE' },
+    { code: 'ENVOYE', libelle: 'Envoyé', color: 'badge ENVOYE' },
+    { code: 'REFUSE', libelle: 'Refusé', color: 'badge REFUSE' },
+    { code: 'CLOTURE', libelle: 'Clôturé', color: 'badge CLOTURE' },
+    { code: 'OUVERT', libelle: 'Ouvert', color: 'badge OUVERT' },
+    { code: 'ENCOURS', libelle: 'En cours', color: 'badge ENCOURS' }
+  ];
+
+// ✅ Méthode pour obtenir la classe CSS
+  getStatutColorClass(code: string): string {
+    const found = this.statuts.find(s => s.code === code?.toUpperCase());
+    return found ? found.color : 'badge DEFAULT';
+  }
+
+// ✅ Méthode pour obtenir le libellé (au lieu du code brut)
+  getStatutLibelle(code: string): string {
+    const found = this.statuts.find(s => s.code === code?.toUpperCase());
+    return found ? found.libelle : code;
   }
 }

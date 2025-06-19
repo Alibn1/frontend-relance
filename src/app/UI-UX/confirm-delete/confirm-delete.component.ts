@@ -13,7 +13,7 @@ import { MATERIAL_PROVIDERS } from '../../material';
 export class ConfirmDeleteComponent {
   constructor(
     public dialogRef: MatDialogRef<ConfirmDeleteComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { message: string }
+    @Inject(MAT_DIALOG_DATA) public data: { message: string, confirmLabel?: string }
   ) {}
 
   onCancel(): void {

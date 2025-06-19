@@ -79,13 +79,8 @@ export class RelanceService {
   }
 
   updateEtapeStatut(numeroRelance: string, statut: 'VALIDE' | 'REFUSE'): Observable<any> {
-    return this.apiService.patch(`etapes-relance/${numeroRelance}`, {
+    return this.apiService.patch(`etape-relances/${numeroRelance}/change`, {
       statut_detail: statut
-    }).pipe(
-      catchError(error => {
-        console.error('Erreur updateEtapeStatut:', error);
-        return throwError(() => error);
-      })
-    );
+    });
   }
 }

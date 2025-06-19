@@ -38,7 +38,8 @@
       <ng-container matColumnDef="statut">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut Dossier</th>
         <td mat-cell *matCellDef="let row">
-          <span [ngClass]="getStatusClass(row.statut_code)" class="badge">{{ row.statut }}</span>
+<!--          <span [ngClass]="getStatusClass(row.statut_code)" class="badge">{{ row.statut }}</span>-->
+          <span [ngClass]="getStatutColorClass(row.statut_code)" class="badge">{{ row.statut }}</span>
         </td>
       </ng-container>
 
@@ -55,7 +56,9 @@
       <ng-container matColumnDef="statut_detail">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut Relance</th>
         <td mat-cell *matCellDef="let row">
-          <span [ngClass]="getStatusClass(row.statut_detail)" class="badge">{{ row.statut_detail }}</span>
+          <span [ngClass]="getStatutColorClass(row.statut_detail)" class="badge">
+            {{ getStatutLibelle(row.statut_detail) }}
+          </span>
         </td>
       </ng-container>
 

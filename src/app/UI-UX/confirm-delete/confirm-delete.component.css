@@ -6,3 +6,16 @@ mat-dialog-content {
 mat-dialog-actions {
   margin-top: 10px;
 }
+
+.danger-button {
+  background-color: #f44336;
+  color: white;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.danger-button:hover {
+  background-color: #c62828;
+}

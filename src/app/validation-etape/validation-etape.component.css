@@ -10,27 +10,35 @@
 }
 
 .etapes-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+  animation: fadeIn 0.6s ease-in;
 }
 
 .etape-card {
-  width: 280px;
-  flex: 0 0 auto;
   background-color: white;
   border-left: 5px solid #7b1fa2;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.4s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  opacity: 0;
+  animation: slideUp 0.5s ease forwards;
 }
 
 .etape-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+.etape-card.removing {
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
 }
 
 .etape-icon {
@@ -49,4 +57,76 @@ mat-card-actions {
   justify-content: flex-end;
   gap: 0.5rem;
   padding: 0.5rem 1rem 1rem;
+}
+
+/* Boutons */
+.valider-btn {
+  background-color: #4caf50 !important;
+  color: white !important;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  --mdc-filled-button-container-color: #4caf50 !important;
+  --mdc-filled-button-label-text-color: white !important;
+}
+
+.valider-btn:hover {
+  background-color: #388e3c;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.rejeter-btn {
+  background-color: #f44336 !important;
+  color: white !important;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  --mdc-filled-button-container-color: #f44336 !important;
+  --mdc-filled-button-label-text-color: white !important;
+}
+
+.rejeter-btn:hover {
+  background-color: #c62828;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Icônes blanches */
+.valider-btn mat-icon,
+.rejeter-btn mat-icon {
+  color: white;
+  font-size: 18px;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* Animations */
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .etapes-grid {
+    grid-template-columns: 1fr;
+  }
 }

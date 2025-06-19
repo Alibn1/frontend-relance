@@ -1,10 +1,11 @@
 
     <!-- Info relance haut de page -->
+    <!--      (toggle)="toggleStatus()"-->
     <app-relance-info
       [relance]="relance"
       (goBack)="goBack()"
-      (toggle)="toggleStatus()"
-      (history)="openDrawer()"
+      (changerStatut)="changerStatutRelance($event)"
+      (history)="openDrawer()">
     ></app-relance-info>
     <app-flash-message *ngIf="showFlash" [message]="flashMessage" [type]="flashType" />
 

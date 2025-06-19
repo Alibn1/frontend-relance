@@ -233,6 +233,26 @@ export class DetailRelanceComponent implements OnInit {
     return this.statuts.find(s => s.code === code)?.icon || 'help';
   }
 
+  capitalizeFirst(text: string): string {
+    return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+  }
+
+  changerStatutRelance(nouveauStatut: string): void {
+    const statutFormate = this.capitalizeFirst(nouveauStatut); // "Cloture" ou "Ouvert" ou "Annule"
+
+    this.apiService.patch(`relance-dossiers/${this.relanceId}/status`, {
+      status: statutFormate
+    }).subscribe({
+      next: () => {
+        this.showFlashMsg(`Statut changé vers "${statutFormate}"`, 'success');
+        this.loadRelanceDetails();
+      },
+      error: () => {
+        this.showFlashMsg('Erreur lors du changement de statut', 'error');
+      }
+    });
+  }
+
   getStatutButtonColorClass(code: string): string {
     switch (code) {
       case 'BROUILLON': return 'btn-olive';
@@ -276,7 +296,4 @@ export class DetailRelanceComponent implements OnInit {
       color: 'statut-icon-violet'
     }
   ];
-
-
-
 }

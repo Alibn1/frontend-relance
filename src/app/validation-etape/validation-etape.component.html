@@ -1,6 +1,8 @@
 <div class="etapes-wrapper">
+  <app-flash-message *ngIf="showFlash" [message]="flashMessage" [type]="flashType">
+  </app-flash-message>
   <div class="etapes-grid">
-    <mat-card class="etape-card" *ngFor="let etape of etapes">
+    <mat-card class="etape-card" [attr.id]="'etape-' + etape.numero_relance" *ngFor="let etape of etapes">
       <mat-card-header>
         <div mat-card-avatar class="etape-icon">
           <mat-icon>notifications</mat-icon>
@@ -15,8 +17,12 @@
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-stroked-button color="primary" (click)="mettreAJourStatut(etape.numero_relance, 'VALIDE')">Valider</button>
-        <button mat-stroked-button color="warn" (click)="mettreAJourStatut(etape.numero_relance, 'REFUSE')">Rejeter</button>
+        <button mat-flat-button class="valider-btn" (click)="valider(etape)">
+          <mat-icon>check_circle</mat-icon> Valider
+        </button>
+        <button mat-flat-button class="rejeter-btn" (click)="rejeter(etape)">
+          <mat-icon>cancel</mat-icon> Rejeter
+        </button>
       </mat-card-actions>
     </mat-card>
   </div>
