@@ -26,16 +26,8 @@ export class RelanceService {
   }
 
   // ✅ Créer un dossier de relance pour un client
-  createRelance(clientCode: string): Observable<any> {
-    const relanceData = {
-      code_client: clientCode,
-      date_relance_dossier: new Date().toISOString().split('T')[0],
-      utilisateur_creation: 'System'  // Tu peux remplacer par le vrai user si besoin
-    };
-
-    console.log('Création relance avec :', relanceData);
-
-    return this.apiService.post('relance-dossiers', relanceData).pipe(
+  createRelance(payload: any): Observable<any> {
+    return this.apiService.post('relance-dossiers', payload).pipe(
       catchError(error => {
         console.error('Erreur createRelance:', error);
         return throwError(() => error);

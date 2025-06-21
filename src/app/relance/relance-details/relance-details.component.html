@@ -4,7 +4,7 @@
     <app-relance-info
       [relance]="relance"
       (goBack)="goBack()"
-      (changerStatut)="changerStatutRelance($event)"
+      (toggle)="toggleStatus()"
       (history)="openDrawer()">
     ></app-relance-info>
     <app-flash-message *ngIf="showFlash" [message]="flashMessage" [type]="flashType" />

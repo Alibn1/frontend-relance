@@ -165,10 +165,16 @@ export class NouvelleRelanceComponent implements OnInit {
   }
 
   private createNewRelance() {
-    return this.relanceService.createRelance(this.clientCode).pipe(
+    const relanceData = {
+      code_client: this.clientCode,
+      statut: 'OUVERT' // ✅ nécessaire pour passer la validation Laravel
+    };
+
+    return this.relanceService.createRelance(relanceData).pipe(
       map((response: any) => response?.data?.numero_relance_dossier || response?.numero_relance_dossier || response)
     );
   }
+
 
   private useExistingRelance(relance: any) {
     const ndr = relance?.numero_relance_dossier;

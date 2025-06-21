@@ -116,6 +116,7 @@ export class RelanceHistoriqueComponent implements OnInit {
     { code: 'VALIDE', libelle: 'Validé', color: 'badge VALIDE' },
     { code: 'ENVOYE', libelle: 'Envoyé', color: 'badge ENVOYE' },
     { code: 'REFUSE', libelle: 'Refusé', color: 'badge REFUSE' },
+    { code: 'ANNULE', libelle: 'Annulé', color: 'badge ANNULE' },
     { code: 'CLOTURE', libelle: 'Clôturé', color: 'badge CLOTURE' },
     { code: 'OUVERT', libelle: 'Ouvert', color: 'badge OUVERT' },
     { code: 'ENCOURS', libelle: 'En cours', color: 'badge ENCOURS' }
