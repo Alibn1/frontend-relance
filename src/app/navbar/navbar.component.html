@@ -38,7 +38,10 @@
           <span>Gestion des relevés</span>
         </a>
         <a mat-list-item routerLink="/relances/validation">
-          <mat-icon>task_alt</mat-icon>
+          <mat-icon matBadge="{{ nombreEtapes }}"
+                    matBadgeColor="warn"
+                    matBadgeOverlap="false"
+                    matBadgeSize="small">task_alt</mat-icon>
           <span>Validation étapes</span>
         </a>
       </mat-nav-list>

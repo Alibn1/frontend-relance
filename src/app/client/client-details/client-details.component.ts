@@ -4,11 +4,13 @@ import { ClientService } from '../../services/client.service';
 import { MatTableDataSource } from '@angular/material/table';
 import {MATERIAL_PROVIDERS} from '../../material';
 import {MatSort} from '@angular/material/sort';
+import {FlashMessageComponent} from '../../UI-UX/flash-message/flash-message.component';
 
 @Component({
   selector: 'app-client-details',
   imports: [
-    MATERIAL_PROVIDERS
+    MATERIAL_PROVIDERS,
+    FlashMessageComponent
   ],
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.css'
@@ -16,6 +18,12 @@ import {MatSort} from '@angular/material/sort';
 export class ClientDetailsComponent implements OnInit {
   clientCode!: string;
   clientDetails: any = {};
+  canCreateEtape: boolean = true;
+  lastEtapeStatut: string = '';
+
+  showFlash = false;
+  flashMessage = '';
+  flashType: 'success' | 'error' | 'info' = 'success';
 
   relances = new MatTableDataSource<any>();
   etape_relances = new MatTableDataSource<any>();
@@ -52,14 +60,17 @@ export class ClientDetailsComponent implements OnInit {
       this.clientService.getClientEtapeRelances(this.clientCode).subscribe({
         next: (relancesData) => {
           const trie = relancesData.sort((a: any, b: any) => {
-            const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
-            const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+            const dateA = new Date(a.created_at).getTime();
+            const dateB = new Date(b.created_at).getTime();
             return dateB - dateA;
           });
 
-           this.relances.data = trie;
+          this.relances.data = trie;
           this.relances.sort = this.sortRelances;
 
+          const lastStep = trie[0];
+          this.lastEtapeStatut = lastStep?.statut_detail || '';
+          this.canCreateEtape = this.lastEtapeStatut !== 'BROUILLON';
         },
         error: (err) => console.error('Erreur lors du chargement des relances:', err)
       });
@@ -77,6 +88,13 @@ export class ClientDetailsComponent implements OnInit {
       this.loadFakeImpayes();
       this.impayes.sort = this.sortImpayes;
     }
+  }
+
+  showFlashMsg(message: string, type: 'success' | 'error' | 'info' = 'success') {
+    this.flashMessage = message;
+    this.flashType = type;
+    this.showFlash = true;
+    setTimeout(() => this.showFlash = false, 3200);
   }
 
   getTotalSoldeInitiale(): number {
@@ -114,6 +132,18 @@ export class ClientDetailsComponent implements OnInit {
   }
 
   navigateToNewRelance(): void {
+    if (!this.canCreateEtape) {
+      this.flashMessage = 'Veuillez traiter l\'étape actuelle';
+      this.flashType = 'error';
+      this.showFlash = true;
+
+      setTimeout(() => {
+        this.showFlash = false;
+      }, 3000);
+
+      return;
+    }
+
     this.router.navigate(['relances', 'create'], { relativeTo: this.route });
   }
 
@@ -128,6 +158,23 @@ export class ClientDetailsComponent implements OnInit {
     if (s.includes('REFUSE') || s.includes('REFUSÉ')) return 'badge REFUSE';
     if (s.includes('ENCOURS')) return 'badge ENCOURS';
     return 'badge DEFAULT';
+  }
+
+  statuts = [
+    { code: 'BROUILLON', libelle: 'Brouillon', color: 'badge BROUILLON' },
+    { code: 'VALIDE', libelle: 'Validé', color: 'badge VALIDE' },
+    { code: 'ENVOYE', libelle: 'Envoyé', color: 'badge ENVOYE' },
+    { code: 'REFUSE', libelle: 'Refusé', color: 'badge REFUSE' },
+    { code: 'ANNULE', libelle: 'Annulé', color: 'badge ANNULE' },
+    { code: 'ENCOURS', libelle: 'En cours', color: 'badge ENCOURS' }
+  ];
+
+  getBadgeClass(code: string): string {
+    return this.statuts.find(s => s.code === code?.toUpperCase())?.color || 'badge DEFAULT';
+  }
+
+  getBadgeLabel(code: string): string {
+    return this.statuts.find(s => s.code === code?.toUpperCase())?.libelle || code;
   }
 
   private loadFakeImpayes(): void {

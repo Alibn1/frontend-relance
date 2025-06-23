@@ -113,11 +113,13 @@ export class DetailRelanceComponent implements OnInit {
 
   toggleStatus(): void {
     if (!this.relance?.statut) return;
-    const newStatus = this.relance.statut.toUpperCase() === 'OUVERT' ? 'Cloture' : 'Ouvert';
 
-    this.apiService.patch(`relance-dossiers/${this.relanceId}/status`, { status: newStatus }).subscribe({
+    const newCode = this.relance.statut.toUpperCase() === 'OUVERT' ? 'Cloture' : 'Ouvert';
+
+    this.apiService.patch(`relance-dossiers/${this.relanceId}/status`, { status: newCode }).subscribe({
       next: () => {
-        this.showFlashMsg(`Statut changé vers "${newStatus}"`, 'success');
+        const libelle = this.getLibelleStatutRelance(newCode);
+        this.showFlashMsg(`Statut changé vers "${libelle}"`, 'success');
         this.loadRelanceDetails();
       },
       error: () => {
@@ -225,8 +227,46 @@ export class DetailRelanceComponent implements OnInit {
     });
   }
 
+  confirmerClotureDossier(): void {
+    const dialogRef = this.dialog.open(ConfirmDeleteComponent, {
+      data: {
+        message: 'Voulez-vous vraiment clôturer ce dossier ?',
+        confirmLabel: 'Clôturer'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.changerStatutRelance('Cloture');
+      }
+    });
+  }
+
+  onToggleStatut(): void {
+    if (!this.relance?.statut) return;
+
+    const statutActuel = this.relance.statut.toUpperCase();
+
+    if (statutActuel === 'CLOTURE') {
+      this.showFlashMsg('Ce dossier est déjà clôturé. Action non autorisée.', 'error');
+    } else if (statutActuel === 'OUVERT') {
+      this.confirmerClotureDossier(); // 💬 MatDialog avant de clôturer
+    } else {
+      this.changerStatutRelance('Ouvert'); // cas théorique si on veut rouvrir un dossier annulé par ex.
+    }
+  }
+
   getLibelleStatut(code: string): string {
     return this.statuts.find(s => s.code === code)?.libelle || 'Statut inconnu';
+  }
+
+  getLibelleStatutRelance(statutCode: string): string {
+    switch (statutCode.toUpperCase()) {
+      case 'OUVERT': return 'Ouvert';
+      case 'CLOTURE': return 'Clôturé';
+      case 'ANNULE': return 'Annulé';
+      default: return 'Inconnu';
+    }
   }
 
   getStatutIcon(code: string): string {

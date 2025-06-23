@@ -1,3 +1,8 @@
+<app-flash-message
+  *ngIf="showFlash"
+  [message]="flashMessage"
+  [type]="flashType">
+</app-flash-message>
 <div class="top-header">
   <button mat-icon-button (click)="goBack()" aria-label="Retour">
     <mat-icon>arrow_back</mat-icon>
@@ -30,7 +35,7 @@
       <ng-container matColumnDef="statut_detail">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut</th>
         <td mat-cell *matCellDef="let r">
-          <span [ngClass]="getStatusClass(r.statut_detail)" class="badge">{{ r.statut_detail }}</span>
+          <span [ngClass]="getStatusClass(r.statut_detail)" class="badge">{{ getBadgeLabel(r.statut_detail) }}</span>
         </td>
       </ng-container>
 
@@ -58,7 +63,7 @@
         </ng-container>
 
         <ng-container matColumnDef="solde_initiale">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Valeur Initiale</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Crédit</th>
           <td mat-cell *matCellDef="let r">{{ r.solde_initiale | number: '1.0-0':'fr-FR' }}</td>
           <td mat-footer-cell *matFooterCellDef class="total-footer">
             {{ getTotalSoldeInitiale() | number: '1.0-0':'fr-FR' }}
@@ -66,7 +71,7 @@
         </ng-container>
 
         <ng-container matColumnDef="solde_finale">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Valeur Réglée</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Débit</th>
           <td mat-cell *matCellDef="let r">{{ r.solde_finale | number: '1.0-0':'fr-FR' }}</td>
           <td mat-footer-cell *matFooterCellDef class="total-footer">
             {{ getTotalSoldeFinale() | number: '1.0-0':'fr-FR' }}
