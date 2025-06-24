@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { finalize } from 'rxjs/operators';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -39,8 +38,7 @@ export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router,
-    private snackBar: MatSnackBar
+    private router: Router
   ) {
     this.registerForm = this.fb.group({
       name: ['', [Validators.required]],
@@ -86,18 +84,10 @@ export class RegisterComponent {
       )
       .subscribe({
         next: () => {
-          this.snackBar.open('Inscription réussie!', 'Fermer', {
-            duration: 5000,
-            panelClass: ['success-snackbar'],
-          });
           this.router.navigate(['/login']);
         },
         error: (error) => {
           this.errorMessage = error.error?.message || 'Erreur lors de l’inscription';
-          this.snackBar.open(this.errorMessage, 'Fermer', {
-            duration: 5000,
-            panelClass: ['error-snackbar']
-          });
         }
       });
   }

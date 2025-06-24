@@ -79,4 +79,8 @@ export class NavbarComponent implements OnInit {
   isRelanceDetailsRoute(): boolean {
     return this.router.url.startsWith('/relance-dossiers/');
   }
+
+  get isResponsable(): boolean {
+    return this.authService.currentUserValue?.role === 'responsable';
+  }
 }

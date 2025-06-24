@@ -1,15 +1,60 @@
 <div class="etapes-wrapper">
-  <app-flash-message *ngIf="showFlash" [message]="flashMessage" [type]="flashType">
-  </app-flash-message>
+  <app-flash-message *ngIf="showFlash" [message]="flashMessage" [type]="flashType"></app-flash-message>
+
   <div class="etapes-grid">
     <mat-card class="etape-card" [attr.id]="'etape-' + etape.numero_relance" *ngFor="let etape of etapes">
+
       <mat-card-header>
         <div mat-card-avatar class="etape-icon">
           <mat-icon>notifications</mat-icon>
         </div>
         <mat-card-title>Rappel de paiement</mat-card-title>
         <mat-card-subtitle>Numéro : {{ etape.numero_relance }}</mat-card-subtitle>
+
+        <!-- Bouton info (popover) -->
+        <button mat-icon-button [matMenuTriggerFor]="infoMenu" class="info-button" matTooltip="Plus d'infos">
+          <mat-icon>info_outline</mat-icon>
+        </button>
       </mat-card-header>
+
+      <!-- Popover -->
+      <mat-menu #infoMenu="matMenu" class="popover-details">
+        <div class="popover-content">
+          <div class="popover-row code-client">
+            <div><strong>{{ etape.client?.code_client || 'Code ?' }}</strong> – {{ etape.client?.raison_sociale || 'Raison sociale ?' }}</div>
+          </div>
+          <hr>
+          <div class="popover-row">
+            <mat-icon class="icon">calendar_today</mat-icon>
+            <div><strong>Date de création :</strong> {{ etape.date_creation_debut | date:'dd/MM/yyyy' }}</div>
+          </div>
+          <div class="popover-row">
+            <mat-icon class="icon">event</mat-icon>
+            <div><strong>Date de rappel :</strong> {{ etape.date_rappel | date:'dd/MM/yyyy' }}</div>
+          </div>
+          <div class="popover-row">
+            <mat-icon class="icon">schedule</mat-icon>
+            <div>
+              <strong>Période d’activation :</strong>
+              {{ etape.date_creation_debut | date:'dd/MM/yyyy' }}
+              –
+              {{ etape.date_rappel | date:'dd/MM/yyyy' }}
+            </div>
+          </div>
+          <div class="popover-row">
+            <mat-icon class="icon">send</mat-icon>
+            <div><strong>Méthode d’envoi :</strong> {{ etape.methode_envoi || 'Non spécifiée' }}</div>
+          </div>
+          <div class="popover-row">
+            <mat-icon class="icon">person</mat-icon>
+            <div><strong>Créé par :</strong> {{ etape.executant_envoi || 'Inconnu' }}</div>
+          </div>
+          <div class="popover-row">
+            <mat-icon class="icon">description</mat-icon>
+            <div><strong>Modèle :</strong> {{ etape.code_sous_modele || 'Non précisé' }}</div>
+          </div>
+        </div>
+      </mat-menu>
 
       <mat-card-content>
         <p><strong>Statut :</strong> {{ etape.statut_detail }}</p>
@@ -24,6 +69,7 @@
           <mat-icon>cancel</mat-icon> Rejeter
         </button>
       </mat-card-actions>
+
     </mat-card>
   </div>
 </div>

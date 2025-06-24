@@ -26,7 +26,14 @@ export class ValidationEtapeComponent implements OnInit {
   ngOnInit() {
     this.relanceService.getAllRelances().subscribe((relances: any[]) => {
       this.etapes = relances
-        .flatMap(r => r.etape_relances || [])
+        .flatMap(r =>
+          (r.etape_relances || []).map((etape: any) => ({
+            ...etape,
+            client: r.client, // pour code_client + raison_sociale
+            user: { name: r.utilisateur_creation || 'Utilisateur inconnu' }, // même format que dans l'autre component
+            modele: { titre: r.sous_modele?.titre || 'Non précisé' } // optionnel mais propre
+          }))
+        )
         .filter(e => e.statut_detail === 'BROUILLON')
         .sort((a, b) => new Date(a.date_creation_debut).getTime() - new Date(b.date_creation_debut).getTime());
     });

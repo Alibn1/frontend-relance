@@ -37,7 +37,8 @@
           <mat-icon>receipt_long</mat-icon>
           <span>Gestion des relevés</span>
         </a>
-        <a mat-list-item routerLink="/relances/validation">
+        <a *ngIf="isResponsable"
+           mat-list-item routerLink="/relances/validation">
           <mat-icon matBadge="{{ nombreEtapes }}"
                     matBadgeColor="warn"
                     matBadgeOverlap="false"
