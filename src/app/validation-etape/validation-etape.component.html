@@ -8,7 +8,7 @@
         <div mat-card-avatar class="etape-icon">
           <mat-icon>notifications</mat-icon>
         </div>
-        <mat-card-title>Rappel de paiement</mat-card-title>
+        <mat-card-title>{{ etape.titre_sous_modele || 'Titre ?' }}</mat-card-title>
         <mat-card-subtitle>Numéro : {{ etape.numero_relance }}</mat-card-subtitle>
 
         <!-- Bouton info (popover) -->
