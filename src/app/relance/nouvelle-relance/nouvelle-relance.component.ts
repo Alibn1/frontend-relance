@@ -10,7 +10,7 @@ import { catchError, switchMap, take, finalize, map } from 'rxjs/operators';
 import { of, throwError } from 'rxjs';
 import { MATERIAL_PROVIDERS } from '../../material';
 import { MatStepperModule } from '@angular/material/stepper';
-import {FlashMessageComponent} from '../../UI-UX/flash-message/flash-message.component';
+import { FlashMessageComponent } from '../../UI-UX/flash-message/flash-message.component';
 
 @Component({
   selector: 'app-nouvelle-relance',
@@ -64,13 +64,21 @@ export class NouvelleRelanceComponent implements OnInit {
     this.initForm();
     this.loadExistingRelances();
     this.loadClientReleves();
+
+    // ➕ Logique de calcul automatique des jours
+    this.infoForm.get('date_rappel')?.valueChanges.subscribe((selectedDate: Date) => {
+      if (selectedDate) {
+        const jours = this.calculerDiffJours(this.today, selectedDate);
+        this.infoForm.get('nb_jours_rappel')?.setValue(jours);
+      }
+    });
   }
 
   showFlashMsg(message: string, type: 'success' | 'error' | 'info' = 'success') {
     this.flashMessage = message;
     this.flashType = type;
     this.showFlash = true;
-    setTimeout(() => this.showFlash = false, 3200);
+    setTimeout(() => this.showFlash = false, 3000);
   }
 
   private initForm(): void {
@@ -79,7 +87,7 @@ export class NouvelleRelanceComponent implements OnInit {
       info: this.fb.group({
         titre: ['Rappel de paiement', Validators.required],
         date_rappel: [this.today, Validators.required],
-        nb_jours_rappel: [30, Validators.required],
+        nb_jours_rappel: [{ value: 0, disabled: true }, Validators.required],
         methode_envoi: ['Email', Validators.required],
         objet_relance1: [''],
         objet_relance2: ['']
@@ -167,14 +175,13 @@ export class NouvelleRelanceComponent implements OnInit {
   private createNewRelance() {
     const relanceData = {
       code_client: this.clientCode,
-      statut: 'OUVERT' // ✅ nécessaire pour passer la validation Laravel
+      statut: 'OUVERT'
     };
 
     return this.relanceService.createRelance(relanceData).pipe(
       map((response: any) => response?.data?.numero_relance_dossier || response?.numero_relance_dossier || response)
     );
   }
-
 
   private useExistingRelance(relance: any) {
     const ndr = relance?.numero_relance_dossier;
@@ -219,9 +226,7 @@ export class NouvelleRelanceComponent implements OnInit {
     this.showNotification(message);
     this.router.navigate(['/relance-dossiers', ndr], {
       state: {
-        flashMessage: this.hasExistingRelances
-          ? 'Nouvelle étape ajoutée avec succès'
-          : 'Relance et étape créées avec succès',
+        flashMessage: message,
         flashType: 'success'
       }
     });
@@ -294,6 +299,14 @@ export class NouvelleRelanceComponent implements OnInit {
     } else {
       control?.setValue([]);
     }
+  }
+
+  private calculerDiffJours(dateDebut: Date, dateFin: Date): number {
+    const debut = new Date(dateDebut.setHours(0, 0, 0, 0));
+    const fin = new Date(dateFin.setHours(0, 0, 0, 0));
+    const diffTime = fin.getTime() - debut.getTime();
+    const diffJours = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffJours >= 0 ? diffJours : 0;
   }
 
   get infoForm(): FormGroup {
