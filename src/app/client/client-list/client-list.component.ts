@@ -85,18 +85,21 @@ export class ClientListComponent implements OnInit, AfterViewInit {
       const totalSoldeInitiale = releves.reduce((acc: number, r: any) => acc + (+r.solde_initiale || 0), 0);
       const totalImpayes = releves.reduce((acc: number, r: any) => acc + ((+r.solde_initiale || 0) - (+r.solde_finale || 0)), 0);
 
+      const lastEtape = this.getDerniereEtape(client.etape_relances);
+
       return {
         ...client,
         raison_sociale: client.R_sociale ?? client.raison_sociale,
         solde_releve: totalSoldeInitiale,
         total_impaye: totalImpayes,
         date_relevee: releves?.[0]?.date_releve ?? null,
-        derniere_relance: this.getDerniereEtapeRelance(client.etape_relances)
+        derniere_relance: lastEtape?.date_creation_debut ?? null,
+        nb_jours_rappel: lastEtape?.nombre_jour_rappel ?? 30 // valeur par défaut
       };
     });
   }
 
-  getDerniereEtapeRelance(etapes: any[]): Date | null {
+  getDerniereEtape(etapes: any[]): any | null {
     if (!etapes || etapes.length === 0) return null;
 
     const validEtapes = etapes.filter(e =>
@@ -105,11 +108,14 @@ export class ClientListComponent implements OnInit, AfterViewInit {
 
     if (validEtapes.length === 0) return null;
 
-    const sorted = validEtapes.sort((a, b) =>
+    return validEtapes.sort((a, b) =>
       new Date(b.date_creation_debut).getTime() - new Date(a.date_creation_debut).getTime()
-    );
+    )[0];
+  }
 
-    return new Date(sorted[0].date_creation_debut);
+  getRelanceBadgeClass(date: string | Date, nbJoursRappel: number): string {
+    const days = this.getDaysElapsed(date);
+    return days <= nbJoursRappel ? 'badge badge-warning' : 'badge badge-danger';
   }
 
   getStatusClass(status: string): string {

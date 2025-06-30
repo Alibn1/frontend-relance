@@ -1,5 +1,5 @@
 <mat-card class="main-card">
-  <mat-card-title class="title">Liste des clients</mat-card-title>
+  <mat-card-title class="title">Clients à relancer</mat-card-title>
 
   <mat-form-field appearance="outline" class="search-field">
     <mat-label>Rechercher</mat-label>
@@ -34,13 +34,12 @@
 
       <!-- Date Relevée -->
       <ng-container matColumnDef="date_relevee">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Relevée</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Relevé</th>
         <td mat-cell *matCellDef="let client">
           {{ client.date_relevee | date: 'yyyy-MM' }}
           <span *ngIf="getDaysElapsed(client.date_relevee) >= 0"
-                [ngClass]="getElapsedBadgeClass(client.date_relevee)"
-                class="badge">
-            {{ getDaysElapsed(client.date_relevee) }} Jr
+                class="badge badge-danger">
+              {{ getDaysElapsed(client.date_relevee) }} Jr
           </span>
         </td>
       </ng-container>
@@ -51,9 +50,9 @@
         <td mat-cell *matCellDef="let client">
           {{ client.derniere_relance | date: 'yyyy-MM-dd' }}
           <span *ngIf="getDaysElapsed(client.derniere_relance) >= 0"
-                [ngClass]="getElapsedBadgeClass(client.derniere_relance)"
+                [ngClass]="getRelanceBadgeClass(client.derniere_relance, client.nb_jours_rappel)"
                 class="badge">
-            {{ getDaysElapsed(client.derniere_relance) }} Jr
+              {{ getDaysElapsed(client.derniere_relance) }} Jr
           </span>
         </td>
       </ng-container>
