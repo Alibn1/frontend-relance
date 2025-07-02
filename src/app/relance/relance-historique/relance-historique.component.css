@@ -1,41 +1,37 @@
+/* === Carte principale === */
 .main-card {
   width: 100%;
   box-sizing: border-box;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 24px;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  padding: 28px;
   margin: 0;
 }
 
+/* === Titre */
 .title {
   font-size: 1.5rem;
   color: #3f51b5;
   margin-bottom: 24px;
 }
 
+/* === Champ de recherche */
 .search-field {
   width: 300px;
   margin-bottom: 20px;
   display: block;
 }
 
-.table-wrapper {
-  width: 100%;
-  overflow-x: auto;
-}
-
-/* ✅ Ligne d’en-tête visuelle personnalisée */
+/* === En-tête visuelle personnalisée */
 .custom-header-row {
   display: flex;
   background-color: #5c6bc0;
   color: white;
-  font-weight: bold;
   text-align: center;
   border-radius: 4px 4px 0 0;
-  height: 42px; /* légèrement plus haut */
+  height: 42px;
   overflow: hidden;
-
 }
 
 .group-title {
@@ -43,42 +39,89 @@
   align-items: center;
   flex-grow: 1;
   text-align: center;
-  font-weight: normal;       /* ⛔️ plus de gras */
-  font-size: 13.5px; /* légèrement plus grand */           /* ⬇️ plus discret */
-  color: #ffffffcc;          /* blanc doux */
-  height: 32px;              /* légèrement plus bas */
+  font-size: 13.5px;
+  color: #ffffffcc;
+  height: 32px;
 }
 
 .group-title.dossier {
   background-color: #5c6bc0;
-  flex: 4.5 0 0; /* correspond à 4 colonnes */
+  flex: 4.5 0 0;
 }
 
 .group-title.relance {
   background-color: #7986cb;
-  flex: 5 0 0; /* correspond à 5 colonnes */
-
+  flex: 5 0 0;
 }
 
+/* === Tableau === */
+.table-wrapper {
+  border: 1px solid #d1c4e9;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Style du tableau */
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
 }
 
+/* En-tête du tableau */
+table tr.mat-header-row {
+  background-color: #dacfef !important;
+}
+
+mat-header-cell {
+  background-color: #dacfef !important;
+  color: #4a148c;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 14px 12px;
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* Cellules */
+mat-cell {
+  text-align: center;
+  padding: 14px 12px;
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* Zébrures */
 .striped tr:nth-child(even) td {
-  background-color: #f9f9f9;
+  background-color: #dacfef;
 }
 
+/* Hover ligne */
+table tr:hover {
+  background-color: #f3f0fa;
+  transition: background-color 0.2s ease-in-out;
+}
+
+/* Icône d’action */
+button mat-icon {
+  color: #5e35b1;
+  transition: transform 0.2s ease;
+}
+
+button:hover mat-icon {
+  transform: scale(1.2);
+}
+
+/* Pagination */
 mat-paginator {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
-mat-header-cell, mat-cell {
-  text-align: center;
-  padding: 12px 8px;
-}
-
+/* === Badges (inchangés) === */
 .badge {
   padding: 4px 10px;
   border-radius: 12px;
@@ -88,6 +131,75 @@ mat-header-cell, mat-cell {
   display: inline-block;
   text-transform: none !important;
 }
+
+/* 🧪 Barre de filtres */
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Groupe gauche : Recherche */
+.filters-group-left {
+  flex: 1;
+  min-width: 220px;
+  max-width: 280px;
+}
+
+/* Groupe centre : Filtres */
+.filters-group-middle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* Groupe droite : Actions */
+.filters-group-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+/* Filtres taille standard */
+.filters-bar mat-form-field {
+  margin: 0;
+  font-size: 13px;
+}
+
+.filter-small {
+  min-width: 160px;
+  max-width: 180px;
+  height: 40px;
+}
+
+.search-field {
+  height: 40px;
+  width: 100%;
+}
+
+/* Boutons */
+.filters-bar button {
+  height: 40px;
+  line-height: 40px;
+  white-space: nowrap;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters-group-middle,
+  .filters-group-right {
+    justify-content: flex-start;
+  }
+}
+
 
 .badge.BROUILLON { background-color: #9e9e9e; }
 .badge.ENVOYE, .badge.ENVOYÉ { background-color: #1e88e5; }

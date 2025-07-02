@@ -31,6 +31,9 @@ export class ClientListComponent implements OnInit, AfterViewInit {
   pageSizeOptions = [5, 10, 25, 100];
   pageIndex = 0;
   totalItems = 0;
+  selectedAgent: string = '';
+  selectedDate: Date | null = null;
+  uniqueAgents: string[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -42,15 +45,14 @@ export class ClientListComponent implements OnInit, AfterViewInit {
       next: (data) => {
         let enrichedData = this.enrichirClients(data);
 
-        // 🔽 Tri croissant par code_client (ex: CLT001, CLT002...)
-        enrichedData = enrichedData.sort((a, b) =>
-          a.code_client.localeCompare(b.code_client)
-        );
+        enrichedData = enrichedData.sort((a, b) => a.code_client.localeCompare(b.code_client));
+
+        this.uniqueAgents = [...new Set(enrichedData.map(c => c.executant_envoi).filter(Boolean))];
 
         this.dataSource.data = enrichedData;
-        this.loading = false;
         this.totalItems = enrichedData.length;
         this.noDataFound = enrichedData.length === 0;
+        this.loading = false;
 
         if (this.paginator && this.sort) {
           this.dataSource.paginator = this.paginator;
@@ -89,6 +91,7 @@ export class ClientListComponent implements OnInit, AfterViewInit {
 
       return {
         ...client,
+        executant_envoi: lastEtape?.executant_envoi ?? '',
         raison_sociale: client.R_sociale ?? client.raison_sociale,
         solde_releve: totalSoldeInitiale,
         total_impaye: totalImpayes,
@@ -97,6 +100,27 @@ export class ClientListComponent implements OnInit, AfterViewInit {
         nb_jours_rappel: lastEtape?.nombre_jour_rappel ?? 30 // valeur par défaut
       };
     });
+  }
+
+  applyAdvancedFilter(): void {
+    const agentFilter = this.selectedAgent?.toLowerCase() || '';
+    const selectedDate = this.selectedDate;
+
+    this.dataSource.filterPredicate = (data: any, filter: string) => {
+      const matchesAgent = !agentFilter || (data.executant_envoi?.toLowerCase() === agentFilter);
+      const matchesDate = !selectedDate || (
+        data.date_relevee && new Date(data.date_relevee).toDateString() === selectedDate.toDateString()
+      );
+      return matchesAgent && matchesDate;
+    };
+
+    this.dataSource.filter = Math.random().toString(); // forcer le filtrage
+  }
+
+  resetFilters(): void {
+    this.selectedAgent = '';
+    this.selectedDate = null;
+    this.applyAdvancedFilter();
   }
 
   getDerniereEtape(etapes: any[]): any | null {

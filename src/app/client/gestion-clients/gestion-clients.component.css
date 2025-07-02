@@ -26,3 +26,56 @@
 mat-form-field {
   width: 100%;
 }
+
+/* === 🌟 Tableau stylé violet harmonisé === */
+table.full-width {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  border: 1px solid #d1c4e9;
+}
+
+/* ✅ En-tête violet clair */
+table.full-width tr.mat-header-row {
+  background-color: #dacfef !important;
+}
+
+.full-width th.mat-header-cell {
+  background-color: #dacfef !important;
+  color: #4a148c;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 14px 12px;
+  border-bottom: 1px solid #e0e0e0 !important;
+}
+
+/* ✅ Cellules */
+.full-width td.mat-cell {
+  font-size: 13.5px;
+  color: #333;
+  padding: 12px 10px;
+  border-bottom: 1px solid #e0e0e0 !important;
+  text-align: center;
+}
+
+table.full-width tr.mat-row:nth-of-type(even) {
+  background-color: #dacfef;
+}
+
+table.full-width tr.mat-row:hover {
+  background-color: #f3f0fa;
+  transition: background-color 0.3s ease;
+}
+
+/* ✅ Icônes actions */
+.full-width td.mat-cell button mat-icon {
+  transition: transform 0.2s ease;
+  color: #5e35b1;
+}
+
+.full-width td.mat-cell button:hover mat-icon {
+  transform: scale(1.2);
+}

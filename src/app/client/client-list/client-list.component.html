@@ -1,10 +1,43 @@
 <mat-card class="main-card">
   <mat-card-title class="title">Clients à relancer</mat-card-title>
 
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>Rechercher</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Recherche Client...">
-  </mat-form-field>
+  <!-- Filtres : Recherche - Filtres - Boutons -->
+  <!-- Barre Filtres structurée en 3 colonnes -->
+  <div class="filters-bar">
+    <!-- 🔍 Recherche -->
+    <div class="filters-group-left">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Rechercher</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Recherche Client...">
+      </mat-form-field>
+    </div>
+
+    <!-- 📋 Filtres -->
+    <div class="filters-group-middle">
+      <mat-form-field appearance="outline" class="filter-small">
+        <mat-label>Agent</mat-label>
+        <mat-select [(value)]="selectedAgent" (selectionChange)="applyAdvancedFilter()">
+          <mat-option value="">Tous</mat-option>
+          <mat-option *ngFor="let agent of uniqueAgents" [value]="agent">{{ agent }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-small">
+        <mat-label>Date Relevé</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" (dateChange)="applyAdvancedFilter()" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </div>
+
+    <!-- 🗑️🔄 Actions -->
+    <div class="filters-group-right">
+      <button mat-icon-button color="warn" (click)="resetFilters()" matTooltip="Réinitialiser les filtres">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-raised-button color="primary" (click)="applyAdvancedFilter()">Actualiser</button>
+    </div>
+  </div>
 
   <div class="table-wrapper">
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z1 striped">
@@ -37,9 +70,8 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Date Relevé</th>
         <td mat-cell *matCellDef="let client">
           {{ client.date_relevee | date: 'yyyy-MM' }}
-          <span *ngIf="getDaysElapsed(client.date_relevee) >= 0"
-                class="badge badge-danger">
-              {{ getDaysElapsed(client.date_relevee) }} Jr
+          <span *ngIf="getDaysElapsed(client.date_relevee) >= 0" class="badge badge-danger">
+            {{ getDaysElapsed(client.date_relevee) }} Jr
           </span>
         </td>
       </ng-container>
@@ -52,7 +84,7 @@
           <span *ngIf="getDaysElapsed(client.derniere_relance) >= 0"
                 [ngClass]="getRelanceBadgeClass(client.derniere_relance, client.nb_jours_rappel)"
                 class="badge">
-              {{ getDaysElapsed(client.derniere_relance) }} Jr
+            {{ getDaysElapsed(client.derniere_relance) }} Jr
           </span>
         </td>
       </ng-container>

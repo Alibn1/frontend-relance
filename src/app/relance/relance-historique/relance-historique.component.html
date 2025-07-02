@@ -1,10 +1,59 @@
 <mat-card class="main-card">
   <mat-card-title class="title">Historique des relances</mat-card-title>
 
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>Recherche</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Rechercher...">
-  </mat-form-field>
+
+  <!-- ✅ Barre de filtres -->
+  <div class="filters-bar">
+    <!-- 🔍 Recherche -->
+    <div class="filters-group-left">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Rechercher</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Recherche...">
+      </mat-form-field>
+    </div>
+
+    <!-- 🧩 Filtres -->
+    <div class="filters-group-middle">
+      <mat-form-field appearance="outline" class="filter-small">
+        <mat-label>Statut Dossier</mat-label>
+        <mat-select [(value)]="filtreStatutDossier">
+          <mat-option value="">Tous</mat-option>
+          <mat-option *ngFor="let statut of statutsDossier" [value]="statut">{{ statut }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-small">
+        <mat-label>Date Rappel</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="filtreDateRappel">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-small">
+        <mat-label>Statut Relance</mat-label>
+        <mat-select [(value)]="filtreStatutRelance">
+          <mat-option value="">Tous</mat-option>
+          <mat-option *ngFor="let statut of statutsRelance" [value]="statut">{{ statut }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="filter-small">
+        <mat-label>Agent</mat-label>
+        <mat-select [(value)]="filtreUtilisateur">
+          <mat-option value="">Tous</mat-option>
+          <mat-option *ngFor="let u of utilisateurs" [value]="u">{{ u }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- 🧼 Boutons à droite -->
+    <div class="filters-group-right">
+      <button mat-icon-button (click)="resetFiltres()" matTooltip="Réinitialiser">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <button mat-raised-button color="primary" (click)="appliquerFiltres()">Actualiser</button>
+    </div>
+  </div>
 
   <div class="table-wrapper">
 

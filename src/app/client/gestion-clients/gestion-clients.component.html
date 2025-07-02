@@ -2,69 +2,69 @@
   <app-flash-message *ngIf="showFlash" [message]="flashMessage" [type]="flashType" />
   <button mat-raised-button color="primary" (click)="ouvrirFormulaire()">+ Ajouter un client</button>
 
-  <form *ngIf="formVisible" [formGroup]="clientForm" class="client-form" (ngSubmit)="soumettreFormulaire()">
-    <mat-card class="form-card">
-      <mat-card-content>
-        <div class="form-grid">
-          <mat-form-field appearance="outline">
-            <mat-label>Raison sociale</mat-label>
-            <input matInput formControlName="raison_sociale" required>
-          </mat-form-field>
+  <!--  <form *ngIf="formVisible" [formGroup]="clientForm" class="client-form" (ngSubmit)="soumettreFormulaire()">-->
+  <!--    <mat-card class="form-card">-->
+  <!--      <mat-card-content>-->
+  <!--        <div class="form-grid">-->
+  <!--          <mat-form-field appearance="outline">-->
+  <!--            <mat-label>Raison sociale</mat-label>-->
+  <!--            <input matInput formControlName="raison_sociale" required>-->
+  <!--          </mat-form-field>-->
 
-          <mat-form-field appearance="outline">
-            <mat-label>Email</mat-label>
-            <input matInput formControlName="email">
-          </mat-form-field>
+  <!--          <mat-form-field appearance="outline">-->
+  <!--            <mat-label>Email</mat-label>-->
+  <!--            <input matInput formControlName="email">-->
+  <!--          </mat-form-field>-->
 
-          <mat-form-field appearance="outline">
-            <mat-label>Téléphone</mat-label>
-            <input matInput formControlName="telephone">
-          </mat-form-field>
+  <!--          <mat-form-field appearance="outline">-->
+  <!--            <mat-label>Téléphone</mat-label>-->
+  <!--            <input matInput formControlName="telephone">-->
+  <!--          </mat-form-field>-->
 
-          <mat-form-field appearance="outline">
-            <mat-label>Adresse</mat-label>
-            <input matInput formControlName="adresse">
-          </mat-form-field>
+  <!--          <mat-form-field appearance="outline">-->
+  <!--            <mat-label>Adresse</mat-label>-->
+  <!--            <input matInput formControlName="adresse">-->
+  <!--          </mat-form-field>-->
 
-          <mat-form-field appearance="outline">
-            <mat-label>Ville</mat-label>
-            <input matInput formControlName="ville">
-          </mat-form-field>
+  <!--          <mat-form-field appearance="outline">-->
+  <!--            <mat-label>Ville</mat-label>-->
+  <!--            <input matInput formControlName="ville">-->
+  <!--          </mat-form-field>-->
 
-          <mat-form-field appearance="outline">
-            <mat-label>Pays</mat-label>
-            <input matInput formControlName="pays">
-          </mat-form-field>
+  <!--          <mat-form-field appearance="outline">-->
+  <!--            <mat-label>Pays</mat-label>-->
+  <!--            <input matInput formControlName="pays">-->
+  <!--          </mat-form-field>-->
 
-          <mat-form-field appearance="outline">
-            <mat-label>Responsable</mat-label>
-            <input matInput formControlName="responsable">
-          </mat-form-field>
+  <!--          <mat-form-field appearance="outline">-->
+  <!--            <mat-label>Responsable</mat-label>-->
+  <!--            <input matInput formControlName="responsable">-->
+  <!--          </mat-form-field>-->
 
-          <mat-form-field appearance="outline">
-            <mat-label>Secteur d'activité</mat-label>
-            <input matInput formControlName="secteur_activite">
-          </mat-form-field>
+  <!--          <mat-form-field appearance="outline">-->
+  <!--            <mat-label>Secteur d'activité</mat-label>-->
+  <!--            <input matInput formControlName="secteur_activite">-->
+  <!--          </mat-form-field>-->
 
-          <mat-form-field appearance="outline">
-            <mat-label>Solde</mat-label>
-            <input matInput type="number" formControlName="solde">
-          </mat-form-field>
+  <!--          <mat-form-field appearance="outline">-->
+  <!--            <mat-label>Solde</mat-label>-->
+  <!--            <input matInput type="number" formControlName="solde">-->
+  <!--          </mat-form-field>-->
 
-          <mat-form-field appearance="outline">
-            <mat-label>Encours autorisé</mat-label>
-            <input matInput type="number" formControlName="encours_autorise">
-          </mat-form-field>
+  <!--          <mat-form-field appearance="outline">-->
+  <!--            <mat-label>Encours autorisé</mat-label>-->
+  <!--            <input matInput type="number" formControlName="encours_autorise">-->
+  <!--          </mat-form-field>-->
 
 
-        </div>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button color="primary" type="submit">{{ editMode ? 'Modifier' : 'Ajouter' }}</button>
-        <button mat-button color="warn" type="button" (click)="annuler()">Annuler</button>
-      </mat-card-actions>
-    </mat-card>
-  </form>
+  <!--        </div>-->
+  <!--      </mat-card-content>-->
+  <!--      <mat-card-actions>-->
+  <!--        <button mat-raised-button color="primary" type="submit">{{ editMode ? 'Modifier' : 'Ajouter' }}</button>-->
+  <!--        <button mat-button color="warn" type="button" (click)="annuler()">Annuler</button>-->
+  <!--      </mat-card-actions>-->
+  <!--    </mat-card>-->
+  <!--  </form>-->
 
   <table mat-table [dataSource]="clients" class="mat-elevation-z2 full-width">
 

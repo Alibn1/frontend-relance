@@ -1,10 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { RelanceService } from '../../services/relance.service';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
 import { MATERIAL_PROVIDERS } from '../../material';
-import {MatSort} from '@angular/material/sort';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-relance-historique',
@@ -17,7 +17,7 @@ import {MatSort} from '@angular/material/sort';
 export class RelanceHistoriqueComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   isLoading = true;
-  isMenuOpen = true; // ❗️ à synchroniser avec le layout si besoin
+  isMenuOpen = true;
 
   displayedColumns = [
     'numero_relance_dossier',
@@ -39,12 +39,22 @@ export class RelanceHistoriqueComponent implements OnInit {
     private router: Router
   ) {}
 
+  // Filtres actifs
+  filtreStatutDossier = '';
+  filtreDateRappel: Date | null = null;
+  filtreStatutRelance = '';
+  filtreUtilisateur = '';
+
+  // Listes dynamiques pour filtres
+  statutsDossier: string[] = [];
+  statutsRelance: string[] = [];
+  utilisateurs: string[] = [];
+
   ngOnInit(): void {
     this.relanceService.getAllRelances().subscribe(data => {
       const rows = data.flatMap((item: any) => {
         const etapes = item.etape_relances || [];
 
-        // Si aucune étape : retourner une ligne sans étape
         if (etapes.length === 0) {
           return [{
             numero_relance_dossier: item.numero_relance_dossier,
@@ -59,7 +69,6 @@ export class RelanceHistoriqueComponent implements OnInit {
           }];
         }
 
-        // Si plusieurs étapes : une ligne par étape
         return etapes.map((etape: any) => ({
           numero_relance_dossier: item.numero_relance_dossier,
           date_relance_dossier: this.formatDate(item.date_relance_dossier),
@@ -84,54 +93,14 @@ export class RelanceHistoriqueComponent implements OnInit {
         return item[property];
       };
 
+      // 🔄 Extraction dynamique pour filtres
+      this.statutsDossier = [...new Set(rows.map(r => r.statut_code).filter(Boolean))];
+      this.statutsRelance = [...new Set(rows.map(r => r.statut_detail).filter(s => s && s !== '—'))];
+      this.utilisateurs = [...new Set(rows.map(r => r.utilisateur_creation).filter(u => u && u !== '—'))];
+
       this.isLoading = false;
     });
   }
-
-
-  // ngOnInit(): void {
-  //   this.relanceService.getAllRelances().subscribe(data => {
-  //     const mapped = data.map((item: any) => {
-  //       const etapes = item.etape_relances || [];
-  //       const etape = etapes.length
-  //         ? etapes.sort((a: any, b: any) =>
-  //           new Date(b.date_rappel || b.created_at).getTime() - new Date(a.date_rappel || a.created_at).getTime()
-  //         )[0]
-  //         : null;
-  //
-  //       return {
-  //         numero_relance_dossier: item.numero_relance_dossier,
-  //         date_relance_dossier: this.formatDate(item.date_relance_dossier),
-  //         client: `${item.client?.code_client ?? ''} ${item.client?.raison_sociale ?? ''}`,
-  //         statut: item.statut?.libelle ?? '—',
-  //         statut_code: item.statut?.code ?? 'BROUILLON',
-  //         numero_relance: etape?.numero_relance ?? '—',
-  //         date_rappel: this.formatDate(etape?.date_rappel),
-  //         statut_detail: etape ? etape.statut_detail : '—',
-  //         utilisateur_creation: etape?.executant_envoi ?? '—'
-  //       };
-  //     });
-  //
-  //     this.dataSource.data = mapped;
-  //
-  //     //  Forcer le tri logique sur numero_relance_dossier
-  //     this.dataSource.sort = this.sort;
-  //
-  //     this.dataSource.sortingDataAccessor = (item, property) => {
-  //       if (property === 'numero_relance_dossier') {
-  //         const match = item.numero_relance_dossier?.match(/\d+$/);
-  //         return match ? parseInt(match[0], 10) : 0;
-  //       }
-  //       return item[property];
-  //     };
-  //
-  //     // this.dataSource.sort.active = 'numero_relance_dossier';
-  //     // this.dataSource.sort.direction = 'asc';
-  //     // this.dataSource.sort.sortChange.emit();
-  //
-  //     this.isLoading = false;
-  //   });
-  // }
 
   formatDate(date: string | undefined): string {
     return date ? this.datePipe.transform(date, 'yyyy-MM-dd') ?? '' : '';
@@ -142,25 +111,43 @@ export class RelanceHistoriqueComponent implements OnInit {
     this.dataSource.filter = filterValue;
   }
 
+  appliquerFiltres() {
+    this.dataSource.filterPredicate = (data, filter) => {
+      const dateMatch = this.filtreDateRappel
+        ? data.date_rappel === this.formatDate(this.filtreDateRappel.toISOString())
+        : true;
+
+      const statutDossierMatch = this.filtreStatutDossier
+        ? data.statut_code === this.filtreStatutDossier
+        : true;
+
+      const statutRelanceMatch = this.filtreStatutRelance
+        ? data.statut_detail === this.filtreStatutRelance
+        : true;
+
+      const userMatch = this.filtreUtilisateur
+        ? data.utilisateur_creation === this.filtreUtilisateur
+        : true;
+
+      return dateMatch && statutDossierMatch && statutRelanceMatch && userMatch;
+    };
+
+    this.dataSource.filter = `${Math.random()}`; // Forcer rafraîchissement
+  }
+
+  resetFiltres() {
+    this.filtreStatutDossier = '';
+    this.filtreDateRappel = null;
+    this.filtreStatutRelance = '';
+    this.filtreUtilisateur = '';
+    this.appliquerFiltres();
+  }
+
   voirDossier(numero: string) {
     this.router.navigate(['/relance-dossiers', numero]);
   }
 
-  // getStatusClass(statut: string): string {
-  //   switch (statut?.toUpperCase()) {
-  //     case 'BROUILLON': return 'badge BROUILLON';
-  //     case 'ENVOYE':
-  //     case 'ENVOYÉ': return 'badge ENVOYE';
-  //     case 'OUVERT': return 'badge OUVERT';
-  //     case 'CLOTURE': return 'badge CLOTURE';
-  //     case 'VALIDE': return 'badge VALIDE';
-  //     case 'REFUSE':
-  //     case 'REFUSÉ': return 'badge REFUSE';
-  //     case 'EN COURS': return 'badge ENCOURS';
-  //     default: return 'badge DEFAULT';
-  //   }
-  // }
-
+  // Pour badges colorés
   statuts = [
     { code: 'BROUILLON', libelle: 'Brouillon', color: 'badge BROUILLON' },
     { code: 'VALIDE', libelle: 'Validé', color: 'badge VALIDE' },
@@ -172,13 +159,11 @@ export class RelanceHistoriqueComponent implements OnInit {
     { code: 'ENCOURS', libelle: 'En cours', color: 'badge ENCOURS' }
   ];
 
-// ✅ Méthode pour obtenir la classe CSS
   getStatutColorClass(code: string): string {
     const found = this.statuts.find(s => s.code === code?.toUpperCase());
     return found ? found.color : 'badge DEFAULT';
   }
 
-// ✅ Méthode pour obtenir le libellé (au lieu du code brut)
   getStatutLibelle(code: string): string {
     const found = this.statuts.find(s => s.code === code?.toUpperCase());
     return found ? found.libelle : code;

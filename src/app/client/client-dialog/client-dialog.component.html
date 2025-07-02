@@ -1,0 +1,65 @@
+<h2 mat-dialog-title class="dialog-title">
+  {{ data ? 'Modifier un client' : 'Ajouter un client' }}
+</h2>
+
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="clientForm" class="form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>Raison sociale</mat-label>
+      <input matInput formControlName="raison_sociale" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Téléphone</mat-label>
+      <input matInput formControlName="telephone">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Adresse</mat-label>
+      <input matInput formControlName="adresse">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Ville</mat-label>
+      <input matInput formControlName="ville">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Pays</mat-label>
+      <input matInput formControlName="pays">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Responsable</mat-label>
+      <input matInput formControlName="responsable">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Secteur d'activité</mat-label>
+      <input matInput formControlName="secteur_activite">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Solde</mat-label>
+      <input matInput type="number" formControlName="solde">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Encours autorisé</mat-label>
+      <input matInput type="number" formControlName="encours_autorise">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-button color="warn" (click)="onCancel()">Annuler</button>
+  <button mat-raised-button color="primary" (click)="onSave()">
+    <mat-icon class="icon-left">save</mat-icon>
+    {{ data ? 'Modifier' : 'Ajouter' }}
+  </button>
+</mat-dialog-actions>

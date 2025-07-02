@@ -1,50 +1,147 @@
-.main-card {
+
+/* Structure 3 zones : gauche (recherche), milieu (filtres), droite (boutons) */
+.filters-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  /*justify-content: space-between;*/
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* 🔍 Zone Recherche */
+.filters-group-left {
+  flex: 1;
+  min-width: 220px;
+  max-width: 280px;
+}
+
+/* 📋 Filtres au centre */
+.filters-group-middle {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+/* 🧼 Actions à droite */
+.filters-group-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+/* Champs de formulaire standardisés */
+.filters-bar mat-form-field {
+  margin: 0;
+  padding: 0;
+  font-size: 13px;
+}
+
+/* Taille des filtres */
+.filter-small {
+  min-width: 160px;
+  max-width: 180px;
+  height: 40px;
+}
+
+/* Champ recherche */
+.search-field {
+  height: 40px;
   width: 100%;
-  box-sizing: border-box;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 24px;
-  margin: 0; /* ✅ supprime les marges inutiles */
+}
+
+/* Boutons d'action */
+.filters-bar button {
+  height: 40px;
+  line-height: 40px;
+  white-space: nowrap;
+}
+
+/* Responsive : filtres empilés sur petit écran */
+@media (max-width: 768px) {
+  .filters-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filters-group-middle,
+  .filters-group-right {
+    justify-content: flex-start;
+  }
+}
+
+/* ======================== */
+/* 🟣 TABLEAU */
+/* ======================== */
+
+.main-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+  padding: 28px;
 }
 
 .title {
   font-size: 1.5rem;
   color: #3f51b5;
-  margin-bottom: 24px;
-}
-
-.search-field {
-  width: 300px;
-  margin-bottom: 20px;
-  display: block;
+  margin-bottom: 16px;
 }
 
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
+  border: 1px solid #d1c4e9;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
 }
 
 table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: white;
+}
+
+table tr:hover {
+  background-color: #f3f0fa;
+  transition: 0.2s ease-in-out;
 }
 
 .striped tr:nth-child(even) td {
-  background-color: #f9f9f9;
-}
-
-mat-paginator {
-  display: flex;
-  justify-content: flex-end;
+  background-color: #dacfef;
 }
 
 mat-header-cell, mat-cell {
   text-align: center;
   padding: 12px 8px;
+  border-bottom: 1px solid #e0e0e0 !important;
 }
 
-/* Badge temps écoulé */
+mat-header-cell {
+  background-color: #dacfef !important;
+  color: #4a148c;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+table tr.mat-header-row {
+  background-color: #dacfef !important;
+}
+
+/* ======================== */
+/* 🟣 PAGINATION */
+/* ======================== */
+mat-paginator {
+  display: flex;
+  justify-content: center;
+}
+
+/* ======================== */
+/* 🟣 BADGES */
+/* ======================== */
 .badge {
   font-size: 10px;
   padding: 2px 6px;
@@ -55,29 +152,22 @@ mat-header-cell, mat-cell {
   margin-left: 6px;
 }
 
-.spinner-container {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.error-message {
-  color: #f44336;
-  font-size: 14px;
-  text-align: center;
-  margin-top: 15px;
-}
-
-table tr:hover {
-  background-color: #f5f5f5;
-  transition: background-color 0.3s ease;
-}
-
-/* Badge orange (≤ 30 jours) */
 .badge-warning {
   background-color: #ff9800;
 }
 
-/* Badge rouge (> 30 jours) */
 .badge-danger {
   background-color: #ef0000;
+}
+
+/* ======================== */
+/* 🟣 ICONES */
+/* ======================== */
+button mat-icon {
+  color: #5e35b1;
+  transition: transform 0.2s ease;
+}
+
+button:hover mat-icon {
+  transform: scale(1.2);
 }
