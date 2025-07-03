@@ -5,6 +5,7 @@ import { ConfirmDeleteComponent } from '../../UI-UX/confirm-delete/confirm-delet
 import { MatDialog } from '@angular/material/dialog';
 import { FlashMessageComponent } from '../../UI-UX/flash-message/flash-message.component';
 import { ClientDialogComponent } from '../client-dialog/client-dialog.component';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-gestion-clients',
@@ -18,6 +19,7 @@ import { ClientDialogComponent } from '../client-dialog/client-dialog.component'
 })
 export class GestionClientsComponent implements OnInit {
   clients: any[] = [];
+  dataSource = new MatTableDataSource<any>([]);
   displayedColumns: string[] = [
     'code_client',
     'raison_sociale',
@@ -55,7 +57,9 @@ export class GestionClientsComponent implements OnInit {
 
   chargerClients(): void {
     this.clientService.getClients().subscribe({
-      next: (data) => (this.clients = data),
+      next: (data) => {
+        this.dataSource.data = data;
+      },
       error: () => this.showFlashMsg('Erreur lors du chargement', 'error')
     });
   }
@@ -98,6 +102,11 @@ export class GestionClientsComponent implements OnInit {
         });
       }
     });
+  }
+
+  applyFilter(event: Event): void {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   supprimerClient(id: number): void {

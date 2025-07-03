@@ -24,9 +24,15 @@
 
       <mat-form-field appearance="outline" class="filter-small">
         <mat-label>Date Relevé</mat-label>
-        <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" (dateChange)="applyAdvancedFilter()" />
+        <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" [readonly]="true">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+        <mat-datepicker #picker
+                        startView="multi-year"
+                        (yearSelected)="chosenYearHandler($event)"
+                        (monthSelected)="chosenMonthHandler($event, picker)"
+                        [startAt]="selectedDate"
+                        panelClass="custom-month-picker">
+        </mat-datepicker>
       </mat-form-field>
     </div>
 
@@ -104,6 +110,6 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]" [pageSize]="10" showFirstLastButtons></mat-paginator>
   </div>
 </mat-card>

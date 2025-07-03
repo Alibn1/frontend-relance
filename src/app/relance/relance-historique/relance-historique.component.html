@@ -16,30 +16,33 @@
     <div class="filters-group-middle">
       <mat-form-field appearance="outline" class="filter-small">
         <mat-label>Statut Dossier</mat-label>
-        <mat-select [(value)]="filtreStatutDossier">
+        <mat-select [(value)]="filtreStatutDossier" (selectionChange)="appliquerFiltres()">
           <mat-option value="">Tous</mat-option>
           <mat-option *ngFor="let statut of statutsDossier" [value]="statut">{{ statut }}</mat-option>
         </mat-select>
       </mat-form-field>
 
+      <!-- ✅ Date Rappel -->
       <mat-form-field appearance="outline" class="filter-small">
         <mat-label>Date Rappel</mat-label>
-        <input matInput [matDatepicker]="picker" [(ngModel)]="filtreDateRappel">
+        <input matInput [matDatepicker]="picker" [(ngModel)]="filtreDateRappel" (dateChange)="appliquerFiltres()">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
 
+      <!-- ✅ Statut Relance -->
       <mat-form-field appearance="outline" class="filter-small">
         <mat-label>Statut Relance</mat-label>
-        <mat-select [(value)]="filtreStatutRelance">
+        <mat-select [(value)]="filtreStatutRelance" (selectionChange)="appliquerFiltres()">
           <mat-option value="">Tous</mat-option>
           <mat-option *ngFor="let statut of statutsRelance" [value]="statut">{{ statut }}</mat-option>
         </mat-select>
       </mat-form-field>
 
+      <!-- ✅ Utilisateur -->
       <mat-form-field appearance="outline" class="filter-small">
         <mat-label>Agent</mat-label>
-        <mat-select [(value)]="filtreUtilisateur">
+        <mat-select [(value)]="filtreUtilisateur" (selectionChange)="appliquerFiltres()">
           <mat-option value="">Tous</mat-option>
           <mat-option *ngFor="let u of utilisateurs" [value]="u">{{ u }}</mat-option>
         </mat-select>
@@ -129,6 +132,6 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <mat-paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+    <mat-paginator [pageSize]="20" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
   </div>
 </mat-card>

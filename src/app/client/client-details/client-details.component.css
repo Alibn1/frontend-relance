@@ -1,100 +1,86 @@
-/* Conteneur principal */
-.details-container {
-  display: flex;
-  flex-direction: row;
-  gap: 24px;
-  padding: 24px;
-}
-
-/* Carte des relances */
-.relances-card {
-  flex: 1;
-  min-width: 350px;
-}
-
-/* Partie droite (Relevés + Impayés) */
-.droite {
-  flex: 2;
+/* ✅ Conteneur global centré */
+.table-container {
+  max-width: 1100px;
+  margin: 2rem auto;
+  padding: 0 1rem;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 2rem;
 }
 
-.releves-card,
-.impayes-card {
-  width: 100%;
-}
-
-/* Titre des cartes */
-mat-card-title {
-  font-size: 1rem;
-  color: #3f51b5;
-  margin-bottom: 8px;
-}
-
-/* Tableaux */
-table {
-  width: 100%;
-}
-
-.total-footer {
-  font-weight: bold;
-  background-color: #e0e0e0;
-}
-
-/* Barre du haut : retour + titre client */
 .top-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 4px 16px 0; /* rapproché de la navbar */
+  padding: 4px 16px 0;
 }
 
+.top-header mat-icon {
+  font-size: 24px;
+  transform: translateY(2px); /* ⬇️ descend légèrement la flèche */
+  color: #333;
+}
 
-.total-footer {
+.client-title {
+  font-weight: 700;      /* gras */
+  font-size: 1.2rem;     /* taille augmentée (~19px) */
+  color: #1a1a1a;        /* facultatif : couleur légèrement plus sombre */
+}
+
+/* ✅ Tables avec style clean */
+.styled-table {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  table-layout: fixed;
+}
+
+/* ✅ En-têtes et cellules */
+mat-header-cell, mat-cell, mat-footer-cell {
+  padding: 14px 16px;
+  text-align: center;
+}
+
+mat-header-row,
+mat-footer-row {
+  background-color: #dacfef !important;
+}
+
+.footer-cell {
   font-weight: bold;
-  background-color: #f3f3f3;
-  padding: 12px;
+  background-color: #dacfef;
   font-size: 14px;
 }
 
-
-/* Titre client : code + raison sociale */
-.client-title {
-  font-size: 1rem;
-  font-weight: 500;
-  color: #333;
-  display: flex;
-  align-items: center;
-}
-
-/* Header dans la card (titre + bouton relance) */
-.card-header {
+/* ✅ Header des sections */
+.section-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 8px;
+  background-color: #dacfef;
+  padding: 12px 20px;
+  color: #4a148c;
+  font-weight: 600;
+  font-size: 15px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-/* Bouton relance : petit et sans contour */
-.relance-btn {
-  height: 28px;
-  font-size: 12px;
-  padding: 0 6px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+/* ✅ Cartes harmonisées */
+.relances-card,
+.releves-card {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e0e0e0;
 }
 
-.no-space mat-icon {
-  margin-right: 0; /* Supprime l'espacement à droite */
-  font-size: 16px;
-  vertical-align: middle;
-}
-
-
-/* Badge status */
+/* ✅ Badge statuts */
 .badge {
   padding: 4px 10px;
   border-radius: 12px;
@@ -104,14 +90,11 @@ table {
   display: inline-block;
 }
 
-/* Statuts couleurs */
 .badge.BROUILLON { background-color: #9e9e9e; }
 .badge.ENVOYE, .badge.ENVOYÉ { background-color: #1e88e5; }
 .badge.OUVERTE { background-color: #43a047; }
 .badge.VALIDE { background-color: #4caf50; }
 .badge.REFUSE, .badge.REFUSÉ { background-color: #e53935; }
+.badge.CLOTURE { background-color: #e53935; }
 .badge.ENCOURS { background-color: #757575; }
 .badge.DEFAULT { background-color: #bdbdbd; }
-
-
-

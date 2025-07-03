@@ -171,3 +171,21 @@ button mat-icon {
 button:hover mat-icon {
   transform: scale(1.2);
 }
+
+::ng-deep .custom-month-picker .mat-calendar {
+  width: 300px !important;
+  height: auto !important;
+  min-height: auto !important;
+}
+
+::ng-deep .custom-month-picker .mat-calendar-content {
+  padding: 0 !important;
+}
+
+::ng-deep .custom-month-picker .mat-calendar-period-button {
+  font-size: 14px;
+}
+
+::ng-deep .custom-month-picker .mat-calendar-body-cell {
+  font-size: 13px;
+}

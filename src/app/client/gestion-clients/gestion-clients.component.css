@@ -79,3 +79,34 @@ table.full-width tr.mat-row:hover {
 .full-width td.mat-cell button:hover mat-icon {
   transform: scale(1.2);
 }
+
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.search-field {
+  max-width: 300px;
+  min-width: 240px;
+  flex: 1 1 auto;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.top-bar button {
+  white-space: nowrap;
+  font-weight: 500;
+  background-color: #7e57c2;
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.top-bar button:hover {
+  background-color: #673ab7;
+}
