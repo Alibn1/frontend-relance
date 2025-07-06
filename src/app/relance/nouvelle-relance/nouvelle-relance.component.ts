@@ -112,7 +112,10 @@ export class NouvelleRelanceComponent implements OnInit {
 
   private loadClientReleves(): void {
     this.clientService.getClientReleves(this.clientCode).pipe(take(1)).subscribe({
-      next: (data) => this.releves = data,
+      next: (data) => {
+        // ❗️Filtrer les relevés ayant statut EN_ATTENTE uniquement
+        this.releves = data.filter((releve: any) => releve.statut === 'EN_ATTENTE');
+      },
       error: () => this.showNotification('Impossible de charger les relevés', true)
     });
   }

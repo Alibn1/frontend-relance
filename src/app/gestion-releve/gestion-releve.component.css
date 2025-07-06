@@ -141,3 +141,19 @@ mat-icon {
   font-family: "Segoe UI", sans-serif;
   font-size: 14px;
 }
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+}
+
+.en_attente {
+  background-color: #9575cd; /* violet clair */
+}
+
+.paye {
+  background-color: #66bb6a; /* vert */
+}

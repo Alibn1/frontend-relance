@@ -58,7 +58,7 @@ export class GestionReleveComponent implements OnInit {
       date_releve: ['', Validators.required],
       solde_initiale: ['', Validators.required],
       solde_finale: ['', Validators.required],
-      statut: ['EN_ATTTENTE'],
+      statut: [''],
       commentaire: [''],
       created_by: ['admin']
     });
@@ -130,7 +130,11 @@ export class GestionReleveComponent implements OnInit {
 
   cancelEdit() {
     this.editingReleve = null;
-    this.releveForm.reset({ created_by: 'admin', code_client: this.selectedClient.code_client });
+    this.releveForm.reset();
+    this.releveForm.patchValue({
+      code_client: this.selectedClient.code_client,
+      created_by: 'admin'
+    });
   }
 
   deleteReleve(id: number) {
@@ -172,6 +176,17 @@ export class GestionReleveComponent implements OnInit {
     const month = (d.getMonth() + 1).toString().padStart(2, '0');
     const day = d.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
+  }
+
+  formatStatut(statut: string): string {
+    switch (statut) {
+      case 'EN_ATTENTE':
+        return 'En attente';
+      case 'PAYE':
+        return 'Payé';
+      default:
+        return statut.toLowerCase();
+    }
   }
 
 }

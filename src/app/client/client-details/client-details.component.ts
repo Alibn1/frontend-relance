@@ -154,6 +154,7 @@ export class ClientDetailsComponent implements OnInit {
     if (s.includes('BROUILLON')) return 'badge BROUILLON';
     if (s.includes('ENVOYE') || s.includes('ENVOYÉ')) return 'badge ENVOYE';
     if (s.includes('OUVERTE')) return 'badge OUVERTE';
+    if (s.includes('CLOTURE')) return 'badge CLOTURE';
     if (s.includes('VALIDE')) return 'badge VALIDE';
     if (s.includes('REFUSE') || s.includes('REFUSÉ')) return 'badge REFUSE';
     if (s.includes('ENCOURS')) return 'badge ENCOURS';
@@ -163,6 +164,7 @@ export class ClientDetailsComponent implements OnInit {
   statuts = [
     { code: 'BROUILLON', libelle: 'Brouillon', color: 'badge BROUILLON' },
     { code: 'VALIDE', libelle: 'Validé', color: 'badge VALIDE' },
+    { code: 'CLOTURE', libelle: 'Cloturé', color: 'badge CLOTURE' },
     { code: 'ENVOYE', libelle: 'Envoyé', color: 'badge ENVOYE' },
     { code: 'REFUSE', libelle: 'Refusé', color: 'badge REFUSE' },
     { code: 'ANNULE', libelle: 'Annulé', color: 'badge ANNULE' },
